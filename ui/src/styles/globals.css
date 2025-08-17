@@ -1,0 +1,563 @@
+@import "tailwindcss";
+@source "../../../apps/**/*.{ts,tsx}";
+@source "../../../components/**/*.{ts,tsx}";
+@source "../**/*.{ts,tsx}";
+
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: oklch(1.0000 0 0);
+  --foreground: oklch(0.2201 0.0440 230.1730);
+  --card: oklch(1.0000 0 0);
+  --card-foreground: oklch(0.2201 0.0440 230.1730);
+  --popover: oklch(1.0000 0 0);
+  --popover-foreground: oklch(0.2201 0.0440 230.1730);
+  --primary: oklch(0.8254 0.2367 148.3680);
+  --primary-foreground: oklch(0.2201 0.0440 230.1730);
+  --secondary: oklch(0.8254 0.2367 148.3680);
+  --secondary-foreground: oklch(0.2201 0.0440 230.1730);
+  --muted: oklch(0.9417 0.0060 170.4415);
+  --muted-foreground: oklch(0.6556 0.0141 221.5114);
+  --accent: oklch(0.8254 0.2367 148.3680);
+  --accent-foreground: oklch(0.2201 0.0440 230.1730);
+  --destructive: oklch(0.5831 0.2068 26.5044);
+  --destructive-foreground: oklch(1.0000 0 0);
+  --border: oklch(0.9417 0.0060 170.4415);
+  --input: oklch(1.0000 0 0);
+  --ring: oklch(0.6557 0.1625 244.4868);
+  --chart-1: oklch(0.4584 0.0963 165.0871);
+  --chart-2: oklch(0.3981 0.2015 301.9644);
+  --chart-3: oklch(0.3822 0.1485 260.4434);
+  --chart-4: oklch(0.5008 0.1190 58.3372);
+  --chart-5: oklch(0.4273 0.1717 28.7659);
+  --sidebar: oklch(1.0000 0 0);
+  --sidebar-foreground: oklch(0.2201 0.0440 230.1730);
+  --sidebar-primary: oklch(0.8254 0.2367 148.3680);
+  --sidebar-primary-foreground: oklch(1.0000 0 0);
+  --sidebar-accent: oklch(0.9417 0.0060 170.4415);
+  --sidebar-accent-foreground: oklch(0.2201 0.0440 230.1730);
+  --sidebar-border: oklch(0.9417 0.0060 170.4415);
+  --sidebar-ring: oklch(0.8247 0.0068 185.2345);
+  --font-sans: Inter;
+  --font-serif: Merriweather;
+  --font-mono: Monaco;
+  --radius: 0.7rem;
+  --shadow-2xs: 0px 2px 0px 0.5px hsl(202.8169 89.1213% 53.1373% / 0.00);
+  --shadow-xs: 0px 2px 0px 0.5px hsl(202.8169 89.1213% 53.1373% / 0.00);
+  --shadow-sm: 0px 2px 0px 0.5px hsl(202.8169 89.1213% 53.1373% / 0.00), 0px 1px 2px -0.5px hsl(202.8169 89.1213% 53.1373% / 0.00);
+  --shadow: 0px 2px 0px 0.5px hsl(202.8169 89.1213% 53.1373% / 0.00), 0px 1px 2px -0.5px hsl(202.8169 89.1213% 53.1373% / 0.00);
+  --shadow-md: 0px 2px 0px 0.5px hsl(202.8169 89.1213% 53.1373% / 0.00), 0px 2px 4px -0.5px hsl(202.8169 89.1213% 53.1373% / 0.00);
+  --shadow-lg: 0px 2px 0px 0.5px hsl(202.8169 89.1213% 53.1373% / 0.00), 0px 4px 6px -0.5px hsl(202.8169 89.1213% 53.1373% / 0.00);
+  --shadow-xl: 0px 2px 0px 0.5px hsl(202.8169 89.1213% 53.1373% / 0.00), 0px 8px 10px -0.5px hsl(202.8169 89.1213% 53.1373% / 0.00);
+  --shadow-2xl: 0px 2px 0px 0.5px hsl(202.8169 89.1213% 53.1373% / 0.00);
+  --tracking-normal: 0em;
+  --spacing: 0.25rem;
+}
+
+.dark {
+  --background: oklch(0.2207 0.0431 231.0286);
+  --foreground: oklch(1.0000 0 0);
+  --card: oklch(0.2207 0.0431 231.0286);
+  --card-foreground: oklch(1.0000 0 0);
+  --popover: oklch(0.2207 0.0431 231.0286);
+  --popover-foreground: oklch(1.0000 0 0);
+  --primary: oklch(0.8254 0.2367 148.3680);
+  --primary-foreground: oklch(0.2207 0.0431 231.0286);
+  --secondary: oklch(0.8254 0.2367 148.3680);
+  --secondary-foreground: oklch(0.2207 0.0431 231.0286);
+  --muted: oklch(0.2607 0.0359 234.3235);
+  --muted-foreground: oklch(0.5212 0.0240 232.5319);
+  --accent: oklch(0.2607 0.0359 234.3235);
+  --accent-foreground: oklch(1.0000 0 0);
+  --destructive: oklch(0.5831 0.2068 26.5044);
+  --destructive-foreground: oklch(1.0000 0 0);
+  --border: oklch(0.4159 0.0271 229.8269);
+  --input: oklch(0.2607 0.0359 234.3235);
+  --ring: oklch(0.6557 0.1625 244.4868);
+  --chart-1: oklch(0.9402 0.0646 171.7014);
+  --chart-2: oklch(0.9065 0.0631 316.0518);
+  --chart-3: oklch(0.9095 0.0492 236.1218);
+  --chart-4: oklch(0.9410 0.0994 96.1056);
+  --chart-5: oklch(0.8902 0.0576 26.2258);
+  --sidebar: oklch(0.2201 0.0440 230.1730);
+  --sidebar-foreground: oklch(1.0000 0 0);
+  --sidebar-primary: oklch(0.8254 0.2367 148.3680);
+  --sidebar-primary-foreground: oklch(0.2201 0.0440 230.1730);
+  --sidebar-accent: oklch(0.5212 0.0240 232.5319);
+  --sidebar-accent-foreground: oklch(1.0000 0 0);
+  --sidebar-border: oklch(0.4159 0.0271 229.8269);
+  --sidebar-ring: oklch(0.6557 0.1625 244.4868);
+  --font-sans: Inter;
+  --font-serif: Merriweather;
+  --font-mono: Monaco;
+  --radius: 0.7rem;
+  --shadow-2xs: 0px 2px 0px 0.5px hsl(0 0% 100% / 0.00);
+  --shadow-xs: 0px 2px 0px 0.5px hsl(0 0% 100% / 0.00);
+  --shadow-sm: 0px 2px 0px 0.5px hsl(0 0% 100% / 0.00), 0px 1px 2px -0.5px hsl(0 0% 100% / 0.00);
+  --shadow: 0px 2px 0px 0.5px hsl(0 0% 100% / 0.00), 0px 1px 2px -0.5px hsl(0 0% 100% / 0.00);
+  --shadow-md: 0px 2px 0px 0.5px hsl(0 0% 100% / 0.00), 0px 2px 4px -0.5px hsl(0 0% 100% / 0.00);
+  --shadow-lg: 0px 2px 0px 0.5px hsl(0 0% 100% / 0.00), 0px 4px 6px -0.5px hsl(0 0% 100% / 0.00);
+  --shadow-xl: 0px 2px 0px 0.5px hsl(0 0% 100% / 0.00), 0px 8px 10px -0.5px hsl(0 0% 100% / 0.00);
+  --shadow-2xl: 0px 2px 0px 0.5px hsl(0 0% 100% / 0.00);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-serif: var(--font-serif);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --shadow-2xs: var(--shadow-2xs);
+  --shadow-xs: var(--shadow-xs);
+  --shadow-sm: var(--shadow-sm);
+  --shadow: var(--shadow);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-xl: var(--shadow-xl);
+  --shadow-2xl: var(--shadow-2xl);
+}
+
+body {
+  letter-spacing: var(--tracking-normal);
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-hanken-grotesk), system-ui, sans-serif;
+}
+
+/* Font utility classes */
+.font-heading {
+  font-family: var(--font-benne), serif;
+}
+
+.font-body {
+  font-family: var(--font-hanken-grotesk), system-ui, sans-serif;
+}
+
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Pixelated Background Patterns */
+@layer utilities {
+  .pixelated-grid {
+    background-image: 
+      linear-gradient(90deg, rgba(255,255,255,0.1) 50%, transparent 50%),
+      linear-gradient(180deg, rgba(255,255,255,0.1) 50%, transparent 50%);
+    background-size: 8px 8px;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+  }
+
+  .pixelated-grid-dark {
+    background-image: 
+      linear-gradient(90deg, rgba(0,0,0,0.2) 50%, transparent 50%),
+      linear-gradient(180deg, rgba(0,0,0,0.2) 50%, transparent 50%);
+    background-size: 8px 8px;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+  }
+
+  .pixelated-dots {
+    background-image: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.15) 1px, transparent 1px);
+    background-size: 8px 8px;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+  }
+
+  .pixelated-checkerboard {
+    background-image: 
+      linear-gradient(45deg, rgba(255,255,255,0.05) 25%, transparent 25%),
+      linear-gradient(-45deg, rgba(255,255,255,0.05) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.05) 75%),
+      linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.05) 75%);
+    background-size: 8px 8px;
+    background-position: 0 0, 0 4px, 4px -4px, -4px 0px;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+  }
+
+  .pixelated-overlay {
+    position: relative;
+  }
+
+  .pixelated-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: 
+      linear-gradient(90deg, rgba(255,255,255,0.08) 50%, transparent 50%),
+      linear-gradient(180deg, rgba(255,255,255,0.08) 50%, transparent 50%);
+    background-size: 6px 6px;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .pixelated-noise {
+    background-image: 
+      radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 1px, transparent 1px),
+      radial-gradient(circle at 40% 20%, rgba(255,255,255,0.08) 1px, transparent 1px),
+      radial-gradient(circle at 90% 30%, rgba(255,255,255,0.06) 1px, transparent 1px),
+      radial-gradient(circle at 70% 80%, rgba(255,255,255,0.1) 1px, transparent 1px);
+    background-size: 12px 12px, 8px 8px, 16px 16px, 10px 10px;
+    background-position: 0 0, 4px 4px, 0 8px, 6px 2px;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+  }
+
+  /* Animated Pixelated Patterns */
+  .pixelated-dots-animated {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pixelated-dots-animated::before,
+  .pixelated-dots-animated::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: 
+      radial-gradient(circle at 10% 20%, rgba(255,255,255,0.15) 1px, transparent 1px),
+      radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 1px, transparent 1px),
+      radial-gradient(circle at 40% 40%, rgba(255,255,255,0.12) 1px, transparent 1px),
+      radial-gradient(circle at 70% 10%, rgba(255,255,255,0.08) 1px, transparent 1px),
+      radial-gradient(circle at 20% 90%, rgba(255,255,255,0.1) 1px, transparent 1px),
+      radial-gradient(circle at 90% 30%, rgba(255,255,255,0.14) 1px, transparent 1px);
+    background-size: 20px 20px, 25px 25px, 15px 15px, 30px 30px, 18px 18px, 22px 22px;
+    animation: pixelated-float 8s ease-in-out infinite;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+  }
+
+  .pixelated-dots-animated::after {
+    background-image: 
+      radial-gradient(circle at 30% 70%, rgba(255,255,255,0.1) 1px, transparent 1px),
+      radial-gradient(circle at 60% 30%, rgba(255,255,255,0.12) 1px, transparent 1px),
+      radial-gradient(circle at 85% 60%, rgba(255,255,255,0.08) 1px, transparent 1px),
+      radial-gradient(circle at 15% 40%, rgba(255,255,255,0.14) 1px, transparent 1px),
+      radial-gradient(circle at 50% 80%, rgba(255,255,255,0.09) 1px, transparent 1px);
+    background-size: 16px 16px, 28px 28px, 12px 12px, 24px 24px, 19px 19px;
+    animation: pixelated-float-reverse 10s ease-in-out infinite;
+    animation-delay: -4s;
+  }
+
+  .pixelated-rain {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pixelated-rain::before,
+  .pixelated-rain::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: 
+      radial-gradient(circle at 10% 0%, rgba(255,255,255,0.15) 1px, transparent 1px),
+      radial-gradient(circle at 30% 0%, rgba(255,255,255,0.1) 1px, transparent 1px),
+      radial-gradient(circle at 50% 0%, rgba(255,255,255,0.12) 1px, transparent 1px),
+      radial-gradient(circle at 70% 0%, rgba(255,255,255,0.08) 1px, transparent 1px),
+      radial-gradient(circle at 90% 0%, rgba(255,255,255,0.14) 1px, transparent 1px);
+    background-size: 20px 100vh;
+    animation: pixelated-rain-fall 3s linear infinite;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+  }
+
+  .pixelated-rain::after {
+    background-image: 
+      radial-gradient(circle at 20% 0%, rgba(255,255,255,0.1) 1px, transparent 1px),
+      radial-gradient(circle at 40% 0%, rgba(255,255,255,0.12) 1px, transparent 1px),
+      radial-gradient(circle at 60% 0%, rgba(255,255,255,0.08) 1px, transparent 1px),
+      radial-gradient(circle at 80% 0%, rgba(255,255,255,0.15) 1px, transparent 1px);
+    background-size: 25px 100vh;
+    animation: pixelated-rain-fall 4s linear infinite;
+    animation-delay: -2s;
+  }
+
+  .pixelated-sparkle {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pixelated-sparkle::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: 
+      radial-gradient(circle at 15% 25%, rgba(255,255,255,0.2) 1px, transparent 1px),
+      radial-gradient(circle at 65% 75%, rgba(255,255,255,0.15) 1px, transparent 1px),
+      radial-gradient(circle at 35% 45%, rgba(255,255,255,0.18) 1px, transparent 1px),
+      radial-gradient(circle at 85% 15%, rgba(255,255,255,0.12) 1px, transparent 1px),
+      radial-gradient(circle at 25% 85%, rgba(255,255,255,0.16) 1px, transparent 1px),
+      radial-gradient(circle at 75% 35%, rgba(255,255,255,0.14) 1px, transparent 1px);
+    background-size: 40px 40px, 60px 60px, 35px 35px, 50px 50px, 45px 45px, 55px 55px;
+    animation: pixelated-sparkle-twinkle 6s ease-in-out infinite;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+  }
+
+  .pixelated-matrix {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pixelated-matrix::before,
+  .pixelated-matrix::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: 
+      linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.1) 2%, transparent 4%),
+      linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.08) 2%, transparent 4%);
+    background-size: 50px 50px;
+    animation: pixelated-matrix-scroll 4s linear infinite;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+  }
+
+  .pixelated-matrix::after {
+    background-size: 30px 30px;
+    animation: pixelated-matrix-scroll 6s linear infinite reverse;
+    opacity: 0.7;
+  }
+}
+
+/* Animation Keyframes */
+@keyframes pixelated-float {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+    background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
+  }
+  25% {
+    transform: translate(2px, -3px) rotate(1deg);
+    background-position: 5px 3px, -3px 8px, 4px -2px, -6px 5px, 2px -4px, 7px 2px;
+  }
+  50% {
+    transform: translate(-1px, 2px) rotate(-1deg);
+    background-position: -2px 6px, 8px -4px, -3px 7px, 4px -8px, -5px 3px, -1px 9px;
+  }
+  75% {
+    transform: translate(3px, 1px) rotate(0.5deg);
+    background-position: 6px -2px, -4px 5px, 8px 1px, -7px -3px, 3px 6px, 5px -5px;
+  }
+}
+
+@keyframes pixelated-float-reverse {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+    background-position: 0 0, 0 0, 0 0, 0 0, 0 0;
+  }
+  33% {
+    transform: translate(-2px, 3px) rotate(-0.8deg);
+    background-position: -4px 5px, 6px -3px, -2px 8px, 5px 2px, -7px -4px;
+  }
+  66% {
+    transform: translate(1px, -2px) rotate(0.8deg);
+    background-position: 3px -6px, -5px 4px, 7px -1px, -3px 7px, 2px 5px;
+  }
+}
+
+@keyframes pixelated-rain-fall {
+  0% {
+    transform: translateY(-100vh);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+
+@keyframes pixelated-sparkle-twinkle {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  25% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.9);
+  }
+  75% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes pixelated-matrix-scroll {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 50px 50px;
+  }
+}
+
+@keyframes gradient-x {
+  0% {
+    background-position: 0% 50%;
+    transform: rotate(0deg);
+  }
+  50% {
+    background-position: 100% 50%;
+    transform: rotate(180deg);
+  }
+  100% {
+    background-position: 0% 50%;
+    transform: rotate(360deg);
+  }
+}
+
+.animate-gradient-x {
+  background-size: 200% 200%;
+  animation: gradient-x 2s ease infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer {
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+}
+
+@keyframes bounce-subtle {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+.animate-bounce-subtle {
+  animation: bounce-subtle 2s ease-in-out infinite;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient {
+  animation: gradient 3s ease infinite;
+}
+
+@keyframes aurora {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-aurora {
+  animation: aurora 8s ease infinite;
+}
+
+.font-heading {
+  font-family: var(--font-benne), serif;
+}
+
+.font-body {
+  font-family: var(--font-hanken-grotesk), system-ui, sans-serif;
+}
+
+.body{
+  font-family: var(--font-hanken-grotesk), system-ui, sans-serif;
+}
+
+@keyframes shine {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-shine {
+  animation: shine var(--duration) linear infinite;
+}

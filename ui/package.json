@@ -40,8 +40,6 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
-    "@ari/eslint-config": "workspace:*",
-    "@ari/typescript-config": "workspace:*",
     "@tailwindcss/postcss": "^4.0.8",
     "@turbo/gen": "^2.4.2",
     "@types/node": "^20",

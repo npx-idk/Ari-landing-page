@@ -23,8 +23,8 @@
 <feBlend mode="normal" in2="shape" result="effect1_innerShadow_13107_30"/>
 </filter>
 <radialGradient id="paint0_radial_13107_30" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(18.6103 24.3807) rotate(-58.974) scale(27.9815 28.6313)">
-<stop stop-color="#7F68FF"/>
-<stop offset="1" stop-color="#BEB2FF"/>
+<stop stop-color="#00b64b"/>
+<stop offset="1" stop-color="#66e39a"/>
 </radialGradient>
 <clipPath id="clip0_13107_30">
 <rect width="32.0205" height="32" fill="white"/>

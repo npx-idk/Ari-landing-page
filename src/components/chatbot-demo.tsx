@@ -1,34 +1,23 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import Button from "@/components/ui/button";
 import { Icons } from "@ari/ui/components/icons";
 import { cn } from "@ari/ui/lib/utils";
 import {
-  ThumbsUp,
-  ThumbsDown,
-  RotateCcw,
-  Send,
-  Eye,
-  ShoppingCart,
-  Monitor,
-  MessageSquare,
-  PanelRight,
-  Search,
-  Heart,
-  User,
-  Menu,
   ChevronDown,
+  Eye,
+  Heart,
+  Monitor,
   Palette,
+  PanelRight,
+  RotateCcw,
+  Search,
+  Send,
+  ShoppingCart,
   Upload,
-  Brain,
-  Code,
-  ArrowRight,
-  CheckCircle,
-  Store,
-  FileText,
-  Zap,
+  User,
 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Button } from "../custom/ui/button";
 
 interface Message {
   id: string;
@@ -293,8 +282,8 @@ export function ThemeDropdown({
     <div className="relative">
       <Button
         onClick={() => setIsOpen(!isOpen)}
-        variant="secondary"
-        className="w-full justify-center gap-3 border-gray-400 dark:border-gray-500"
+        variant="outline"
+        className="w-full justify-center gap-3 border-gray-400 dark:border-gray-500 cursor-pointer rounded-full py-5 border-2  hover:bg-primary-foreground/5 dark:hover:bg-accent-foreground/5 transition-colors"
       >
         <Palette className="w-4 h-4" />
         {currentThemeInfo.label}
@@ -310,7 +299,7 @@ export function ThemeDropdown({
                 onThemeChange(theme.type);
                 setIsOpen(false);
               }}
-              className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-3 first:rounded-t-lg last:rounded-b-lg"
+              className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-3 first:rounded-t-lg last:rounded-b-lg cursor-pointer"
             >
               <div
                 className="w-4 h-4 rounded-full border-2 border-gray-300"
@@ -515,8 +504,8 @@ function ShopifyStoreBackground({ theme = "default" }: { theme?: ThemeType }) {
                   isRetro
                     ? "bg-black border-cyan-500 text-cyan-300 font-mono placeholder-cyan-600"
                     : isPoster
-                      ? "bg-white border-red-300 text-red-800 placeholder-red-400 border-2"
-                      : "border-gray-300 bg-white text-gray-900"
+                    ? "bg-white border-red-300 text-red-800 placeholder-red-400 border-2"
+                    : "border-gray-300 bg-white text-gray-900"
                 )}
                 style={{ borderRadius: currentTheme.borderRadius.input }}
               />
@@ -531,8 +520,8 @@ function ShopifyStoreBackground({ theme = "default" }: { theme?: ThemeType }) {
                   isRetro
                     ? "bg-cyan-500 text-black font-mono"
                     : isPoster
-                      ? "bg-red-600 border-2 border-yellow-400"
-                      : "bg-red-500"
+                    ? "bg-red-600 border-2 border-yellow-400"
+                    : "bg-red-500"
                 )}
               >
                 3
@@ -551,16 +540,16 @@ function ShopifyStoreBackground({ theme = "default" }: { theme?: ThemeType }) {
             isRetro
               ? "bg-gradient-to-r from-cyan-600 to-green-600 border border-cyan-400"
               : isPoster
-                ? "bg-gradient-to-r from-red-600 via-orange-600 to-yellow-600 border-4 border-yellow-400 shadow-xl"
-                : isMinimal
-                  ? "bg-gradient-to-r from-gray-600 to-gray-800"
-                  : theme === "blue"
-                    ? "bg-gradient-to-r from-blue-500 to-cyan-600"
-                    : theme === "purple"
-                      ? "bg-gradient-to-r from-purple-500 to-violet-600"
-                      : theme === "orange"
-                        ? "bg-gradient-to-r from-orange-500 to-red-600"
-                        : "bg-gradient-to-r from-green-500 to-emerald-600"
+              ? "bg-gradient-to-r from-red-600 via-orange-600 to-yellow-600 border-4 border-yellow-400 shadow-xl"
+              : isMinimal
+              ? "bg-gradient-to-r from-gray-600 to-gray-800"
+              : theme === "blue"
+              ? "bg-gradient-to-r from-blue-500 to-cyan-600"
+              : theme === "purple"
+              ? "bg-gradient-to-r from-purple-500 to-violet-600"
+              : theme === "orange"
+              ? "bg-gradient-to-r from-orange-500 to-red-600"
+              : "bg-gradient-to-r from-green-500 to-emerald-600"
           )}
           style={{ borderRadius: currentTheme.borderRadius.container }}
         >
@@ -610,10 +599,10 @@ function ShopifyStoreBackground({ theme = "default" }: { theme?: ThemeType }) {
                 isRetro
                   ? "bg-gray-900 border-cyan-500"
                   : isPoster
-                    ? "bg-gradient-to-b from-amber-50 to-orange-50 border-red-300 border-2 shadow-lg"
-                    : isMinimal
-                      ? "bg-white border-gray-300"
-                      : "bg-white border-gray-200"
+                  ? "bg-gradient-to-b from-amber-50 to-orange-50 border-red-300 border-2 shadow-lg"
+                  : isMinimal
+                  ? "bg-white border-gray-300"
+                  : "bg-white border-gray-200"
               )}
               style={{ borderRadius: currentTheme.borderRadius.container }}
             >
@@ -623,8 +612,8 @@ function ShopifyStoreBackground({ theme = "default" }: { theme?: ThemeType }) {
                   isRetro
                     ? "bg-gray-800"
                     : isPoster
-                      ? "bg-gradient-to-b from-yellow-100 to-orange-100"
-                      : "bg-gray-200"
+                    ? "bg-gradient-to-b from-yellow-100 to-orange-100"
+                    : "bg-gray-200"
                 )}
               ></div>
               <div className="p-4">
@@ -634,15 +623,15 @@ function ShopifyStoreBackground({ theme = "default" }: { theme?: ThemeType }) {
                     isRetro
                       ? "text-cyan-300 font-mono"
                       : isPoster
-                        ? "text-red-800 font-bold text-center"
-                        : config.textColor
+                      ? "text-red-800 font-bold text-center"
+                      : config.textColor
                   )}
                 >
                   {isRetro
                     ? `> Product_${i + 1}.exe`
                     : isPoster
-                      ? `PRODUCT ${i + 1}`
-                      : `Product Name ${i + 1}`}
+                    ? `PRODUCT ${i + 1}`
+                    : `Product Name ${i + 1}`}
                 </h3>
                 <div className="flex items-center justify-between">
                   <span
@@ -651,8 +640,8 @@ function ShopifyStoreBackground({ theme = "default" }: { theme?: ThemeType }) {
                       isRetro
                         ? "text-green-400 font-mono"
                         : isPoster
-                          ? "text-red-700 font-black"
-                          : ""
+                        ? "text-red-700 font-black"
+                        : ""
                     )}
                     style={{ color: currentTheme.colors.primary }}
                   >
@@ -664,8 +653,8 @@ function ShopifyStoreBackground({ theme = "default" }: { theme?: ThemeType }) {
                       isRetro
                         ? "text-red-400 font-mono"
                         : isPoster
-                          ? "text-red-500 font-semibold"
-                          : "text-gray-500"
+                        ? "text-red-500 font-semibold"
+                        : "text-gray-500"
                     )}
                   >
                     {isRetro ? "$129.99" : "$129.99"}
@@ -678,8 +667,8 @@ function ShopifyStoreBackground({ theme = "default" }: { theme?: ThemeType }) {
                       isRetro
                         ? "text-yellow-300 font-mono"
                         : isPoster
-                          ? "text-yellow-600"
-                          : "text-yellow-400"
+                        ? "text-yellow-600"
+                        : "text-yellow-400"
                     )}
                   >
                     {isRetro ? "[*****]" : isPoster ? "★★★★★" : "★".repeat(5)}
@@ -690,8 +679,8 @@ function ShopifyStoreBackground({ theme = "default" }: { theme?: ThemeType }) {
                       isRetro
                         ? "text-cyan-600 font-mono"
                         : isPoster
-                          ? "text-red-600 font-semibold"
-                          : "text-gray-500"
+                        ? "text-red-600 font-semibold"
+                        : "text-gray-500"
                     )}
                   >
                     {isPoster ? "(24)" : "(24)"}
@@ -711,8 +700,8 @@ function ShopifyStoreBackground({ theme = "default" }: { theme?: ThemeType }) {
                   {isRetro
                     ? "ADD_TO_CART"
                     : isPoster
-                      ? "ADD TO CART"
-                      : "Add to Cart"}
+                    ? "ADD TO CART"
+                    : "Add to Cart"}
                 </Button>
               </div>
             </div>
@@ -743,12 +732,12 @@ function ProductCard({
         isRetro
           ? "bg-black border-cyan-500 text-cyan-300"
           : isPoster
-            ? "bg-gradient-to-b from-amber-50 to-orange-50 border-red-300 border-2 shadow-lg"
-            : isSpace
-              ? "bg-gradient-to-b from-slate-800 to-purple-900 border-purple-400 border-2 shadow-xl text-purple-100"
-              : isCyber2077
-                ? "bg-gradient-to-b from-black to-gray-900 border-yellow-400 shadow-yellow-400/30 shadow-lg text-yellow-300"
-                : "bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600"
+          ? "bg-gradient-to-b from-amber-50 to-orange-50 border-red-300 border-2 shadow-lg"
+          : isSpace
+          ? "bg-gradient-to-b from-slate-800 to-purple-900 border-purple-400 border-2 shadow-xl text-purple-100"
+          : isCyber2077
+          ? "bg-gradient-to-b from-black to-gray-900 border-yellow-400 shadow-yellow-400/30 shadow-lg text-yellow-300"
+          : "bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600"
       )}
       style={{ borderRadius: currentTheme.borderRadius.container }}
     >
@@ -775,24 +764,24 @@ function ProductCard({
               isRetro
                 ? "bg-cyan-500 text-black font-mono border border-cyan-300"
                 : isPoster
-                  ? "bg-red-600 text-white font-bold tracking-wider border-2 border-yellow-400 shadow-md"
-                  : isSpace
-                    ? "bg-gradient-to-r from-purple-500 to-violet-600 text-white font-medium tracking-wide border border-cyan-400 shadow-lg"
-                    : isCyber2077
-                      ? "bg-yellow-400 text-black font-bold tracking-wide border border-cyan-400 shadow-yellow-400/50 shadow-lg"
-                      : "bg-green-500 text-white"
+                ? "bg-red-600 text-white font-bold tracking-wider border-2 border-yellow-400 shadow-md"
+                : isSpace
+                ? "bg-gradient-to-r from-purple-500 to-violet-600 text-white font-medium tracking-wide border border-cyan-400 shadow-lg"
+                : isCyber2077
+                ? "bg-yellow-400 text-black font-bold tracking-wide border border-cyan-400 shadow-yellow-400/50 shadow-lg"
+                : "bg-green-500 text-white"
             )}
             style={{ borderRadius: currentTheme.borderRadius.badge }}
           >
             {isRetro
               ? `[${product.badge.toUpperCase()}]`
               : isPoster
-                ? `★ ${product.badge.toUpperCase()} ★`
-                : isSpace
-                  ? `⭐ ${product.badge.toUpperCase()}`
-                  : isCyber2077
-                    ? `${product.badge.toUpperCase()}`
-                    : product.badge}
+              ? `★ ${product.badge.toUpperCase()} ★`
+              : isSpace
+              ? `⭐ ${product.badge.toUpperCase()}`
+              : isCyber2077
+              ? `${product.badge.toUpperCase()}`
+              : product.badge}
           </span>
         )}
       </div>
@@ -803,23 +792,23 @@ function ProductCard({
             isRetro
               ? "text-cyan-300 font-mono"
               : isPoster
-                ? "text-red-900 font-bold text-center tracking-wide text-xs leading-tight"
-                : isSpace
-                  ? "text-purple-100 font-medium text-center tracking-wide"
-                  : isCyber2077
-                    ? "text-yellow-300 font-bold tracking-wide"
-                    : "text-gray-900 dark:text-white"
+              ? "text-red-900 font-bold text-center tracking-wide text-xs leading-tight"
+              : isSpace
+              ? "text-purple-100 font-medium text-center tracking-wide"
+              : isCyber2077
+              ? "text-yellow-300 font-bold tracking-wide"
+              : "text-gray-900 dark:text-white"
           )}
         >
           {isRetro
             ? `> ${product.name}`
             : isPoster
-              ? product.name.toUpperCase()
-              : isSpace
-                ? `⭐ ${product.name} ⭐`
-                : isCyber2077
-                  ? product.name.toUpperCase()
-                  : product.name}
+            ? product.name.toUpperCase()
+            : isSpace
+            ? `⭐ ${product.name} ⭐`
+            : isCyber2077
+            ? product.name.toUpperCase()
+            : product.name}
         </h4>
         <div className="flex items-center gap-2 mb-3 flex-shrink-0">
           <span
@@ -834,12 +823,12 @@ function ProductCard({
               color: isRetro
                 ? "#00ff00"
                 : isPoster
-                  ? "#991b1b"
-                  : isSpace
-                    ? "#c084fc"
-                    : isCyber2077
-                      ? "#fcee09"
-                      : currentTheme.colors.primary,
+                ? "#991b1b"
+                : isSpace
+                ? "#c084fc"
+                : isCyber2077
+                ? "#fcee09"
+                : currentTheme.colors.primary,
             }}
           >
             {product.price}
@@ -870,10 +859,10 @@ function ProductCard({
             {isRetro
               ? "[*****]"
               : isPoster
-                ? "★★★★★"
-                : isSpace
-                  ? "⭐⭐⭐⭐⭐"
-                  : "★".repeat(5)}
+              ? "★★★★★"
+              : isSpace
+              ? "⭐⭐⭐⭐⭐"
+              : "★".repeat(5)}
           </div>
           <span
             className={cn(
@@ -894,12 +883,12 @@ function ProductCard({
               isRetro
                 ? "border-cyan-500 text-cyan-100 hover:bg-cyan-900/20 font-mono bg-gray-900"
                 : isPoster
-                  ? "border-red-600 text-red-800 hover:bg-red-50 font-bold tracking-wide bg-amber-50 border-2"
-                  : isSpace
-                    ? "border-purple-400 text-purple-200 hover:bg-purple-900/30 font-medium bg-slate-800 border-2"
-                    : isCyber2077
-                      ? "border-yellow-400 text-yellow-300 hover:bg-yellow-900/20 font-bold bg-black"
-                      : ""
+                ? "border-red-600 text-red-800 hover:bg-red-50 font-bold tracking-wide bg-amber-50 border-2"
+                : isSpace
+                ? "border-purple-400 text-purple-200 hover:bg-purple-900/30 font-medium bg-slate-800 border-2"
+                : isCyber2077
+                ? "border-yellow-400 text-yellow-300 hover:bg-yellow-900/20 font-bold bg-black"
+                : ""
             )}
             style={{ borderRadius: currentTheme.borderRadius.input }}
           >
@@ -907,10 +896,10 @@ function ProductCard({
             {isRetro
               ? "VIEW"
               : isSpace
-                ? "SCAN"
-                : isCyber2077
-                  ? "ANALYZE"
-                  : "View"}
+              ? "SCAN"
+              : isCyber2077
+              ? "ANALYZE"
+              : "View"}
           </Button>
           <Button
             className={cn(
@@ -918,23 +907,23 @@ function ProductCard({
               isRetro
                 ? "text-black border border-cyan-500 font-mono"
                 : isPoster
-                  ? "text-white font-bold tracking-wide border-2 border-yellow-500 shadow-md bg-red-700 hover:bg-red-800"
-                  : isSpace
-                    ? "text-white font-medium tracking-wide bg-gradient-to-r from-purple-500 to-violet-600 hover:from-purple-600 hover:to-violet-700 border border-cyan-400"
-                    : isCyber2077
-                      ? "text-black font-bold tracking-wide bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 border border-cyan-400"
-                      : "text-white"
+                ? "text-white font-bold tracking-wide border-2 border-yellow-500 shadow-md bg-red-700 hover:bg-red-800"
+                : isSpace
+                ? "text-white font-medium tracking-wide bg-gradient-to-r from-purple-500 to-violet-600 hover:from-purple-600 hover:to-violet-700 border border-cyan-400"
+                : isCyber2077
+                ? "text-black font-bold tracking-wide bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 border border-cyan-400"
+                : "text-white"
             )}
             style={{
               backgroundColor: isPoster
                 ? "#b91c1c"
                 : isRetro
-                  ? currentTheme.colors.primary
-                  : isSpace
-                    ? undefined
-                    : isCyber2077
-                      ? undefined
-                      : currentTheme.colors.primary,
+                ? currentTheme.colors.primary
+                : isSpace
+                ? undefined
+                : isCyber2077
+                ? undefined
+                : currentTheme.colors.primary,
               borderRadius: currentTheme.borderRadius.input,
             }}
           >
@@ -1026,12 +1015,12 @@ function ChatContent({
               {isRetro
                 ? ">ARI_v2.1.exe"
                 : isPoster
-                  ? "ARI SHOPKEEPER"
-                  : isSpace
-                    ? "🛸 ARI COSMIC ASSISTANT 🛸"
-                    : isCyber2077
-                      ? "ARI NEURAL INTERFACE"
-                      : "Ari - AI Shopkeeper"}
+                ? "ARI SHOPKEEPER"
+                : isSpace
+                ? "🛸 ARI COSMIC ASSISTANT 🛸"
+                : isCyber2077
+                ? "ARI NEURAL INTERFACE"
+                : "Ari - AI Shopkeeper"}
             </h3>
             <span
               className={cn(
@@ -1047,12 +1036,12 @@ function ChatContent({
               {isRetro
                 ? "[ONLINE] Ready to assist..."
                 : isPoster
-                  ? "ALWAYS AT YOUR SERVICE!"
-                  : isSpace
-                    ? "🌌 ONLINE • Transmitting from the cosmos"
-                    : isCyber2077
-                      ? "NEURAL LINK ESTABLISHED • Night City Commerce"
-                      : "Online • Ready to help"}
+                ? "ALWAYS AT YOUR SERVICE!"
+                : isSpace
+                ? "🌌 ONLINE • Transmitting from the cosmos"
+                : isCyber2077
+                ? "NEURAL LINK ESTABLISHED • Night City Commerce"
+                : "Online • Ready to help"}
             </span>
           </div>
         </div>
@@ -1075,22 +1064,22 @@ function ChatContent({
               backgroundColor: isPoster
                 ? "transparent"
                 : isSpace
-                  ? "transparent"
-                  : isCyber2077
-                    ? "#fcee09"
-                    : currentTheme.colors.primary,
+                ? "transparent"
+                : isCyber2077
+                ? "#fcee09"
+                : currentTheme.colors.primary,
               borderRadius: currentTheme.borderRadius.badge,
             }}
           >
             {isRetro
               ? "DEMO.EXE"
               : isPoster
-                ? "LIVE DEMO"
-                : isSpace
-                  ? "🚀 COSMIC DEMO"
-                  : isCyber2077
-                    ? "NEURAL DEMO"
-                    : "DEMO"}
+              ? "LIVE DEMO"
+              : isSpace
+              ? "🚀 COSMIC DEMO"
+              : isCyber2077
+              ? "NEURAL DEMO"
+              : "DEMO"}
           </span>
           <Button
             variant="secondary"
@@ -1154,42 +1143,42 @@ function ChatContent({
                       ? isRetro
                         ? "text-cyan-300 font-mono"
                         : isPoster
-                          ? "text-red-800 font-semibold"
-                          : isSpace
-                            ? "text-purple-200 font-medium"
-                            : isCyber2077
-                              ? "text-yellow-300 font-medium"
-                              : "text-gray-900"
+                        ? "text-red-800 font-semibold"
+                        : isSpace
+                        ? "text-purple-200 font-medium"
+                        : isCyber2077
+                        ? "text-yellow-300 font-medium"
+                        : "text-gray-900"
                       : isRetro
-                        ? "text-green-400 font-mono border border-green-600"
-                        : isPoster
-                          ? "text-red-700 font-medium border-2 border-red-300 bg-white shadow-md"
-                          : isSpace
-                            ? "text-cyan-200 font-medium border border-purple-400 bg-slate-800/50 shadow-lg"
-                            : isCyber2077
-                              ? "text-cyan-300 font-medium border border-yellow-400 bg-gray-900"
-                              : "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white"
+                      ? "text-green-400 font-mono border border-green-600"
+                      : isPoster
+                      ? "text-red-700 font-medium border-2 border-red-300 bg-white shadow-md"
+                      : isSpace
+                      ? "text-cyan-200 font-medium border border-purple-400 bg-slate-800/50 shadow-lg"
+                      : isCyber2077
+                      ? "text-cyan-300 font-medium border border-yellow-400 bg-gray-900"
+                      : "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white"
                   )}
                   style={{
                     backgroundColor: message.isUser
                       ? isRetro
                         ? currentTheme.colors.secondary
                         : isPoster
-                          ? currentTheme.colors.secondary
-                          : isSpace
-                            ? "#1e1b4b"
-                            : isCyber2077
-                              ? "#1a1a1a"
-                              : currentTheme.colors.secondary
+                        ? currentTheme.colors.secondary
+                        : isSpace
+                        ? "#1e1b4b"
+                        : isCyber2077
+                        ? "#1a1a1a"
+                        : currentTheme.colors.secondary
                       : isRetro
-                        ? "#001a0d"
-                        : isPoster
-                          ? "#ffffff"
-                          : isSpace
-                            ? "#0f172a"
-                            : isCyber2077
-                              ? "#0a0a0a"
-                              : undefined,
+                      ? "#001a0d"
+                      : isPoster
+                      ? "#ffffff"
+                      : isSpace
+                      ? "#0f172a"
+                      : isCyber2077
+                      ? "#0a0a0a"
+                      : undefined,
                     borderRadius: currentTheme.borderRadius.message,
                   }}
                 >
@@ -1213,12 +1202,12 @@ function ChatContent({
                       backgroundColor: isRetro
                         ? "#001a1a"
                         : isPoster
-                          ? currentTheme.colors.primary
-                          : isSpace
-                            ? "#8b5cf6"
-                            : isCyber2077
-                              ? "#fcee09"
-                              : currentTheme.colors.secondary,
+                        ? currentTheme.colors.primary
+                        : isSpace
+                        ? "#8b5cf6"
+                        : isCyber2077
+                        ? "#fcee09"
+                        : currentTheme.colors.secondary,
                       borderRadius: currentTheme.borderRadius.badge,
                     }}
                   >
@@ -1234,21 +1223,21 @@ function ChatContent({
                         color: isPoster
                           ? "white"
                           : isSpace
-                            ? "white"
-                            : isCyber2077
-                              ? "black"
-                              : currentTheme.colors.logo,
+                          ? "white"
+                          : isCyber2077
+                          ? "black"
+                          : currentTheme.colors.logo,
                       }}
                     >
                       {isRetro
                         ? "$"
                         : isPoster
-                          ? "C"
-                          : isSpace
-                            ? "👤"
-                            : isCyber2077
-                              ? "U"
-                              : "U"}
+                        ? "C"
+                        : isSpace
+                        ? "👤"
+                        : isCyber2077
+                        ? "U"
+                        : "U"}
                     </span>
                   </div>
                 )}
@@ -1366,21 +1355,21 @@ function ChatContent({
           backgroundColor: isRetro
             ? "#000000"
             : isPoster
-              ? undefined
-              : isSpace
-                ? undefined
-                : isCyber2077
-                  ? "#000000"
-                  : undefined, // Let CSS classes handle default/dark mode
+            ? undefined
+            : isSpace
+            ? undefined
+            : isCyber2077
+            ? "#000000"
+            : undefined, // Let CSS classes handle default/dark mode
           borderTop: isRetro
             ? "1px solid #06b6d4"
             : isPoster
-              ? "1px solid #b91c1c"
-              : isSpace
-                ? "1px solid #8b5cf6"
-                : isCyber2077
-                  ? "1px solid #fcee09"
-                  : "", // Will be overridden by dark mode CSS if needed
+            ? "1px solid #b91c1c"
+            : isSpace
+            ? "1px solid #8b5cf6"
+            : isCyber2077
+            ? "1px solid #fcee09"
+            : "", // Will be overridden by dark mode CSS if needed
           padding: "16px",
           borderRadius: "0px",
         }}
@@ -1399,21 +1388,21 @@ function ChatContent({
             backgroundColor: isRetro
               ? "#001a1a"
               : isPoster
-                ? "#ffffff"
-                : isSpace
-                  ? "#1e293b"
-                  : isCyber2077
-                    ? "#111111"
-                    : undefined, // Let CSS classes handle default/dark mode
+              ? "#ffffff"
+              : isSpace
+              ? "#1e293b"
+              : isCyber2077
+              ? "#111111"
+              : undefined, // Let CSS classes handle default/dark mode
             borderColor: isRetro
               ? "#06b6d4"
               : isPoster
-                ? "#dc2626"
-                : isSpace
-                  ? "#8b5cf6"
-                  : isCyber2077
-                    ? "#fcee09"
-                    : "#d1d5db", // This will be overridden by CSS for dark mode
+              ? "#dc2626"
+              : isSpace
+              ? "#8b5cf6"
+              : isCyber2077
+              ? "#fcee09"
+              : "#d1d5db", // This will be overridden by CSS for dark mode
             borderWidth: "1px",
             borderStyle: "solid",
             borderRadius: currentTheme.borderRadius.input,
@@ -1426,14 +1415,14 @@ function ChatContent({
                 isUserTyping
                   ? ""
                   : isRetro
-                    ? "> Enter command..."
-                    : isPoster
-                      ? "What can I help you find today?"
-                      : isSpace
-                        ? "🛸 Transmit your cosmic shopping request..."
-                        : isCyber2077
-                          ? ">> Enter neural query..."
-                          : "Ask Ari about your Shopify store..."
+                  ? "> Enter command..."
+                  : isPoster
+                  ? "What can I help you find today?"
+                  : isSpace
+                  ? "🛸 Transmit your cosmic shopping request..."
+                  : isCyber2077
+                  ? ">> Enter neural query..."
+                  : "Ask Ari about your Shopify store..."
               }
               value={typingText}
               readOnly
@@ -1454,12 +1443,12 @@ function ChatContent({
                 color: isRetro
                   ? "#67e8f9"
                   : isPoster
-                    ? "#991b1b"
-                    : isSpace
-                      ? "#c084fc"
-                      : isCyber2077
-                        ? "#fcee09"
-                        : undefined, // Let CSS classes handle default/dark mode
+                  ? "#991b1b"
+                  : isSpace
+                  ? "#c084fc"
+                  : isCyber2077
+                  ? "#fcee09"
+                  : undefined, // Let CSS classes handle default/dark mode
                 fontSize: "14px",
                 lineHeight: "1.5",
                 fontFamily: isRetro ? "monospace" : "inherit",
@@ -1495,12 +1484,12 @@ function ChatContent({
                   color: isRetro
                     ? "#6b7280"
                     : isPoster
-                      ? "#9ca3af"
-                      : isSpace
-                        ? "#9ca3af"
-                        : isCyber2077
-                          ? "#6b7280"
-                          : undefined, // Let CSS classes handle default/dark mode
+                    ? "#9ca3af"
+                    : isSpace
+                    ? "#9ca3af"
+                    : isCyber2077
+                    ? "#6b7280"
+                    : undefined, // Let CSS classes handle default/dark mode
                   backgroundColor: "transparent",
                 }}
               >
@@ -1526,12 +1515,12 @@ function ChatContent({
                   color: isRetro
                     ? "#6b7280"
                     : isPoster
-                      ? "#9ca3af"
-                      : isSpace
-                        ? "#9ca3af"
-                        : isCyber2077
-                          ? "#6b7280"
-                          : undefined, // Let CSS classes handle default/dark mode
+                    ? "#9ca3af"
+                    : isSpace
+                    ? "#9ca3af"
+                    : isCyber2077
+                    ? "#6b7280"
+                    : undefined, // Let CSS classes handle default/dark mode
                   backgroundColor: "transparent",
                 }}
               >
@@ -1716,7 +1705,7 @@ export function ChatbotDemo({
         </div>
       )}
 
-      {/* Bottom Right Mode - Temporarily Disabled 
+      {/* Bottom Right Mode - Temporarily Disabled
       {false && placement === "bottom-right" && (
         <div className="relative h-[800px] rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700">
           <div className="absolute inset-0 filter blur-sm">

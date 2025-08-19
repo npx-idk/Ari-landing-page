@@ -4,6 +4,7 @@ import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import Logo from "./logo";
+import { ThemeSwitcher } from "./theme/theme-switcher";
 import { Button } from "./ui/button";
 
 const menuItems = [
@@ -63,7 +64,7 @@ export const HeroHeader = () => {
                   <li key={index}>
                     <Link
                       href={item.href}
-                      className="text-muted-foreground hover:text-accent-foreground block duration-150"
+                      className="text-accent-foreground/70 hover:text-accent-foreground block duration-150"
                     >
                       <span>{item.name}</span>
                     </Link>
@@ -88,6 +89,7 @@ export const HeroHeader = () => {
                 </ul>
               </div>
               <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit">
+                <ThemeSwitcher />
                 <Button
                   asChild
                   variant="outline"

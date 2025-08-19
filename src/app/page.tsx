@@ -1,11 +1,10 @@
 "use client";
 
-// import { HeroSection } from "@/components/hero-section";
 import { Footer } from "@/components/footer";
+import Features from "@/custom/features";
 import { HeroHeader } from "@/custom/header";
 import HeroSection from "@/custom/hero";
 import NewBenefits from "./new-components/benefits";
-import NewCoreFeature from "./new-components/core-features";
 import NewFaq from "./new-components/faq";
 import NewFooter from "./new-components/footer";
 import NewPricing from "./new-components/pricing";
@@ -18,7 +17,7 @@ export default function Home() {
       <HeroHeader />
       <main>
         <HeroSection />
-        <NewCoreFeature />
+        <Features />
         <NewTabView />
         <NewBenefits />
         <Testimonials />

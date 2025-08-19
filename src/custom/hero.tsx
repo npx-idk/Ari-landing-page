@@ -345,7 +345,7 @@ export default function HeroSection({
   const { theme, setTheme, handleThemeChange } = useThemeControl(initialTheme);
 
   return (
-    <section className={`overflow-hidden ${className}`}>
+    <section className={`overflow-hidden ${className} pb-12`}>
       <div className="relative pt-24 md:pt-32">
         <div className="mx-auto max-w-7xl px-6">
           <div className="text-center sm:mx-auto lg:mr-auto lg:mt-0">

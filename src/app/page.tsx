@@ -4,11 +4,11 @@ import { Footer } from "@/components/footer";
 import Features from "@/custom/features";
 import { HeroHeader } from "@/custom/header";
 import HeroSection from "@/custom/hero";
+import TabView from "@/custom/tab-view";
 import NewBenefits from "./new-components/benefits";
 import NewFaq from "./new-components/faq";
 import NewFooter from "./new-components/footer";
 import NewPricing from "./new-components/pricing";
-import NewTabView from "./new-components/tab-view";
 import Testimonials from "./new-components/testimonial";
 
 export default function Home() {
@@ -18,7 +18,7 @@ export default function Home() {
       <main>
         <HeroSection />
         <Features />
-        <NewTabView />
+        <TabView />
         <NewBenefits />
         <Testimonials />
         <NewPricing />

@@ -1,0 +1,289 @@
+"use client";
+
+import { cn } from "@/lib/utils";
+import NumberFlow from "@number-flow/react";
+import { ArrowRight, BadgeCheck } from "lucide-react";
+import { memo, useCallback, useMemo, useState } from "react";
+import { AnimatedGroup } from "./motion/animated-group";
+import { TextEffect } from "./motion/text-effect";
+import { Badge } from "./ui/badge";
+import { Button } from "./ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
+import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
+
+// Types
+interface PlanPrice {
+  readonly monthly: number | string;
+  readonly yearly: number | string;
+}
+
+interface Plan {
+  readonly id: string;
+  readonly name: string;
+  readonly price: PlanPrice;
+  readonly description: string;
+  readonly features: readonly string[];
+  readonly cta: string;
+  readonly popular?: boolean;
+}
+
+type BillingFrequency = "monthly" | "yearly";
+
+// Constants - moved to top level for better tree-shaking
+const PLANS: readonly Plan[] = [
+  {
+    id: "free",
+    name: "Free",
+    price: { monthly: 0, yearly: 0 },
+    description:
+      "The perfect starting place for your web app or personal project.",
+    features: ["300 Messages", "No AI Audio Call", "No Support Available"],
+    cta: "Get started for free",
+  },
+  {
+    id: "plus",
+    name: "Plus",
+    price: { monthly: 20, yearly: 216 },
+    description: "Everything you need to build and scale your business.",
+    features: ["1200 Messages", "No AI Audio Call", "Standard Support"],
+    cta: "Subscribe to Plus",
+    popular: true,
+  },
+  {
+    id: "pro",
+    name: "Pro",
+    price: { monthly: 50, yearly: 480 },
+    description: "Everything you need to build and scale your business.",
+    features: ["2000 Messages", "AI Audio Call", "Priority 24/7 Support"],
+    cta: "Subscribe to Pro",
+  },
+  {
+    id: "enterprise",
+    name: "Enterprise",
+    price: { monthly: "Let's talk", yearly: "Let's talk" },
+    description: "Critical security, performance, observability and support.",
+    features: ["2000 Messages", "AI Audio Call", "Priority 24/7 Support"],
+    cta: "Contact us",
+  },
+] as const;
+
+// Consolidated styles with CSS custom properties for better performance
+const STYLES = {
+  section:
+    "not-prose flex flex-col gap-16 px-8 text-center @container bg-[#F8FAFC] py-16 md:py-20 dark:bg-[#111A24]",
+  header: "flex flex-col items-center justify-center gap-8",
+  title:
+    "text-balance text-4xl font-semibold lg:text-5xl text-gray-700 dark:text-white/90",
+  subtitle: "mt-4 text-gray-500 dark:text-white/70 max-w-2xl mx-auto",
+  grid: "mt-8 grid w-full h-full gap-6 @2xl:grid-cols-4",
+  card: {
+    base: "relative w-full h-full text-left bg-white border border-gray-200/60 shadow-lg shadow-gray-100/50 dark:bg-[#1A2E25] dark:shadow-2xl dark:shadow-primary/10 dark:bg-gradient-to-br dark:from-card dark:via-card dark:to-primary/5 dark:border-gray-700/50",
+    popular:
+      "ring-2 ring-primary/30 border-primary/30 dark:ring-primary/30 dark:border-primary/30",
+  },
+  tabs: {
+    container: "bg-muted rounded-full pb-0.5",
+    list: "bg-transparent grid w-full grid-cols-2",
+    trigger:
+      "data-[state=active]:bg-white dark:data-[state=active]:bg-[#011e2b] data-[state=active]:shadow-sm text-muted-foreground data-[state=active]:text-foreground font-medium rounded-full cursor-pointer",
+  },
+  badge: {
+    popular:
+      "-translate-x-1/2 -translate-y-1/2 absolute top-0 left-1/2 rounded-full px-4 py-1.5 text-xs shadow-lg font-semibold h-8 uppercase tracking-wider backdrop-blur-md border bg-green-50 text-green-700 border-green-200 hover:bg-green-100 hover:shadow-md dark:bg-green-600/20 dark:hover:bg-green-600/30 dark:text-white dark:border-green-500/30 dark:hover:shadow-xl dark:hover:shadow-green-500/25",
+    discount:
+      "ml-2 bg-primary/75 text-[#011e2b] border border-primary/20 text-xs px-2 py-0.5 rounded-full",
+  },
+  price: {
+    container: "flex items-baseline gap-1",
+    number: "font-bold text-3xl text-foreground",
+    text: "text-gray-600 font-medium dark:text-white/80",
+    string: "font-bold text-4xl text-foreground",
+  },
+  feature: {
+    container:
+      "flex items-center gap-3 text-sm text-gray-600 dark:text-white/80",
+    icon: "h-4 w-4 flex-shrink-0 text-green-600 dark:text-primary/50",
+  },
+  button: {
+    base: "w-full font-semibold h-10 text-sm uppercase tracking-wider backdrop-blur-md border bg-green-600 hover:bg-green-700 text-white border-green-600 hover:border-green-700 shadow-md hover:shadow-lg hover:shadow-green-600/25 dark:bg-green-600/20 dark:hover:bg-green-600/30 dark:text-white dark:border-green-500/30 dark:hover:shadow-xl dark:hover:shadow-green-500/25 cursor-pointer rounded-full",
+    popular: "shadow-lg hover:shadow-xl",
+  },
+} as const;
+
+// Number formatting configuration
+const NUMBER_FORMAT_CONFIG = {
+  style: "currency" as const,
+  currency: "USD" as const,
+  currencyDisplay: "narrowSymbol" as const,
+  maximumFractionDigits: 0,
+};
+
+// Memoized components for better performance
+const PriceDisplay = memo<{ price: PlanPrice; frequency: BillingFrequency }>(
+  ({ price, frequency }) => {
+    const currentPrice = price[frequency];
+
+    if (typeof currentPrice === "number") {
+      return (
+        <div className={STYLES.price.container}>
+          <NumberFlow
+            className={STYLES.price.number}
+            format={NUMBER_FORMAT_CONFIG}
+            value={currentPrice}
+          />
+          <span className={STYLES.price.text}>/ {frequency}</span>
+        </div>
+      );
+    }
+
+    return <span className={STYLES.price.string}>{currentPrice}</span>;
+  }
+);
+PriceDisplay.displayName = "PriceDisplay";
+
+const FeatureList = memo<{ features: readonly string[] }>(({ features }) => (
+  <CardContent className="grid gap-3 pb-2 h-full">
+    {features.map((feature) => (
+      <div key={feature} className={STYLES.feature.container}>
+        <BadgeCheck className={STYLES.feature.icon} />
+        {feature}
+      </div>
+    ))}
+  </CardContent>
+));
+FeatureList.displayName = "FeatureList";
+
+const PlanCard = memo<{ plan: Plan; frequency: BillingFrequency }>(
+  ({ plan, frequency }) => (
+    <Card className={cn(STYLES.card.base, plan.popular && STYLES.card.popular)}>
+      {plan.popular && <Badge className={STYLES.badge.popular}>Popular</Badge>}
+
+      <CardHeader className="pb-2">
+        <CardTitle className="font-semibold text-xl text-card-foreground">
+          {plan.name}
+        </CardTitle>
+        <CardDescription className="text-gray-600 dark:text-white/80">
+          <p className="mb-4">{plan.description}</p>
+          <PriceDisplay price={plan.price} frequency={frequency} />
+        </CardDescription>
+      </CardHeader>
+
+      <FeatureList features={plan.features} />
+
+      <CardFooter>
+        <Button
+          className={cn(
+            STYLES.button.base,
+            plan.popular && STYLES.button.popular
+          )}
+        >
+          {plan.cta}
+          <ArrowRight className="ml-2 h-4 w-4" />
+        </Button>
+      </CardFooter>
+    </Card>
+  )
+);
+PlanCard.displayName = "PlanCard";
+
+const PricingTabs = memo<{
+  frequency: BillingFrequency;
+  onFrequencyChange: (value: string) => void;
+}>(({ frequency, onFrequencyChange }) => (
+  <Tabs
+    defaultValue={frequency ?? "monthly"}
+    onValueChange={onFrequencyChange}
+    className={STYLES.tabs.container}
+    aria-label="Billing frequency tabs"
+  >
+    <TabsList
+      className={STYLES.tabs.list}
+      aria-label="Choose your billing frequency"
+    >
+      <TabsTrigger value="monthly" className={STYLES.tabs.trigger}>
+        Monthly
+      </TabsTrigger>
+      <TabsTrigger value="yearly" className={STYLES.tabs.trigger}>
+        Yearly
+        <Badge className={STYLES.badge.discount}>20% off</Badge>
+      </TabsTrigger>
+    </TabsList>
+  </Tabs>
+));
+PricingTabs.displayName = "PricingTabs";
+
+// Main component
+const OptimizedPricing = () => {
+  const [frequency, setFrequency] = useState<BillingFrequency>("monthly");
+
+  // Use useCallback to prevent unnecessary re-renders of child components
+  const handleFrequencyChange = useCallback((value: string) => {
+    setFrequency(value as BillingFrequency);
+  }, []);
+
+  // Memoize plan cards - only re-render when frequency changes
+  const planCards = useMemo(
+    () =>
+      PLANS.map((plan) => (
+        <PlanCard key={plan.id} plan={plan} frequency={frequency} />
+      )),
+    [frequency]
+  );
+
+  return (
+    <section className={STYLES.section}>
+      <AnimatedGroup
+        preset="blur-slide"
+        className={STYLES.header}
+        viewportBehavior="once"
+      >
+        <TextEffect
+          as="h2"
+          className={STYLES.title}
+          preset="fade-in-blur"
+          per="word"
+          viewportBehavior="once"
+        >
+          Start Crafting Content the AI Way
+        </TextEffect>
+
+        <TextEffect
+          as="p"
+          className={STYLES.subtitle}
+          preset="slide"
+          per="word"
+          viewportBehavior="once"
+        >
+          Collaborate with AI to generate content that resonates with your
+          audience, drives and delivers meaningful results across all platforms.
+        </TextEffect>
+
+        <PricingTabs
+          frequency={frequency}
+          onFrequencyChange={handleFrequencyChange}
+        />
+
+        <AnimatedGroup
+          preset="scale"
+          as="div"
+          className={STYLES.grid}
+          viewportBehavior="once"
+        >
+          {planCards}
+        </AnimatedGroup>
+      </AnimatedGroup>
+    </section>
+  );
+};
+
+// Add display name for better debugging
+OptimizedPricing.displayName = "OptimizedPricing";
+
+export default memo(OptimizedPricing);

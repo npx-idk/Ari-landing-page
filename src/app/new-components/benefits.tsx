@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 
 const Benefits: React.FC = () => {
@@ -28,25 +29,37 @@ const Benefits: React.FC = () => {
                   </p>
                 </div>
                 <div>
-                  <img
-                    src="assets/images/benefits/ind-1.svg"
+                  <Image
+                    src="/assets/images/benefits/ind-1.svg"
                     className="absolute left-8 top-[61%] floating-1"
                     alt=""
+                    width={100}
+                    height={100}
+                    loading="lazy"
                   />
-                  <img
-                    src="assets/images/benefits/ind-2.svg"
+                  <Image
+                    src="/assets/images/benefits/ind-2.svg"
                     className="absolute right-28 top-[55%] floating-2"
                     alt=""
+                    width={100}
+                    height={100}
+                    loading="lazy"
                   />
-                  <img
-                    src="assets/images/benefits/ind-3.svg"
+                  <Image
+                    src="/assets/images/benefits/ind-3.svg"
                     className="right-8 absolute bottom-[15%] floating-3"
                     alt=""
+                    width={100}
+                    height={100}
+                    loading="lazy"
                   />
-                  <img
-                    src="assets/images/benefits/bn-1.svg"
+                  <Image
+                    src="/assets/images/benefits/bn-1.svg"
                     className="-mb-8 md:-mb-11"
                     alt=""
+                    width={100}
+                    height={100}
+                    loading="lazy"
                   />
                 </div>
               </div>
@@ -54,7 +67,13 @@ const Benefits: React.FC = () => {
             <div className="lg:col-span-6">
               <div className="benefits-bg rounded-[20px] p-12 overflow-hidden">
                 <div>
-                  <img src="assets/images/benefits/bn-2.svg" alt="" />
+                  <Image
+                    src="/assets/images/benefits/bn-2.svg"
+                    alt=""
+                    width={100}
+                    height={100}
+                    loading="lazy"
+                  />
                 </div>
                 <div>
                   <h3 className="font-bold max-w-xs text-white text-2xl md:text-3xl mb-4">
@@ -85,16 +104,22 @@ const Benefits: React.FC = () => {
                   </a>
                 </div>
                 <div>
-                  <img
-                    src="assets/images/benefits/bn-3.svg"
+                  <Image
+                    src="/assets/images/benefits/bn-3.svg"
                     className="hidden lg:block relative z-10"
                     alt=""
+                    width={100}
+                    height={100}
+                    loading="lazy"
                   />
                 </div>
-                <img
-                  src="assets/images/benefits/blur-shape.png"
+                <Image
+                  src="/assets/images/benefits/blur-shape.png"
                   alt=""
                   className="h-full w-full -z-0 absolute top-0 right-0"
+                  width={100}
+                  height={100}
+                  loading="lazy"
                 />
               </div>
             </div>

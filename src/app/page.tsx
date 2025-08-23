@@ -1,30 +1,29 @@
 "use client";
 
-import { Footer } from "@/components/footer";
+import Faq from "@/custom/faq";
 import Features from "@/custom/features";
-import { HeroHeader } from "@/custom/header";
+import Footer from "@/custom/footer";
+import { Header } from "@/custom/header";
 import HeroSection from "@/custom/hero";
+import { LogoCloud } from "@/custom/logo-cloud";
+import Pricing from "@/custom/pricing";
 import TabView from "@/custom/tab-view";
-import NewBenefits from "./new-components/benefits";
-import NewFaq from "./new-components/faq";
-import NewFooter from "./new-components/footer";
-import NewPricing from "./new-components/pricing";
-import Testimonials from "./new-components/testimonial";
+import Testimonials from "@/custom/testimonials";
 
 export default function Home() {
   return (
     <div className="min-h-screen">
-      <HeroHeader />
+      <Header />
       <main>
         <HeroSection />
         <Features />
         <TabView />
-        <NewBenefits />
+        <LogoCloud />
         <Testimonials />
-        <NewPricing />
-        <NewFaq />
-        <NewFooter />
+        <Pricing />
+        <Faq />
       </main>
+
       <Footer />
     </div>
   );

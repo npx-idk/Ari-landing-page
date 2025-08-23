@@ -1,78 +1,85 @@
-// components/theme-switcher.tsx
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Monitor, Moon, Sun } from "lucide-react";
+import { Moon, Sun } from "lucide-react";
 import { motion } from "motion/react";
 import {
+  memo,
   useCallback,
   useEffect,
   useLayoutEffect,
-  useRef,
+  useMemo,
   useState,
 } from "react";
+import { AnimatedGroup } from "../motion/animated-group";
+import { Button } from "../ui/button";
 
+// Types
 type Theme = "light" | "dark" | "system";
+type Size = "sm" | "md" | "lg";
 
-const THEME_KEY = "theme";
-const MEDIA_QUERY = "(prefers-color-scheme: dark)";
+// Constants
+const THEME_KEY = "theme" as const;
+const MEDIA_QUERY = "(prefers-color-scheme: dark)" as const;
+const TRANSITION_CONFIG = {
+  type: "spring",
+  stiffness: 500,
+  damping: 30,
+  mass: 0.8,
+} as const;
 
-const themes = [
-  { key: "system" as const, icon: Monitor, label: "System theme" },
+// Theme configuration
+const THEME_CONFIG = [
   { key: "light" as const, icon: Sun, label: "Light theme" },
   { key: "dark" as const, icon: Moon, label: "Dark theme" },
-];
+] as const;
 
-// Optimized theme utilities
+// Size variants
+const SIZE_VARIANTS = {
+  sm: { container: "h-6 gap-x-0.5", button: "h-4 w-4", icon: "h-3 w-3" },
+  md: { container: "h-8 gap-x-0.5", button: "h-6 w-6", icon: "h-4 w-4" },
+  lg: { container: "h-10 gap-x-1", button: "h-8 w-8", icon: "h-5 w-5" },
+} as const;
+
+// Utility functions (moved outside component for better performance)
 const getSystemTheme = (): boolean =>
   typeof window !== "undefined" && window.matchMedia(MEDIA_QUERY).matches;
 
 const getStoredTheme = (): Theme => {
   if (typeof window === "undefined") return "system";
   try {
-    return (localStorage.getItem(THEME_KEY) as Theme) || "system";
+    const stored = localStorage.getItem(THEME_KEY) as Theme;
+    return stored || "system";
   } catch {
     return "system";
   }
 };
 
-const applyThemeToDOM = (theme: Theme) => {
+const applyThemeToDOM = (theme: Theme): void => {
+  if (typeof window === "undefined") return;
+
   const root = document.documentElement;
   const isDark = theme === "dark" || (theme === "system" && getSystemTheme());
 
-  // Add transitioning class to prevent flash
-  root.classList.add("theme-transitioning");
-
-  // Apply theme
-  root.classList.toggle("dark", isDark);
-  root.style.colorScheme = isDark ? "dark" : "light";
-
-  // Remove transitioning class after a frame
+  // Batch DOM updates
   requestAnimationFrame(() => {
-    root.classList.remove("theme-transitioning");
+    root.classList.add("theme-transitioning");
+    root.classList.toggle("dark", isDark);
+    root.style.colorScheme = isDark ? "dark" : "light";
+
+    // Clean up transition class
+    requestAnimationFrame(() => {
+      root.classList.remove("theme-transitioning");
+    });
   });
 };
 
-export type ThemeSwitcherProps = {
-  className?: string;
-  size?: "sm" | "md" | "lg";
-};
-
-export function ThemeSwitcher({ className, size = "md" }: ThemeSwitcherProps) {
+// Custom hook for theme management
+const useTheme = () => {
   const [theme, setThemeState] = useState<Theme>("system");
   const [mounted, setMounted] = useState(false);
-  const mediaQueryRef = useRef<MediaQueryList | null>(null);
-  const listenerRef = useRef<(() => void) | null>(null);
 
-  const sizeClasses = {
-    sm: { container: "h-6", button: "h-4 w-4", icon: "h-3 w-3" },
-    md: { container: "h-8", button: "h-6 w-6", icon: "h-4 w-4" },
-    lg: { container: "h-10", button: "h-8 w-8", icon: "h-5 w-5" },
-  };
-
-  const classes = sizeClasses[size];
-
-  // Initialize theme from storage (useLayoutEffect to prevent flash)
+  // Initialize theme (prevents flash)
   useLayoutEffect(() => {
     const storedTheme = getStoredTheme();
     setThemeState(storedTheme);
@@ -80,127 +87,199 @@ export function ThemeSwitcher({ className, size = "md" }: ThemeSwitcherProps) {
     setMounted(true);
   }, []);
 
-  // Optimized system theme listener
+  // System theme listener with cleanup
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined" || theme !== "system") return;
 
-    const updateSystemListener = () => {
-      // Clean up previous listener
-      if (mediaQueryRef.current && listenerRef.current) {
-        mediaQueryRef.current.removeEventListener(
-          "change",
-          listenerRef.current
-        );
-      }
+    const mediaQuery = window.matchMedia(MEDIA_QUERY);
+    const handleChange = () => applyThemeToDOM("system");
 
-      // Only add listener if theme is system
-      if (theme === "system") {
-        mediaQueryRef.current = window.matchMedia(MEDIA_QUERY);
-        listenerRef.current = () => applyThemeToDOM("system");
-        mediaQueryRef.current.addEventListener("change", listenerRef.current);
-      }
-    };
-
-    updateSystemListener();
-
-    return () => {
-      if (mediaQueryRef.current && listenerRef.current) {
-        mediaQueryRef.current.removeEventListener(
-          "change",
-          listenerRef.current
-        );
-      }
-    };
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
   }, [theme]);
 
   const setTheme = useCallback((newTheme: Theme) => {
     setThemeState(newTheme);
 
-    // Store preference
+    // Persist theme preference
     try {
       localStorage.setItem(THEME_KEY, newTheme);
     } catch {
-      // Silently ignore storage errors
+      // Silently handle storage errors
     }
 
-    // Apply theme immediately
     applyThemeToDOM(newTheme);
   }, []);
 
-  // Render skeleton during hydration
-  if (!mounted) {
+  return { theme, setTheme, mounted };
+};
+
+// Skeleton component for hydration
+const ThemeSwitcherSkeleton = memo(
+  ({ className, size }: { className?: string; size: Size }) => {
+    const { container, button } = SIZE_VARIANTS[size];
+
     return (
       <div
         className={cn(
-          "relative isolate flex rounded-full bg-background p-1 ring-1 ring-border",
-          classes.container,
+          "relative flex rounded-full bg-background p-1 ring-1 ring-border w-fit",
+          container,
           className
         )}
       >
-        {themes.map((_, index) => (
+        {THEME_CONFIG.map((_, index) => (
           <div
             key={index}
-            className={cn(
-              "rounded-full bg-muted/20 animate-pulse",
-              classes.button
-            )}
+            className={cn("rounded-full bg-muted/20 animate-pulse", button)}
           />
         ))}
       </div>
     );
   }
+);
 
-  return (
-    <div
+ThemeSwitcherSkeleton.displayName = "ThemeSwitcherSkeleton";
+
+// Theme button component
+const ThemeButton = memo(
+  ({
+    themeKey,
+    icon: Icon,
+    label,
+    isActive,
+    onClick,
+    buttonClass,
+    iconClass,
+  }: {
+    themeKey: Theme;
+    icon: typeof Sun;
+    label: string;
+    isActive: boolean;
+    onClick: (theme: Theme) => void;
+    buttonClass: string;
+    iconClass: string;
+  }) => (
+    <Button
+      variant="ghost"
+      size="icon"
+      type="button"
+      role="radio"
+      aria-checked={isActive}
+      aria-label={label}
       className={cn(
-        "relative isolate flex rounded-full bg-background p-1 ring-1 ring-border cursor-pointer",
-        classes.container,
-        className
+        "relative rounded-full p-0 transition-colors duration-200 cursor-pointer",
+        "hover:bg-accent/50 focus-visible:ring-2 focus-visible:ring-ring",
+        buttonClass
       )}
-      role="radiogroup"
-      aria-label="Theme selection"
+      onClick={() => onClick(themeKey)}
     >
-      {themes.map(({ key, icon: Icon, label }) => {
-        const isActive = theme === key;
-        return (
-          <button
-            key={key}
-            type="button"
-            role="radio"
-            aria-checked={isActive}
-            aria-label={label}
-            className={cn(
-              "relative rounded-full transition-colors duration-200 cursor-pointer",
-              "hover:bg-accent/50 active:bg-accent/70 cursor-pointer",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 cursor-pointer",
-              "disabled:pointer-events-none disabled:opacity-50",
-              classes.button
-            )}
-            onClick={() => setTheme(key)}
-          >
-            {isActive && (
-              <motion.div
-                className="absolute inset-0 rounded-full bg-secondary cursor-pointer"
-                layoutId="theme-active-indicator"
-                initial={false}
-                transition={{
-                  type: "spring",
-                  stiffness: 500,
-                  damping: 30,
-                  mass: 0.8,
-                }}
-              />
-            )}
-            <Icon
-              className={cn(
-                "relative z-10 m-auto transition-colors duration-200 cursor-pointer",
-                classes.icon,
-                isActive ? "text-foreground" : "text-muted-foreground"
-              )}
-            />
-          </button>
-        );
-      })}
-    </div>
-  );
+      {isActive && (
+        <motion.div
+          className="absolute inset-0 rounded-full bg-secondary"
+          layoutId="theme-active-indicator"
+          initial={false}
+          transition={TRANSITION_CONFIG}
+        />
+      )}
+      <Icon
+        className={cn(
+          "relative z-10 transition-colors duration-200",
+          iconClass,
+          isActive ? "text-foreground" : "text-muted-foreground"
+        )}
+      />
+    </Button>
+  )
+);
+
+ThemeButton.displayName = "ThemeButton";
+
+// Props interface
+export interface ThemeSwitcherProps {
+  className?: string;
+  size?: Size;
 }
+
+// Main component
+export const ThemeSwitcher = memo(
+  ({ className, size = "md" }: ThemeSwitcherProps) => {
+    const { theme, setTheme, mounted } = useTheme();
+
+    // Memoize size classes
+    const sizeClasses = useMemo(() => SIZE_VARIANTS[size], [size]);
+
+    // Show skeleton during hydration
+    if (!mounted) {
+      return <ThemeSwitcherSkeleton className={className} size={size} />;
+    }
+
+    return (
+      <div
+        className={cn(
+          "relative isolate flex rounded-full bg-background p-1 ring-1 ring-border w-fit",
+          sizeClasses.container,
+          className
+        )}
+        role="radiogroup"
+        aria-label="Theme selection"
+      >
+        {THEME_CONFIG.map(({ key, icon, label }) => (
+          <ThemeButton
+            key={key}
+            themeKey={key}
+            icon={icon}
+            label={label}
+            isActive={theme === key}
+            onClick={setTheme}
+            buttonClass={sizeClasses.button}
+            iconClass={sizeClasses.icon}
+          />
+        ))}
+      </div>
+    );
+  }
+);
+
+ThemeSwitcher.displayName = "ThemeSwitcher";
+
+// Alternative version with TextEffect and AnimatedGroup
+export const AnimatedThemeSwitcher = memo(
+  ({ className, size = "md" }: ThemeSwitcherProps) => {
+    const { theme, setTheme, mounted } = useTheme();
+    const sizeClasses = useMemo(() => SIZE_VARIANTS[size], [size]);
+
+    if (!mounted) {
+      return <ThemeSwitcherSkeleton className={className} size={size} />;
+    }
+
+    return (
+      <AnimatedGroup
+        preset="scale"
+        className={cn(
+          "relative isolate flex rounded-full bg-background p-1 ring-1 ring-border w-fit",
+          sizeClasses.container,
+          className
+        )}
+        aria-label="Theme selection"
+        viewportBehavior="once"
+      >
+        {THEME_CONFIG.map(({ key, icon, label }) => (
+          <ThemeButton
+            key={key}
+            themeKey={key}
+            icon={icon}
+            label={label}
+            isActive={theme === key}
+            onClick={setTheme}
+            buttonClass={sizeClasses.button}
+            iconClass={sizeClasses.icon}
+          />
+        ))}
+      </AnimatedGroup>
+    );
+  }
+);
+
+AnimatedThemeSwitcher.displayName = "AnimatedThemeSwitcher";
+
+export default ThemeSwitcher;

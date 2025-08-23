@@ -1,4 +1,5 @@
 "use client";
+
 import { cn } from "@/lib/utils";
 import type {
   TargetAndTransition,
@@ -7,13 +8,13 @@ import type {
   Variants,
 } from "motion/react";
 import { AnimatePresence, motion } from "motion/react";
-import React from "react";
+import React, { useCallback, useMemo } from "react";
 
 export type PresetType = "blur" | "fade-in-blur" | "scale" | "fade" | "slide";
-
 export type PerType = "word" | "char" | "line";
+export type ViewportBehavior = "immediate" | "once" | "loop";
 
-export type TextEffectProps = {
+export interface TextEffectProps {
   children: string;
   per?: PerType;
   as?: keyof React.JSX.IntrinsicElements;
@@ -33,41 +34,45 @@ export type TextEffectProps = {
   containerTransition?: Transition;
   segmentTransition?: Transition;
   style?: React.CSSProperties;
-};
+  viewportBehavior?: ViewportBehavior;
+  viewport?: {
+    once?: boolean;
+    margin?: string;
+    amount?: number | "some" | "all";
+  };
+}
 
-const defaultStaggerTimes: Record<PerType, number> = {
+// Optimized constants - computed once at module level
+const STAGGER_TIMES: Record<PerType, number> = {
   char: 0.03,
   word: 0.05,
   line: 0.1,
-};
+} as const;
 
-const defaultContainerVariants: Variants = {
+const BASE_CONTAINER_VARIANTS: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.05,
-    },
+    transition: { staggerChildren: 0.05 },
   },
   exit: {
     transition: { staggerChildren: 0.05, staggerDirection: -1 },
   },
-};
+} as const;
 
-const defaultItemVariants: Variants = {
+const BASE_ITEM_VARIANTS: Variants = {
   hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-  },
+  visible: { opacity: 1 },
   exit: { opacity: 0 },
-};
+} as const;
 
-const presetVariants: Record<
+// Preset variants with optimized structure
+const PRESET_VARIANTS: Record<
   PresetType,
   { container: Variants; item: Variants }
 > = {
   blur: {
-    container: defaultContainerVariants,
+    container: BASE_CONTAINER_VARIANTS,
     item: {
       hidden: { opacity: 0, filter: "blur(12px)" },
       visible: { opacity: 1, filter: "blur(0px)" },
@@ -75,7 +80,7 @@ const presetVariants: Record<
     },
   },
   "fade-in-blur": {
-    container: defaultContainerVariants,
+    container: BASE_CONTAINER_VARIANTS,
     item: {
       hidden: { opacity: 0, y: 20, filter: "blur(12px)" },
       visible: { opacity: 1, y: 0, filter: "blur(0px)" },
@@ -83,7 +88,7 @@ const presetVariants: Record<
     },
   },
   scale: {
-    container: defaultContainerVariants,
+    container: BASE_CONTAINER_VARIANTS,
     item: {
       hidden: { opacity: 0, scale: 0 },
       visible: { opacity: 1, scale: 1 },
@@ -91,91 +96,39 @@ const presetVariants: Record<
     },
   },
   fade: {
-    container: defaultContainerVariants,
-    item: {
-      hidden: { opacity: 0 },
-      visible: { opacity: 1 },
-      exit: { opacity: 0 },
-    },
+    container: BASE_CONTAINER_VARIANTS,
+    item: BASE_ITEM_VARIANTS,
   },
   slide: {
-    container: defaultContainerVariants,
+    container: BASE_CONTAINER_VARIANTS,
     item: {
       hidden: { opacity: 0, y: 20 },
       visible: { opacity: 1, y: 0 },
       exit: { opacity: 0, y: 20 },
     },
   },
-};
+} as const;
 
-const AnimationComponent: React.FC<{
-  segment: string;
-  variants: Variants;
-  per: "line" | "word" | "char";
-  segmentWrapperClassName?: string;
-}> = React.memo(({ segment, variants, per, segmentWrapperClassName }) => {
-  const content =
-    per === "line" ? (
-      <motion.span variants={variants} className="block">
-        {segment}
-      </motion.span>
-    ) : per === "word" ? (
-      <motion.span
-        aria-hidden="true"
-        variants={variants}
-        className="inline-block whitespace-pre"
-      >
-        {segment}
-      </motion.span>
-    ) : (
-      <motion.span className="inline-block whitespace-pre">
-        {segment.split("").map((char, charIndex) => (
-          <motion.span
-            key={`char-${charIndex}`}
-            aria-hidden="true"
-            variants={variants}
-            className="inline-block whitespace-pre"
-          >
-            {char}
-          </motion.span>
-        ))}
-      </motion.span>
-    );
-
-  if (!segmentWrapperClassName) {
-    return content;
-  }
-
-  const defaultWrapperClassName = per === "line" ? "block" : "inline-block";
-
-  return (
-    <span className={cn(defaultWrapperClassName, segmentWrapperClassName)}>
-      {content}
-    </span>
-  );
-});
-
-AnimationComponent.displayName = "AnimationComponent";
-
-const splitText = (text: string, per: PerType) => {
-  if (per === "line") return text.split("\n");
-  return text.split(/(\s+)/);
+// Utility functions
+const splitText = (text: string, per: PerType): string[] => {
+  return per === "line" ? text.split("\n") : text.split(/(\s+)/);
 };
 
 const hasTransition = (
   variant?: Variant
 ): variant is TargetAndTransition & { transition?: Transition } => {
-  if (!variant) return false;
-  return typeof variant === "object" && "transition" in variant;
+  return Boolean(
+    variant && typeof variant === "object" && "transition" in variant
+  );
 };
 
-const createVariantsWithTransition = (
+const mergeVariantsWithTransition = (
   baseVariants: Variants,
   transition?: Transition & { exit?: Transition }
 ): Variants => {
   if (!transition) return baseVariants;
 
-  const { exit: _, ...mainTransition } = transition;
+  const { exit: exitTransition, ...mainTransition } = transition;
 
   return {
     ...baseVariants,
@@ -201,6 +154,65 @@ const createVariantsWithTransition = (
   };
 };
 
+// Optimized AnimationSegment component
+const AnimationSegment = React.memo<{
+  segment: string;
+  variants: Variants;
+  per: PerType;
+  segmentWrapperClassName?: string;
+  index: number;
+}>(({ segment, variants, per, segmentWrapperClassName, index }) => {
+  const content = useMemo(() => {
+    switch (per) {
+      case "line":
+        return (
+          <motion.span variants={variants} className="block">
+            {segment}
+          </motion.span>
+        );
+      case "word":
+        return (
+          <motion.span
+            aria-hidden="true"
+            variants={variants}
+            className="inline-block whitespace-pre"
+          >
+            {segment}
+          </motion.span>
+        );
+      case "char":
+        return (
+          <motion.span className="inline-block whitespace-pre">
+            {segment.split("").map((char, charIndex) => (
+              <motion.span
+                key={charIndex}
+                aria-hidden="true"
+                variants={variants}
+                className="inline-block whitespace-pre"
+              >
+                {char}
+              </motion.span>
+            ))}
+          </motion.span>
+        );
+      default:
+        return null;
+    }
+  }, [segment, variants, per]);
+
+  if (!segmentWrapperClassName) return content;
+
+  const wrapperClassName = useMemo(
+    () =>
+      cn(per === "line" ? "block" : "inline-block", segmentWrapperClassName),
+    [per, segmentWrapperClassName]
+  );
+
+  return <span className={wrapperClassName}>{content}</span>;
+});
+
+AnimationSegment.displayName = "AnimationSegment";
+
 export function TextEffect({
   children,
   per = "word",
@@ -218,72 +230,183 @@ export function TextEffect({
   containerTransition,
   segmentTransition,
   style,
+  viewportBehavior = "immediate",
+  viewport,
 }: TextEffectProps) {
-  const segments = splitText(children, per);
-  const MotionTag = motion[as as keyof typeof motion] as typeof motion.div;
+  // Memoize segments to prevent re-splitting on every render
+  const segments = useMemo(() => splitText(children, per), [children, per]);
 
-  const baseVariants = preset
-    ? presetVariants[preset]
-    : { container: defaultContainerVariants, item: defaultItemVariants };
+  // Memoize motion component
+  const MotionTag = useMemo(
+    () => motion[as as keyof typeof motion] as typeof motion.div,
+    [as]
+  );
 
-  const stagger = defaultStaggerTimes[per] / speedReveal;
+  // Memoize base variants
+  const baseVariants = useMemo(
+    () =>
+      preset
+        ? PRESET_VARIANTS[preset]
+        : {
+            container: BASE_CONTAINER_VARIANTS,
+            item: BASE_ITEM_VARIANTS,
+          },
+    [preset]
+  );
 
-  const baseDuration = 0.3 / speedSegment;
+  // Memoize computed timing values
+  const computedTiming = useMemo(() => {
+    const stagger = STAGGER_TIMES[per] / speedReveal;
+    const duration = 0.3 / speedSegment;
 
-  const customStagger = hasTransition(variants?.container?.visible ?? {})
-    ? (variants?.container?.visible as TargetAndTransition).transition
-        ?.staggerChildren
-    : undefined;
+    const customStagger = hasTransition(variants?.container?.visible)
+      ? (variants!.container!.visible as TargetAndTransition).transition
+          ?.staggerChildren
+      : undefined;
 
-  const customDelay = hasTransition(variants?.container?.visible ?? {})
-    ? (variants?.container?.visible as TargetAndTransition).transition
-        ?.delayChildren
-    : undefined;
+    const customDelay = hasTransition(variants?.container?.visible)
+      ? (variants!.container!.visible as TargetAndTransition).transition
+          ?.delayChildren
+      : undefined;
 
-  const computedVariants = {
-    container: createVariantsWithTransition(
-      variants?.container || baseVariants.container,
-      {
-        staggerChildren: customStagger ?? stagger,
-        delayChildren: customDelay ?? delay,
-        ...containerTransition,
-        exit: {
-          staggerChildren: customStagger ?? stagger,
-          staggerDirection: -1,
-        },
-      }
-    ),
-    item: createVariantsWithTransition(variants?.item || baseVariants.item, {
-      duration: baseDuration,
-      ...segmentTransition,
+    return {
+      stagger: customStagger ?? stagger,
+      delay: customDelay ?? delay,
+      duration,
+    };
+  }, [per, speedReveal, speedSegment, delay, variants]);
+
+  // Memoize final variants
+  const finalVariants = useMemo(
+    () => ({
+      container: mergeVariantsWithTransition(
+        variants?.container || baseVariants.container,
+        {
+          staggerChildren: computedTiming.stagger,
+          delayChildren: computedTiming.delay,
+          ...containerTransition,
+          exit: {
+            staggerChildren: computedTiming.stagger,
+            staggerDirection: -1,
+          },
+        }
+      ),
+      item: mergeVariantsWithTransition(variants?.item || baseVariants.item, {
+        duration: computedTiming.duration,
+        ...segmentTransition,
+      }),
     }),
-  };
+    [
+      variants,
+      baseVariants,
+      computedTiming,
+      containerTransition,
+      segmentTransition,
+    ]
+  );
+
+  // Memoize segments rendering
+  const renderedSegments = useMemo(
+    () =>
+      segments.map((segment, index) => (
+        <AnimationSegment
+          key={`${per}-${index}-${segment}`}
+          segment={segment}
+          variants={finalVariants.item}
+          per={per}
+          segmentWrapperClassName={segmentWrapperClassName}
+          index={index}
+        />
+      )),
+    [segments, finalVariants.item, per, segmentWrapperClassName]
+  );
+
+  // Memoize animation callbacks
+  const handleAnimationComplete = useCallback(() => {
+    onAnimationComplete?.();
+  }, [onAnimationComplete]);
+
+  const handleAnimationStart = useCallback(() => {
+    onAnimationStart?.();
+  }, [onAnimationStart]);
+
+  // Memoize viewport configuration
+  const viewportConfig = useMemo(
+    () => ({
+      once: viewportBehavior === "once" || viewport?.once || false,
+      margin: viewport?.margin || "0px",
+      amount: viewport?.amount || 0.1,
+    }),
+    [viewportBehavior, viewport]
+  );
+
+  // Determine animation props based on viewport behavior
+  const animationProps = useMemo(() => {
+    const baseProps = {
+      variants: finalVariants.container,
+      className,
+      onAnimationComplete: handleAnimationComplete,
+      onAnimationStart: handleAnimationStart,
+      style,
+      children: (
+        <>
+          {per !== "line" && <span className="sr-only">{children}</span>}
+          {renderedSegments}
+        </>
+      ),
+    };
+
+    switch (viewportBehavior) {
+      case "immediate":
+        return {
+          ...baseProps,
+          initial: "hidden",
+          animate: "visible",
+          exit: "exit",
+        };
+
+      case "once":
+        return {
+          ...baseProps,
+          initial: "hidden",
+          whileInView: "visible",
+          exit: "exit",
+          viewport: viewportConfig,
+        };
+
+      case "loop":
+        return {
+          ...baseProps,
+          initial: "hidden",
+          whileInView: "visible",
+          exit: "hidden", // Reset to hidden when out of view for loop behavior
+          viewport: { ...viewportConfig, once: false },
+        };
+
+      default:
+        return {
+          ...baseProps,
+          initial: "hidden",
+          animate: "visible",
+          exit: "exit",
+        };
+    }
+  }, [
+    viewportBehavior,
+    finalVariants.container,
+    className,
+    handleAnimationComplete,
+    handleAnimationStart,
+    style,
+    per,
+    children,
+    renderedSegments,
+    viewportConfig,
+  ]);
 
   return (
     <AnimatePresence mode="popLayout">
-      {trigger && (
-        <MotionTag
-          initial="hidden"
-          animate="visible"
-          exit="exit"
-          variants={computedVariants.container}
-          className={className}
-          onAnimationComplete={onAnimationComplete}
-          onAnimationStart={onAnimationStart}
-          style={style}
-        >
-          {per !== "line" ? <span className="sr-only">{children}</span> : null}
-          {segments.map((segment, index) => (
-            <AnimationComponent
-              key={`${per}-${index}-${segment}`}
-              segment={segment}
-              variants={computedVariants.item}
-              per={per}
-              segmentWrapperClassName={segmentWrapperClassName}
-            />
-          ))}
-        </MotionTag>
-      )}
+      {trigger && <MotionTag {...animationProps} />}
     </AnimatePresence>
   );
 }

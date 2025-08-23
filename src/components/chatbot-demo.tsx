@@ -495,6 +495,7 @@ function ShopifyStoreBackground({ theme = "default" }: { theme?: ThemeType }) {
                 )}
               />
               <input
+                id="search"
                 type="text"
                 placeholder={
                   isRetro ? "> Search products..." : "Search products..."
@@ -1082,6 +1083,7 @@ function ChatContent({
               : "DEMO"}
           </span>
           <Button
+            name="reset-demo"
             variant="secondary"
             onClick={resetDemo}
             className={cn(
@@ -1411,6 +1413,7 @@ function ChatContent({
           {/* Text input area */}
           <div className="relative flex-1">
             <textarea
+              name="message"
               placeholder={
                 isUserTyping
                   ? ""
@@ -1467,6 +1470,8 @@ function ChatContent({
             <div className="flex items-center gap-2">
               {/* Image selector button */}
               <button
+                id="image-upload-button"
+                name="image-upload"
                 disabled={!isUserTyping}
                 className={cn(
                   "h-10 w-10 rounded-md p-1 border-none",
@@ -1498,6 +1503,8 @@ function ChatContent({
 
               {/* Camera button */}
               <button
+                id="camera-upload-button"
+                name="camera-upload"
                 disabled={!isUserTyping}
                 className={cn(
                   "h-10 w-10 rounded-md p-1 border-none",
@@ -1542,6 +1549,8 @@ function ChatContent({
 
             {/* Send button on the right */}
             <button
+              id="send-message"
+              name="send-message"
               disabled={!isUserTyping}
               className={cn(
                 "flex items-center justify-center",

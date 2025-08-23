@@ -1,12 +1,16 @@
-import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
 import React, { useState } from "react";
-import { GRADIENT_PRESETS, MovingBorderWrapper } from "./moving-border-wrapper";
+import { AnimatedGroup } from "./motion/animated-group";
+import {
+  GRADIENT_PRESETS,
+  MovingBorderWrapper,
+} from "./motion/moving-border-wrapper";
+import { TextEffect } from "./motion/text-effect";
+import { Button } from "./ui/button";
 
-// Types
+// ===== CONSTANTS =====
 type TabId = "text" | "image" | "code" | "video" | "email";
 
-// Static data - extracted to reduce component size
 const TAB_CONFIG = {
   text: {
     title: "Easiest way to generate text",
@@ -45,7 +49,15 @@ const TAB_CONFIG = {
   },
 } as const;
 
-// Optimized tab button - removed React.memo as it's often unnecessary overhead for simple components
+const IMAGE_MAP: Record<TabId, number> = {
+  text: 1,
+  image: 2,
+  code: 3,
+  video: 4,
+  email: 5,
+};
+
+// ===== COMPONENTS =====
 const TabButton = ({
   id,
   isActive,
@@ -57,15 +69,18 @@ const TabButton = ({
   onClick: (id: TabId) => void;
   config: (typeof TAB_CONFIG)[TabId];
 }) => (
-  <button
+  <Button
     onClick={() => onClick(id)}
-    className={`flex items-center h-12 gap-2 px-4 py-3 text-sm font-medium rounded-full cursor-pointer transition-colors duration-300 ease-in-out will-change-auto
-        ${
-          isActive
-            ? "bg-white dark:text-white/90 dark:bg-white/10 text-gray-800"
-            : "text-gray-500 dark:text-gray-400 bg-transparent hover:bg-neutral-200/60 dark:hover:bg-white/5"
-        }`}
-    aria-pressed={isActive}
+    className={`flex items-center h-12 gap-2 px-4 py-3 text-sm font-medium rounded-full
+                cursor-pointer transition-colors duration-300 ease-in-out will-change-auto
+               ${
+                 isActive
+                   ? "bg-white/80 text-gray-800 hover:bg-white dark:bg-white/10 dark:text-white/90 dark:hover:bg-white/20"
+                   : "text-gray-500 dark:text-gray-400 bg-transparent hover:bg-neutral-200/60 dark:hover:bg-white/5 hover:text-gray-800 dark:hover:text-white/80"
+               }
+
+            `}
+    aria-selected={isActive}
     role="tab"
     type="button"
   >
@@ -73,24 +88,15 @@ const TabButton = ({
       src={`/assets/images/tabs/${config.icon}`}
       width={34}
       height={34}
-      alt={config.label}
+      alt={`${config.label} Icon`}
+      loading="lazy"
     />
     {config.label}
-  </button>
+  </Button>
 );
 
-// Simplified tab content component
 const TabContent = ({ activeTab }: { activeTab: TabId }) => {
-  // Direct mapping instead of indexOf for better performance
-  const imageMap: Record<TabId, number> = {
-    text: 1,
-    image: 2,
-    code: 3,
-    video: 4,
-    email: 5,
-  };
-
-  const imageIndex = imageMap[activeTab];
+  const imageIndex = IMAGE_MAP[activeTab];
   const config = TAB_CONFIG[activeTab];
 
   return (
@@ -117,101 +123,164 @@ const TabContent = ({ activeTab }: { activeTab: TabId }) => {
   );
 };
 
-// Main component - simplified and optimized
+const TabHeader = () => (
+  <AnimatedGroup
+    preset="blur-slide"
+    className="max-w-2xl mx-auto mb-12 text-center"
+    viewportBehavior="once"
+  >
+    <TextEffect
+      preset="fade-in-blur"
+      per="word"
+      as="h2"
+      className="text-balance text-4xl font-semibold lg:text-5xl text-gray-700 dark:text-white/90"
+      viewportBehavior="once"
+    >
+      AI power at your fingertips
+    </TextEffect>
+    <TextEffect
+      preset="slide"
+      per="line"
+      delay={0.3}
+      as="p"
+      className="mt-4 text-gray-500 dark:text-gray-400 max-w-2xl mx-auto"
+      viewportBehavior="once"
+    >
+      Unlock the Potential of Innovation. Discover the Advanced AI Tools
+      Transforming Your Ideas into Reality with Unmatched Precision and
+      Intelligence.
+    </TextEffect>
+  </AnimatedGroup>
+);
+
+const TabNavigation = ({
+  activeTab,
+  onTabChange,
+}: {
+  activeTab: TabId;
+  onTabChange: (id: TabId) => void;
+}) => (
+  <AnimatedGroup preset="scale" viewportBehavior="once">
+    <nav
+      className="flex flex-wrap sm:justify-center mx-auto gap-2 p-1 w-full mb-8
+                 dark:bg-white/[0.05] bg-gray-100 rounded-2xl lg:rounded-full max-w-fit"
+      role="tablist"
+      aria-label="AI Tools Navigation"
+    >
+      {(
+        Object.entries(TAB_CONFIG) as [TabId, (typeof TAB_CONFIG)[TabId]][]
+      ).map(([id, config]) => (
+        <TabButton
+          key={id}
+          id={id}
+          isActive={activeTab === id}
+          onClick={onTabChange}
+          config={config}
+        />
+      ))}
+    </nav>
+  </AnimatedGroup>
+);
+
+const TabContentSection = ({ activeTab }: { activeTab: TabId }) => {
+  const activeConfig = TAB_CONFIG[activeTab];
+
+  return (
+    <AnimatedGroup
+      preset="blur-slide"
+      className="text-center mb-8"
+      viewportBehavior="immediate"
+      key={`content-${activeTab}`} // Force re-mount and re-animate on tab change
+    >
+      <TextEffect
+        preset="fade-in-blur"
+        per="word"
+        as="h3"
+        className="text-xl font-bold text-gray-800 dark:text-white/90"
+        viewportBehavior="immediate"
+      >
+        {activeConfig.title}
+      </TextEffect>
+      <TextEffect
+        preset="slide"
+        per="line"
+        delay={0.2}
+        as="p"
+        className="mt-2 text-sm text-gray-500 dark:text-gray-400 max-w-2xl mx-auto"
+        viewportBehavior="immediate"
+      >
+        {activeConfig.description}
+      </TextEffect>
+
+      <AnimatedGroup
+        preset="scale"
+        className="mt-6"
+        viewportBehavior="immediate"
+        key={`image-${activeTab}`} // Force re-animate on tab change
+      >
+        <TabContent activeTab={activeTab} />
+      </AnimatedGroup>
+    </AnimatedGroup>
+  );
+};
+
+const TabFooter = () => (
+  <AnimatedGroup
+    preset="blur-slide"
+    className="mt-6 text-center"
+    viewportBehavior="once"
+  >
+    <TextEffect
+      preset="fade-in-blur"
+      per="word"
+      as="h3"
+      className="mb-2 text-xl font-bold text-gray-800 dark:text-white/90"
+      viewportBehavior="once"
+    >
+      Ready to transform your workflow with AI?
+    </TextEffect>
+
+    <TextEffect
+      preset="slide"
+      per="line"
+      delay={0.3}
+      as="p"
+      className="max-w-xl mx-auto mb-6 text-sm text-gray-500 dark:text-gray-400"
+      viewportBehavior="once"
+    >
+      Start exploring powerful AI tools for content, visuals, code, and more —
+      all in one seamless platform. No setup, no hassle.
+    </TextEffect>
+
+    <MovingBorderWrapper
+      duration={4000}
+      borderRadius="9999px"
+      gradientColors={GRADIENT_PRESETS.green}
+      glowIntensity="high"
+      className="inline-flex drop-shadow dark:drop-shadow-primary/20 cursor-pointer"
+    >
+      <div className="flex items-center gap-2 bg-white dark:bg-[#011e2b] rounded-full px-5 py-2">
+        <p className="text-sm dark:text-white/90 whitespace-nowrap">
+          Try it now for free
+        </p>
+      </div>
+    </MovingBorderWrapper>
+  </AnimatedGroup>
+);
+
+// ===== MAIN COMPONENT =====
 const TabView: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabId>("text");
-  const activeConfig = TAB_CONFIG[activeTab];
 
   return (
     <section className="py-14 md:py-20 dark:bg-dark-primary" role="tabpanel">
       <div className="wrapper">
-        {/* Header */}
-        <header className="max-w-2xl mx-auto mb-12 text-center">
-          <h2 className="text-balance text-4xl font-semibold lg:text-5xl  text-gray-700  dark:text-white/90">
-            AI power at your fingertips
-          </h2>
-          <p className="mt-4 text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
-            Unlock the Potential of Innovation. Discover the Advanced AI Tools
-            Transforming Your Ideas into Reality with Unmatched Precision and
-            Intelligence.
-          </p>
-        </header>
+        <TabHeader />
 
         <div className="max-w-[1008px] mx-auto">
-          {/* Tab Navigation */}
-          <nav
-            className="flex flex-wrap sm:justify-center mx-auto gap-2 p-1 w-full mb-8 dark:bg-white/[0.05] bg-gray-100 rounded-2xl lg:rounded-full max-w-fit"
-            role="tablist"
-            aria-label="AI Tools Navigation"
-          >
-            {(
-              Object.entries(TAB_CONFIG) as [
-                TabId,
-                (typeof TAB_CONFIG)[TabId]
-              ][]
-            ).map(([id, config]) => (
-              <TabButton
-                key={id}
-                id={id}
-                isActive={activeTab === id}
-                onClick={setActiveTab}
-                config={config}
-              />
-            ))}
-          </nav>
-          {/* Tab Content */}
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeTab} // triggers animation on tab change
-              className="text-center mb-8"
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 25 }}
-              exit={{ opacity: 0, y: -25 }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-            >
-              <h3 className="text-xl font-bold text-gray-800 dark:text-white/90">
-                {activeConfig.title}
-              </h3>
-              <p className="mt-2 text-sm text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
-                {activeConfig.description}
-              </p>
-
-              {/* Image block */}
-              <motion.div
-                key={activeTab + "-image"}
-                initial={{ opacity: 0, scale: 0.98 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.98 }}
-                transition={{ duration: 0.3, ease: "easeOut" }}
-              >
-                <TabContent activeTab={activeTab} />
-              </motion.div>
-            </motion.div>
-          </AnimatePresence>
-          {/* Footer */}
-          <footer className="mt-6 text-center">
-            <h3 className="mb-2 text-xl font-bold text-gray-800 dark:text-white/90">
-              Ready to transform your workflow with AI?
-            </h3>
-
-            <p className="max-w-xl mx-auto mb-6 text-sm text-gray-500 dark:text-gray-400">
-              Start exploring powerful AI tools for content, visuals, code, and
-              more — all in one seamless platform. No setup, no hassle.
-            </p>
-            <MovingBorderWrapper
-              duration={4000}
-              borderRadius="9999px"
-              gradientColors={GRADIENT_PRESETS.green}
-              glowIntensity="high"
-              className="inline-flex drop-shadow dark:drop-shadow-primary/20 cursor-pointer"
-            >
-              <div className="flex items-center gap-2 bg-white dark:bg-[#011e2b] rounded-full px-5 py-2">
-                <p className="text-sm dark:text-white/90 whitespace-nowrap">
-                  Try it now for free
-                </p>
-              </div>
-            </MovingBorderWrapper>
-          </footer>
+          <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
+          <TabContentSection activeTab={activeTab} />
+          <TabFooter />
         </div>
       </div>
     </section>

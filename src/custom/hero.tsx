@@ -254,7 +254,7 @@ const FloatingIcons = () => {
   return (
     <AnimatedGroup
       preset="blur-slide"
-      className="relative -z-50"
+      className="relative -z-50 lg:block hidden"
       viewportBehavior="once"
     >
       {FLOATING_ICONS_CONFIG.map((config, index) => (

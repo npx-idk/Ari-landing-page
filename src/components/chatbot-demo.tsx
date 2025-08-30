@@ -25,6 +25,7 @@ interface Message {
   isUser: boolean;
   timestamp: Date;
   hasProducts?: boolean;
+  isHtml?: boolean; // Flag to indicate if content contains HTML
 }
 
 interface Product {
@@ -211,7 +212,7 @@ const dummyProducts: Product[] = [
     price: "$99.99",
     originalPrice: "$129.99",
     image:
-      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop&crop=center",
+      "https://plus.unsplash.com/premium_photo-1679513691641-9aedddc94f96?w=900",
     badge: "Best Seller",
   },
   {
@@ -219,7 +220,7 @@ const dummyProducts: Product[] = [
     name: "Smart Fitness Watch",
     price: "$199.99",
     image:
-      "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&h=300&fit=crop&crop=center",
+      "https://images.unsplash.com/photo-1693621947585-7b7d94149af4",
     badge: "Top Rated",
   },
   {
@@ -228,16 +229,39 @@ const dummyProducts: Product[] = [
     price: "$29.99",
     originalPrice: "$39.99",
     image:
-      "https://images.unsplash.com/photo-1601944177325-f8867652837f?w=300&h=300&fit=crop&crop=center",
+      "https://images.unsplash.com/photo-1610196600828-517131fddddd",
   },
   {
     id: "4",
     name: "Portable Power Bank",
     price: "$49.99",
     image:
-      "https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?w=300&h=300&fit=crop&crop=center",
+      "https://images.unsplash.com/photo-1636099652696-f5bec08a7503",
   },
 ];
+
+// Function to convert markdown to HTML
+const parseMarkdownToHtml = (text: string): string => {
+  return text
+    // Convert bold text **text** to <strong>text</strong>
+    .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold">$1</strong>')
+    // Split into paragraphs and process each one
+    .split('\n\n')
+    .map(paragraph => {
+      // If paragraph starts with an emoji, treat it as a list item
+      if (paragraph.match(/^[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}]/u)) {
+        return `<div class="flex items-start gap-2 mb-2"><span class="text-lg leading-none">${paragraph.charAt(0)}</span><div class="flex-1">${paragraph.substring(1).trim()}</div></div>`;
+      }
+      // Regular paragraph
+      return `<p class="mb-2 last:mb-0">${paragraph.replace(/\n/g, '<br>')}</p>`;
+    })
+    .join('')
+    // Clean up any empty paragraphs
+    .replace(/<p class="mb-2 last:mb-0"><\/p>/g, '');
+};
+
+// Store the original markdown text for the return policy message
+const returnPolicyMarkdown = "No worries! We offer a hassle-free return policy:\n\n📦 **30-day return window** from delivery date\n🔄 **Free returns** - we'll send you a prepaid label\n💰 **Full refund** to your original payment method\n📞 **Easy process** - just contact us or initiate online\n\n✨ **Pro tip:** The Wireless Bluetooth Headphones have adjustable ear hooks and come with multiple ear tip sizes for the perfect fit!";
 
 const demoMessages: Omit<Message, "id" | "timestamp">[] = [
   {
@@ -247,12 +271,12 @@ const demoMessages: Omit<Message, "id" | "timestamp">[] = [
   },
   {
     content:
-      "I'm looking for wireless headphones for working out. What do you recommend?",
+      "I'm looking for bluetooth headphones with good sound quality and noise cancellation",
     isUser: true,
   },
   {
     content:
-      "Great choice! Based on your need for workout headphones, here are our top recommendations that are sweat-resistant and offer excellent sound quality:",
+      "Great choice! Based on your need for bluetooth headphones with good sound quality and noise cancellation, here are our top recommendations that are best for you",
     isUser: false,
     hasProducts: true,
   },
@@ -262,9 +286,9 @@ const demoMessages: Omit<Message, "id" | "timestamp">[] = [
     isUser: true,
   },
   {
-    content:
-      "No worries! We offer a hassle-free return policy:\n\n📦 **30-day return window** from delivery date\n🔄 **Free returns** - we'll send you a prepaid label\n💰 **Full refund** to your original payment method\n📞 **Easy process** - just contact us or initiate online\n\n✨ **Pro tip:** The Wireless Bluetooth Headphones have adjustable ear hooks and come with multiple ear tip sizes for the perfect fit!",
+    content: returnPolicyMarkdown, // Use plain text for typing animation
     isUser: false,
+    isHtml: false, // Will be converted to HTML after typing is complete
   },
 ];
 
@@ -1140,7 +1164,7 @@ function ChatContent({
                 )}
                 <div
                   className={cn(
-                    "px-4 py-2 whitespace-pre-wrap",
+                    "px-4 py-2",
                     message.isUser
                       ? isRetro
                         ? "text-cyan-300 font-mono"
@@ -1184,10 +1208,17 @@ function ChatContent({
                     borderRadius: currentTheme.borderRadius.message,
                   }}
                 >
-                  {isRetro && !message.isUser && "> "}
-                  {isSpace && !message.isUser && "🛸 "}
-                  {isCyber2077 && !message.isUser && "&gt;&gt; "}
-                  {message.content}
+                  {isRetro && !message.isUser && <span>&gt; </span>}
+                  {isSpace && !message.isUser && <span>🛸 </span>}
+                  {isCyber2077 && !message.isUser && <span>&gt;&gt; </span>}
+                  {message.isHtml ? (
+                    <div
+                      className="space-y-2"
+                      dangerouslySetInnerHTML={{ __html: message.content }}
+                    />
+                  ) : (
+                    <div className="whitespace-pre-wrap">{message.content}</div>
+                  )}
                 </div>
                 {message.isUser && (
                   <div
@@ -1427,7 +1458,7 @@ function ChatContent({
                   ? ">> Enter neural query..."
                   : "Ask Ari about your Shopify store..."
               }
-              value={typingText}
+              value={isUserTyping ? typingText : ""}
               readOnly
               disabled={!isUserTyping}
               rows={1}
@@ -1611,18 +1642,20 @@ export function ChatbotDemo({
       if (currentIndex < text.length) {
         setTypingText(text.substring(0, currentIndex + 1));
         currentIndex++;
-        setTimeout(typeChar, 20 + Math.random() * 30); // Faster typing speed
+        // Much faster and smoother typing: 15-25ms per character
+        setTimeout(typeChar, 15 + Math.random() * 10);
       } else {
-        // Pause at the end before sending
+        // Shorter pause at the end before sending
         setTimeout(() => {
           setIsUserTyping(false);
           setTypingText("");
           callback();
-        }, 500);
+        }, 300);
       }
     };
 
-    setTimeout(typeChar, 500); // Initial delay before typing
+    // Shorter initial delay before typing
+    setTimeout(typeChar, 200);
   };
 
   useEffect(() => {
@@ -1646,20 +1679,25 @@ export function ChatbotDemo({
             // Bot message has typing indicator
             setIsTyping(true);
             setTimeout(() => {
-              setMessages((prev) => [
-                ...prev,
-                {
-                  ...demoMessages[currentMessageIndex],
-                  id: Date.now().toString(),
-                  timestamp: new Date(),
-                },
-              ]);
+              const message = demoMessages[currentMessageIndex];
+              const newMessage = {
+                ...message,
+                id: Date.now().toString(),
+                timestamp: new Date(),
+                // Convert markdown to HTML for the return policy message
+                content: message.content === returnPolicyMarkdown 
+                  ? parseMarkdownToHtml(message.content)
+                  : message.content,
+                isHtml: message.content === returnPolicyMarkdown ? true : message.isHtml,
+              };
+              
+              setMessages((prev) => [...prev, newMessage]);
               setIsTyping(false);
               setCurrentMessageIndex((prev) => prev + 1);
-            }, 1500);
+            }, 800); // Reduced from 1500ms to 800ms
           }
         },
-        currentMessageIndex === 0 ? 1000 : 2000
+        currentMessageIndex === 0 ? 500 : 1000 // Reduced delays: first message 500ms, subsequent 1000ms
       );
 
       return () => clearTimeout(timer);
@@ -1667,7 +1705,7 @@ export function ChatbotDemo({
       // Demo is complete, restart after a delay
       const restartTimer = setTimeout(() => {
         resetDemo();
-      }, 3000); // Wait 3 seconds before restarting
+      }, 2000); // Wait 2 seconds before restarting
 
       return () => clearTimeout(restartTimer);
     }

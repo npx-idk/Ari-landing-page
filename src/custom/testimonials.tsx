@@ -157,8 +157,8 @@ const CARD_VARIANTS = {
 } as const;
 
 const COLUMN_HEIGHTS = {
-  mobile: "h-[400px]",
-  tablet: "md:h-[600px]",
+  mobile: "h-[350px]",
+  tablet: "sm:h-[450px] md:h-[600px]",
   desktop: "lg:h-[700px]",
 } as const;
 
@@ -384,7 +384,7 @@ export const WallOfLoveSection = memo<WallOfLoveSectionProps>(
     return (
       <section
         className={cn(
-          "relative py-12 md:py-20 lg:py-32 overflow-hidden",
+          "relative py-12 sm:py-16 md:py-20 lg:py-32 overflow-hidden",
           className
         )}
       >
@@ -392,7 +392,7 @@ export const WallOfLoveSection = memo<WallOfLoveSectionProps>(
           {/* Header section with TextEffect */}
           <AnimatedGroup
             preset="blur-slide"
-            className="text-center mb-12 md:mb-16 lg:mb-20"
+            className="text-center mb-8 sm:mb-12 md:mb-16 lg:mb-20"
             viewportBehavior="once"
           >
             <div className="relative inline-block">
@@ -421,7 +421,7 @@ export const WallOfLoveSection = memo<WallOfLoveSectionProps>(
           {/* Testimonials grid */}
           <AnimatedGroup
             preset="scale"
-            className={cn("grid gap-4 md:gap-6 lg:gap-8", getGridClasses())}
+            className={cn("grid gap-3 sm:gap-4 md:gap-6 lg:gap-8", getGridClasses())}
             viewportBehavior="once"
           >
             {testimonialChunks.map((chunk, index) => (

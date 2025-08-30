@@ -83,43 +83,29 @@ const MenuToggle = memo(
 
 MenuToggle.displayName = "MenuToggle";
 
-// Memoized action buttons component
-const ActionButtons = memo(({ isScrolled }: { isScrolled: boolean }) => (
-  <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit">
-    <AnimatedGroup preset="slide" className="contents">
+// Memoized mobile theme switcher component
+const MobileThemeSwitcher = memo(() => (
+  <div className="flex w-full">
+    <AnimatedGroup preset="slide">
       <ThemeSwitcher />
-
-      <Button
-        asChild
-        variant="outline"
-        size="sm"
-        className={cn(isScrolled && "lg:hidden")}
-      >
-        <Link href="#login">
-          <TextEffect preset="fade">Login</TextEffect>
-        </Link>
-      </Button>
-
-      <Button asChild size="sm" className={cn(isScrolled && "lg:hidden")}>
-        <Link href="#signup">
-          <TextEffect preset="fade">Sign Up</TextEffect>
-        </Link>
-      </Button>
-
-      <Button
-        asChild
-        size="sm"
-        className={cn(isScrolled ? "lg:inline-flex" : "hidden")}
-      >
-        <Link href="#get-started">
-          <TextEffect preset="fade">Get Started</TextEffect>
-        </Link>
-      </Button>
     </AnimatedGroup>
   </div>
 ));
 
-ActionButtons.displayName = "ActionButtons";
+// Memoized desktop action buttons component  
+const DesktopActionButtons = memo(() => (
+  <div className="hidden lg:flex lg:gap-3">
+    <ThemeSwitcher />
+    <Button asChild size="sm">
+      <Link href="#get-started">
+        <TextEffect preset="fade">Get Started</TextEffect>
+      </Link>
+    </Button>
+  </div>
+));
+
+MobileThemeSwitcher.displayName = "MobileThemeSwitcher";
+DesktopActionButtons.displayName = "DesktopActionButtons";
 
 // Custom hook for scroll detection
 const useScrolled = (threshold: number = SCROLL_THRESHOLD) => {
@@ -203,8 +189,8 @@ export const Header = memo(() => {
           )}
         >
           <div className="relative flex flex-wrap items-center justify-between gap-6 py-3 lg:gap-0 lg:py-4">
-            {/* Logo and Mobile Menu Toggle */}
-            <div className="flex w-full justify-between lg:w-auto">
+            {/* Logo, Get Started Button, and Mobile Menu Toggle */}
+            <div className="flex w-full items-center justify-between lg:w-auto">
               <Link
                 href="/"
                 aria-label="Go to homepage"
@@ -212,7 +198,15 @@ export const Header = memo(() => {
               >
                 <Logo />
               </Link>
-              <MenuToggle isOpen={isMenuOpen} onToggle={toggleMenu} />
+              
+              <div className="flex items-center gap-3 lg:hidden">
+                <Button asChild size="sm">
+                  <Link href="#get-started">
+                    <TextEffect preset="fade">Get Started</TextEffect>
+                  </Link>
+                </Button>
+                <MenuToggle isOpen={isMenuOpen} onToggle={toggleMenu} />
+              </div>
             </div>
 
             {/* Desktop Navigation */}
@@ -220,21 +214,24 @@ export const Header = memo(() => {
               <NavigationItems variant="desktop" />
             </div>
 
-            {/* Mobile Menu and Action Buttons */}
+            {/* Desktop Action Buttons */}
+            <DesktopActionButtons />
+
+            {/* Mobile Menu */}
             <div
               className={cn(
-                "mb-6 hidden w-full flex-wrap items-center justify-end space-y-8 rounded-3xl border bg-background p-6 shadow-2xl shadow-zinc-300/20 transition-all duration-300 md:flex-nowrap lg:m-0 lg:flex lg:w-fit lg:gap-6 lg:space-y-0 lg:border-transparent lg:bg-transparent lg:p-0 lg:shadow-none dark:shadow-none dark:lg:bg-transparent",
-                isMenuOpen && "block lg:flex"
+                "mb-6 hidden w-full flex-col items-center space-y-8 rounded-3xl border bg-background p-6 shadow-2xl shadow-zinc-300/20 transition-all duration-300 lg:hidden",
+                isMenuOpen && "block"
               )}
               data-state={isMenuOpen ? "active" : "inactive"}
             >
               {/* Mobile Navigation */}
-              <AnimatedGroup preset="slide" className="lg:hidden">
+              <AnimatedGroup preset="slide">
                 <NavigationItems variant="mobile" />
               </AnimatedGroup>
 
-              {/* Action Buttons */}
-              <ActionButtons isScrolled={isScrolled} />
+              {/* Mobile Theme Switcher */}
+              <MobileThemeSwitcher />
             </div>
           </div>
         </div>

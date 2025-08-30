@@ -118,17 +118,17 @@ const FeatureCard = ({
   title: string;
   description: string;
 }) => (
-  <MagicCard className="shadow-zinc-950/5 rounded-lg border transition-all duration-300 hover:shadow-lg h-88 flex flex-col justify-center">
-    <CardHeader className="pb-3 text-center">
+  <MagicCard className="shadow-zinc-950/5 rounded-lg border transition-all duration-300 hover:shadow-lg min-h-[300px] sm:min-h-[320px] lg:min-h-[280px] flex flex-col justify-center p-4 sm:p-6">
+    <CardHeader className="pb-3 text-center px-0">
       <IconDecorator size="md" variant="elevated">
-        <Icon className="size-6" aria-hidden="true" />
+        <Icon className="size-5 sm:size-6" aria-hidden="true" />
       </IconDecorator>
-      <h3 className="mt-6 font-medium text-lg text-gray-700 dark:text-white/90">
+      <h3 className="mt-4 sm:mt-6 font-medium text-base sm:text-lg text-gray-700 dark:text-white/90 leading-tight">
         {title}
       </h3>
     </CardHeader>
-    <CardContent className="flex-1 flex items-center">
-      <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed text-center">
+    <CardContent className="flex-1 flex items-center px-0">
+      <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 leading-relaxed text-center">
         {description}
       </p>
     </CardContent>
@@ -158,9 +158,7 @@ const FeaturesHeader = () => (
       className="mt-4 text-gray-500 dark:text-gray-400 max-w-2xl mx-auto"
       viewportBehavior="once"
     >
-      Unlock the Potential of Innovation. Discover the Advanced AI Tools
-      Transforming Your Ideas into Reality with Unmatched Precision and
-      Intelligence.
+     Meet your AI sales assistant. It helps shoppers find the right products, follows up on abandoned carts, and answers support questions, so more people check out, even when you're off. Learn from customer behavior and gently lift order values.
     </TextEffect>
   </AnimatedGroup>
 );
@@ -168,7 +166,9 @@ const FeaturesHeader = () => (
 const FeaturesGrid = () => (
   <AnimatedGroup
     preset="scale"
-    className="@min-4xl:max-w-full @min-4xl:grid-cols-3 mx-auto mt-8 grid max-w-sm gap-6 md:mt-16 h-full"
+    className="mx-auto mt-8 md:mt-16 grid gap-4 sm:gap-6 
+               grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 
+               max-w-sm sm:max-w-2xl lg:max-w-6xl"
     viewportBehavior="once"
   >
     {FEATURES.map((feature) => (
@@ -185,8 +185,8 @@ const FeaturesGrid = () => (
 // ===== MAIN COMPONENT =====
 export default function Features() {
   return (
-    <section className="bg-[#F8FAFC] h-full py-16 md:py-20 dark:bg-[#111A24]">
-      <div className="@container mx-auto max-w-5xl px-6">
+    <section className="bg-[#F8FAFC] py-12 sm:py-16 md:py-20 dark:bg-[#111A24]">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <FeaturesHeader />
         <FeaturesGrid />
       </div>

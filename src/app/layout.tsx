@@ -54,7 +54,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className="scroll-smooth dark" style={{ colorScheme: 'dark' }}>
       <body
         className={`${hankenGrotesk.variable} ${benne.variable} font-body antialiased`}
       >

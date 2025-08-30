@@ -4,7 +4,14 @@ import {
   ThemeDropdown,
   ThemeType,
 } from "@/components/chatbot-demo";
-import { Monitor, PanelRight } from "lucide-react";
+import {
+  Image as ImageIcon,
+  MessageCircleMore,
+  Monitor,
+  PanelRight,
+  PhoneCall,
+  ShoppingCart,
+} from "lucide-react";
 import Image from "next/image";
 import { useCallback, useState } from "react";
 import { AnimatedGroup } from "./motion/animated-group";
@@ -14,6 +21,7 @@ import {
 } from "./motion/moving-border-wrapper";
 import { TextEffect } from "./motion/text-effect";
 import { Button } from "./ui/button";
+import { CapsuleIcon } from "./ui/capsule-icon";
 
 // ===== CONSTANTS =====
 const PLACEMENT_OPTIONS = [
@@ -193,6 +201,75 @@ const DemoSection = ({
   </AnimatedGroup>
 );
 
+const FloatingIcons = () => {
+  const FLOATING_ICONS_CONFIG = [
+    {
+      icon: (
+        <MessageCircleMore
+          size={20}
+          className={`stroke-[#16a34a] dark:stroke-primary`}
+        />
+      ),
+      text: "Product Suggestion",
+      pointerPosition: "bottom-right" as const,
+      className: "absolute left-20 animate-[float_4s_ease-in-out_infinite]",
+    },
+    {
+      icon: (
+        <ImageIcon
+          size={20}
+          className={`stroke-[#16a34a] dark:stroke-primary`}
+        />
+      ),
+      text: "Image Search",
+      pointerPosition: "bottom-left" as const,
+      className:
+        "absolute right-1/12 animate-[float-diagonal_4s_linear_infinite]",
+    },
+    {
+      icon: (
+        <PhoneCall
+          size={20}
+          className={`stroke-[#16a34a] dark:stroke-primary`}
+        />
+      ),
+      text: "Voice Call",
+      pointerPosition: "top-right" as const,
+      className:
+        "absolute top-60 left-1/6 animate-[float-horizontal_4s_linear_infinite]",
+    },
+    {
+      icon: (
+        <ShoppingCart
+          size={20}
+          className={`stroke-[#16a34a] dark:stroke-primary`}
+        />
+      ),
+      text: "Track Order",
+      pointerPosition: "top-left" as const,
+      className:
+        "absolute top-68 right-1/6 animate-[float-fast_4s_linear_infinite]",
+    },
+  ];
+  return (
+    <AnimatedGroup
+      preset="blur-slide"
+      className="relative -z-50"
+      viewportBehavior="once"
+    >
+      {FLOATING_ICONS_CONFIG.map((config, index) => (
+        <CapsuleIcon
+          key={`${config.text}-${index}`}
+          icon={config.icon}
+          text={config.text}
+          pointerPosition={config.pointerPosition}
+          className={config.className}
+        />
+      ))}
+    </AnimatedGroup>
+  );
+};
+
 // ===== MAIN COMPONENT =====
 export default function HeroSection() {
   const [placement, setPlacement] = useState<PlacementType>("center");
@@ -218,6 +295,7 @@ export default function HeroSection() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="text-center sm:mx-auto lg:mr-auto lg:mt-0">
             <HeroBadge />
+            <FloatingIcons />
             <BackgroundAura />
             <HeroContent />
             <ControlSection

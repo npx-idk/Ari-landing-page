@@ -180,6 +180,29 @@ const generateInitials = (name: string): string => {
     .toUpperCase();
 };
 
+// Custom hook for responsive behavior
+const useResponsive = () => {
+  const [screenSize, setScreenSize] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      if (window.innerWidth < 768) {
+        setScreenSize('mobile');
+      } else if (window.innerWidth < 1024) {
+        setScreenSize('tablet');
+      } else {
+        setScreenSize('desktop');
+      }
+    };
+
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
+
+  return screenSize;
+};
+
 // Custom hook for smooth scrolling animation
 const useSmoothScroll = (
   direction: "up" | "down",
@@ -365,20 +388,30 @@ export const WallOfLoveSection = memo<WallOfLoveSectionProps>(
     className,
     showHoverHint = true,
   }) => {
-    // Responsive column distribution
-    const testimonialsPerColumn = Math.ceil(testimonials.length / columns);
+    // Responsive column distribution based on screen size
+    const screenSize = useResponsive();
+    
+    // Determine number of columns based on screen size
+    const getColumnCount = () => {
+      switch (screenSize) {
+        case 'mobile':
+          return 1;
+        case 'tablet':
+          return 2;
+        case 'desktop':
+          return columns;
+        default:
+          return columns;
+      }
+    };
+    
+    const currentColumns = getColumnCount();
+    const testimonialsPerColumn = Math.ceil(testimonials.length / currentColumns);
     const testimonialChunks = chunkArray(testimonials, testimonialsPerColumn);
 
-    // Grid classes based on column count
+    // Grid classes based on responsive column count
     const getGridClasses = () => {
-      switch (columns) {
-        case 2:
-          return "grid-cols-1 md:grid-cols-2";
-        case 4:
-          return "grid-cols-1 md:grid-cols-2 lg:grid-cols-4";
-        default:
-          return "grid-cols-1 md:grid-cols-2 lg:grid-cols-3";
-      }
+      return "grid-cols-1 md:grid-cols-2 lg:grid-cols-3";
     };
 
     return (

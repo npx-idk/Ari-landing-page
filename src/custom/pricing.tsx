@@ -81,7 +81,8 @@ const STYLES = {
   header: "flex flex-col items-center justify-center gap-6 sm:gap-8",
   title:
     "text-balance text-3xl sm:text-4xl lg:text-5xl font-semibold text-gray-700 dark:text-white/90",
-  subtitle: "mt-4 text-sm sm:text-base text-gray-500 dark:text-white/70 max-w-2xl mx-auto",
+  subtitle:
+    "mt-4 text-sm sm:text-base text-gray-500 dark:text-white/70 max-w-2xl mx-auto",
   grid: "mt-6 sm:mt-8 grid w-full gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4",
   card: {
     base: "relative w-full h-full text-left bg-white border border-gray-200/60 shadow-lg shadow-gray-100/50 dark:bg-[#1A2E25] dark:shadow-2xl dark:shadow-primary/10 dark:bg-gradient-to-br dark:from-card dark:via-card dark:to-primary/5 dark:border-gray-700/50",
@@ -89,7 +90,7 @@ const STYLES = {
       "ring-2 ring-primary/30 border-primary/30 dark:ring-primary/30 dark:border-primary/30",
   },
   tabs: {
-    container: "bg-muted rounded-full pb-0.5 max-w-xs mx-auto",
+    container: "bg-muted rounded-full pb-2.5 max-w-xs mx-auto",
     list: "bg-transparent grid w-full grid-cols-2 gap-1",
     trigger:
       "data-[state=active]:bg-white dark:data-[state=active]:bg-[#011e2b] data-[state=active]:shadow-sm text-muted-foreground data-[state=active]:text-foreground font-medium rounded-full cursor-pointer text-sm px-3 py-2",
@@ -251,18 +252,19 @@ const OptimizedPricing = () => {
           per="word"
           viewportBehavior="once"
         >
-          Start Crafting Content the AI Way
+          Simple Pricing for Powerful AI
         </TextEffect>
 
         <TextEffect
           as="p"
           className={STYLES.subtitle}
           preset="slide"
-          per="word"
+          per="line"
           viewportBehavior="once"
         >
-          Collaborate with AI to generate content that resonates with your
-          audience, drives and delivers meaningful results across all platforms.
+          Choose a pricing plan that works for your business needs. Start with
+          our free trial and upgrade as your business grows, no long-term
+          contracts, cancel anytime.
         </TextEffect>
 
         <PricingTabs

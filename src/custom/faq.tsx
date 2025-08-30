@@ -62,7 +62,7 @@ const FAQ_ITEMS: readonly FAQItem[] = [
 // Consolidated styles
 const STYLES = {
   section: "py-12 sm:py-16 md:py-20",
-  container: "mx-auto max-w-5xl px-4 sm:px-6",
+  container: "mx-auto max-w-7xl px-4 sm:px-6",
   layout: "flex flex-col gap-8 sm:gap-10 md:flex-row md:gap-16",
   sidebar: "md:w-1/3",
   stickyContent: "md:sticky md:top-20",

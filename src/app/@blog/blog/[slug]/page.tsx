@@ -27,12 +27,19 @@ export default async function BlogPostPage({ params }: Params) {
         const title = node?.data?.target?.fields?.title ?? "";
         if (!url) return null;
         // eslint-disable-next-line @next/next/no-img-element
-        return <img src={`https:${url}`} alt={title} className="my-6 rounded-xl" />;
+        return (
+          <img src={`https:${url}`} alt={title} className="my-6 rounded-xl" />
+        );
       },
       [INLINES.HYPERLINK]: (node: any, children: any) => {
         const href = node?.data?.uri as string;
         return (
-          <a href={href} target="_blank" rel="noreferrer" className="text-brand-600 underline">
+          <a
+            href={href}
+            target="_blank"
+            rel="noreferrer"
+            className="text-brand-600 underline"
+          >
             {children}
           </a>
         );
@@ -47,23 +54,39 @@ export default async function BlogPostPage({ params }: Params) {
         <article>
           <header className="relative isolate">
             <div className="mx-auto max-w-4xl px-6 py-8 lg:px-8">
-              <Link href="/blog" className="text-sm text-neutral-500 hover:text-neutral-700">← Back to blog</Link>
-              <h1 className="mt-4 text-4xl font-extrabold tracking-tight sm:text-5xl">{post.title}</h1>
+              <Link
+                href="/blog"
+                className="text-sm text-neutral-500 hover:text-neutral-700"
+              >
+                ← Back to blog
+              </Link>
+              <h1 className="mt-4 text-4xl font-extrabold tracking-tight sm:text-5xl">
+                {post.title}
+              </h1>
               <p className="mt-2 text-neutral-600">
-                {post.publishedDate ? format(new Date(post.publishedDate), "PPP") : null}
+                {post.publishedDate
+                  ? format(new Date(post.publishedDate), "PPP")
+                  : null}
               </p>
             </div>
             {imageUrl && (
               <div className="mx-auto max-w-6xl px-6 pb-6 lg:px-8">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={imageUrl} alt={post.featuredImage?.fields.title || post.title} className="h-auto w-full rounded-3xl object-cover shadow-card" />
+                <img
+                  src={imageUrl}
+                  alt={post.featuredImage?.fields.title || post.title}
+                  className="h-auto w-full rounded-3xl object-cover shadow-card"
+                />
               </div>
             )}
           </header>
 
           <section className="mx-auto max-w-3xl px-6 pb-24 lg:px-8">
             <div className="prose">
-              {documentToReactComponents(post.content as unknown as Document, options)}
+              {documentToReactComponents(
+                post.content as unknown as Document,
+                options
+              )}
             </div>
           </section>
         </article>
@@ -72,5 +95,3 @@ export default async function BlogPostPage({ params }: Params) {
     </div>
   );
 }
-
-

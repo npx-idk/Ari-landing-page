@@ -46,12 +46,12 @@ const getSystemTheme = (): boolean =>
   typeof window !== "undefined" && window.matchMedia(MEDIA_QUERY).matches;
 
 const getStoredTheme = (): Theme => {
-  if (typeof window === "undefined") return "system";
+  if (typeof window === "undefined") return "dark";
   try {
     const stored = localStorage.getItem(THEME_KEY) as Theme;
-    return stored || "system";
+    return stored || "dark";
   } catch {
-    return "system";
+    return "dark";
   }
 };
 
@@ -76,7 +76,7 @@ const applyThemeToDOM = (theme: Theme): void => {
 
 // Custom hook for theme management
 const useTheme = () => {
-  const [theme, setThemeState] = useState<Theme>("system");
+  const [theme, setThemeState] = useState<Theme>("dark");
   const [mounted, setMounted] = useState(false);
 
   // Initialize theme (prevents flash)
@@ -127,10 +127,15 @@ const ThemeSwitcherSkeleton = memo(
           className
         )}
       >
-        {THEME_CONFIG.map((_, index) => (
+        {THEME_CONFIG.map((config, index) => (
           <div
             key={index}
-            className={cn("rounded-full bg-muted/20 animate-pulse", button)}
+            className={cn(
+              "rounded-full animate-pulse",
+              button,
+              // Show dark theme as active by default during skeleton state
+              config.key === "dark" ? "bg-secondary" : "bg-muted/20"
+            )}
           />
         ))}
       </div>
@@ -208,11 +213,6 @@ export const ThemeSwitcher = memo(
     // Memoize size classes
     const sizeClasses = useMemo(() => SIZE_VARIANTS[size], [size]);
 
-    // Show skeleton during hydration
-    if (!mounted) {
-      return <ThemeSwitcherSkeleton className={className} size={size} />;
-    }
-
     return (
       <div
         className={cn(
@@ -229,7 +229,7 @@ export const ThemeSwitcher = memo(
             themeKey={key}
             icon={icon}
             label={label}
-            isActive={theme === key}
+            isActive={mounted ? theme === key : key === "dark"}
             onClick={setTheme}
             buttonClass={sizeClasses.button}
             iconClass={sizeClasses.icon}
@@ -248,10 +248,6 @@ export const AnimatedThemeSwitcher = memo(
     const { theme, setTheme, mounted } = useTheme();
     const sizeClasses = useMemo(() => SIZE_VARIANTS[size], [size]);
 
-    if (!mounted) {
-      return <ThemeSwitcherSkeleton className={className} size={size} />;
-    }
-
     return (
       <AnimatedGroup
         preset="scale"
@@ -269,7 +265,7 @@ export const AnimatedThemeSwitcher = memo(
             themeKey={key}
             icon={icon}
             label={label}
-            isActive={theme === key}
+            isActive={mounted ? theme === key : key === "dark"}
             onClick={setTheme}
             buttonClass={sizeClasses.button}
             iconClass={sizeClasses.icon}

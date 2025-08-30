@@ -77,22 +77,22 @@ const PLANS: readonly Plan[] = [
 // Consolidated styles with CSS custom properties for better performance
 const STYLES = {
   section:
-    "not-prose flex flex-col gap-16 px-8 text-center @container bg-[#F8FAFC] py-16 md:py-20 dark:bg-[#111A24]",
-  header: "flex flex-col items-center justify-center gap-8",
+    "not-prose flex flex-col gap-12 sm:gap-16 px-4 sm:px-6 lg:px-8 text-center bg-[#F8FAFC] py-12 sm:py-16 md:py-20 dark:bg-[#111A24]",
+  header: "flex flex-col items-center justify-center gap-6 sm:gap-8",
   title:
-    "text-balance text-4xl font-semibold lg:text-5xl text-gray-700 dark:text-white/90",
-  subtitle: "mt-4 text-gray-500 dark:text-white/70 max-w-2xl mx-auto",
-  grid: "mt-8 grid w-full h-full gap-6 @2xl:grid-cols-4",
+    "text-balance text-3xl sm:text-4xl lg:text-5xl font-semibold text-gray-700 dark:text-white/90",
+  subtitle: "mt-4 text-sm sm:text-base text-gray-500 dark:text-white/70 max-w-2xl mx-auto",
+  grid: "mt-6 sm:mt-8 grid w-full gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4",
   card: {
     base: "relative w-full h-full text-left bg-white border border-gray-200/60 shadow-lg shadow-gray-100/50 dark:bg-[#1A2E25] dark:shadow-2xl dark:shadow-primary/10 dark:bg-gradient-to-br dark:from-card dark:via-card dark:to-primary/5 dark:border-gray-700/50",
     popular:
       "ring-2 ring-primary/30 border-primary/30 dark:ring-primary/30 dark:border-primary/30",
   },
   tabs: {
-    container: "bg-muted rounded-full pb-0.5",
-    list: "bg-transparent grid w-full grid-cols-2",
+    container: "bg-muted rounded-full pb-0.5 max-w-xs mx-auto",
+    list: "bg-transparent grid w-full grid-cols-2 gap-1",
     trigger:
-      "data-[state=active]:bg-white dark:data-[state=active]:bg-[#011e2b] data-[state=active]:shadow-sm text-muted-foreground data-[state=active]:text-foreground font-medium rounded-full cursor-pointer",
+      "data-[state=active]:bg-white dark:data-[state=active]:bg-[#011e2b] data-[state=active]:shadow-sm text-muted-foreground data-[state=active]:text-foreground font-medium rounded-full cursor-pointer text-sm px-3 py-2",
   },
   badge: {
     popular:

@@ -54,29 +54,29 @@ const BackgroundAura = () => (
   <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
     {/* Light Mode Auras - Static */}
     <div
-      className="absolute top-2/5 left-1/2 w-[80vw] h-[80vw]
-                 -translate-x-1/2 -translate-y-1/2 rounded-full blur-[160px]
-                 bg-[oklch(0.35_0.03_250)] opacity-6 dark:hidden"
+      className="absolute top-2/5 left-1/2 w-[90vw] h-[90vw] sm:w-[80vw] sm:h-[80vw] max-w-[800px] max-h-[800px]
+                 -translate-x-1/2 -translate-y-1/2 rounded-full blur-[100px] sm:blur-[160px]
+                 bg-[oklch(0.35_0.03_250)] opacity-4 sm:opacity-6 dark:hidden"
     />
 
     <div
-      className="absolute top-1/2 left-1/2 w-[50vw] h-[50vw] max-w-[600px] max-h-[600px]
-                 -translate-x-1/2 -translate-y-1/2 rounded-full blur-[100px]
-                 bg-gradient-to-tl from-black/3 via-black/1 to-black/3 dark:hidden"
+      className="absolute top-1/2 left-1/2 w-[60vw] h-[60vw] sm:w-[50vw] sm:h-[50vw] max-w-[600px] max-h-[600px]
+                 -translate-x-1/2 -translate-y-1/2 rounded-full blur-[60px] sm:blur-[100px]
+                 bg-gradient-to-tl from-black/2 via-black/1 to-black/2 sm:from-black/3 sm:via-black/1 sm:to-black/3 dark:hidden"
     />
 
     {/* Dark Mode Auras - Static */}
     <div
-      className="absolute top-2/5 left-1/2 w-[80vw] h-[80vw] -translate-x-1/2 -translate-y-1/2
-                 rounded-full blur-[160px] bg-[oklch(0.8254_0.2367_148.368)]
-                 opacity-[0.06] hidden dark:block"
+      className="absolute top-2/5 left-1/2 w-[90vw] h-[90vw] sm:w-[80vw] sm:h-[80vw] max-w-[800px] max-h-[800px] 
+                 -translate-x-1/2 -translate-y-1/2 rounded-full blur-[100px] sm:blur-[160px] 
+                 bg-[oklch(0.8254_0.2367_148.368)] opacity-[0.04] sm:opacity-[0.06] hidden dark:block"
     />
 
     <div
-      className="absolute top-1/2 left-1/2 w-[50vw] h-[50vw] max-w-[600px] max-h-[600px]
-                 -translate-x-1/2 -translate-y-1/2 rounded-full blur-[90px]
-                 bg-gradient-to-tl from-violet-400/8 via-purple-400/6 to-fuchsia-400/8
-                 hidden dark:block"
+      className="absolute top-1/2 left-1/2 w-[60vw] h-[60vw] sm:w-[50vw] sm:h-[50vw] max-w-[600px] max-h-[600px]
+                 -translate-x-1/2 -translate-y-1/2 rounded-full blur-[60px] sm:blur-[90px]
+                 bg-gradient-to-tl from-violet-400/4 via-purple-400/3 to-fuchsia-400/4
+                 sm:from-violet-400/8 sm:via-purple-400/6 sm:to-fuchsia-400/8 hidden dark:block"
     />
   </div>
 );
@@ -87,11 +87,12 @@ const HeroContent = () => (
       preset="fade-in-blur"
       per="word"
       as="h1"
-      className="text-gray-700 mx-auto font-bold mb-4 text-4xl sm:text-[50px]
-                 dark:text-white/90 sm:leading-[64px] max-w-[700px] mt-10"
+      className="text-gray-700 mx-auto font-bold mb-4 text-3xl sm:text-4xl lg:text-[50px]
+                 dark:text-white/90 leading-tight sm:leading-[48px] lg:leading-[64px] 
+                 max-w-[700px] mt-6 sm:mt-8 lg:mt-10 px-4"
       viewportBehavior="once"
     >
-      AI UI Kit and Templates for Tailwind CSS and Figma
+     Transform Your E-commerce with the Power of AI
     </TextEffect>
 
     <TextEffect
@@ -100,12 +101,10 @@ const HeroContent = () => (
       delay={0.3}
       as="p"
       className="max-w-[537px] text-center mx-auto dark:text-gray-400
-                 text-gray-500 text-base mt-8"
+                 text-gray-500 text-sm sm:text-base mt-6 sm:mt-8 px-4"
       viewportBehavior="once"
     >
-      Transform Your Vision into Reality: Unleash Your Creativity and Build
-      Cutting-Edge AI Startups, Tools, and Products with Our Powerful AI Agent
-      UI Kit, Designed to Streamline Development and AI Innovation.
+      Deploy an intelligent AI shopkeeper that answers queries in texts, photos and voice calls in any language 24/7. Your AI assistant grows your business by turning visitors into customers around the clock.
     </TextEffect>
   </AnimatedGroup>
 );
@@ -127,21 +126,21 @@ const ControlSection = ({
   return (
     <AnimatedGroup
       preset="scale"
-      className="mt-12 flex flex-col items-center justify-center gap-2 md:flex-row"
+      className="mt-8 sm:mt-12 flex flex-col items-center justify-center gap-4 px-4"
       viewportBehavior="once"
     >
-      <div className="flex items-center justify-center gap-6 mb-6 flex-wrap">
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-6 w-full max-w-2xl">
         {/* Placement Control */}
-        <div className="flex items-center gap-2">
-          <span className="text-md text-gray-600 dark:text-gray-400">
+        <div className="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
+          <span className="text-sm sm:text-md text-gray-600 dark:text-gray-400 whitespace-nowrap">
             Placement:
           </span>
           <Button
             onClick={onPlacementChange}
             variant="outline"
-            className="justify-center gap-3 border-gray-400 dark:border-gray-500
-                       rounded-full py-5 border-2 hover:bg-primary-foreground/5
-                       dark:hover:bg-accent-foreground/5 w-36 transition-colors cursor-pointer"
+            className="justify-center gap-2 sm:gap-3 border-gray-400 dark:border-gray-500
+                       rounded-full py-3 sm:py-5 px-4 border-2 hover:bg-primary-foreground/5
+                       dark:hover:bg-accent-foreground/5 w-full sm:w-36 transition-colors cursor-pointer text-sm"
             aria-label={`Switch to next placement. Current: ${currentOption.label}`}
           >
             <CurrentIcon className="w-4 h-4 flex-shrink-0" />
@@ -150,8 +149,8 @@ const ControlSection = ({
         </div>
 
         {/* Theme Control */}
-        <div className="flex items-center gap-2">
-          <span className="text-md text-gray-600 dark:text-gray-400">
+        <div className="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
+          <span className="text-sm sm:text-md text-gray-600 dark:text-gray-400 whitespace-nowrap">
             Theme:
           </span>
           <ThemeDropdown currentTheme={theme} onThemeChange={onThemeChange} />
@@ -177,11 +176,11 @@ const DemoSection = ({
     className="relative -z-50"
     viewportBehavior="once"
   >
-    <div className="-mr-56 mt-8 overflow-hidden px-2 sm:mr-0 sm:mt-12">
+    <div className="mt-8 sm:mt-12 px-4 sm:px-6 lg:px-8">
       <div
         className="inset-shadow-2xs ring-background dark:inset-shadow-white/20
                    bg-background/30 relative mx-auto max-w-6xl overflow-hidden
-                   rounded-2xl border p-4 shadow-lg shadow-zinc-950/15 ring-1"
+                   rounded-xl sm:rounded-2xl border p-2 sm:p-4 shadow-lg shadow-zinc-950/15 ring-1"
       >
         <ChatbotDemo
           placement={placement}
@@ -214,9 +213,9 @@ export default function HeroSection() {
   }, []);
 
   return (
-    <section className="overflow-hidden pb-12">
-      <div className="relative pt-24 md:pt-32">
-        <div className="mx-auto max-w-7xl px-6">
+    <section className="overflow-hidden pb-8 sm:pb-12">
+      <div className="relative pt-20 mt-10 sm:mt-0 sm:pt-24 md:pt-32">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="text-center sm:mx-auto lg:mr-auto lg:mt-0">
             <HeroBadge />
             <BackgroundAura />

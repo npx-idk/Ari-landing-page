@@ -71,27 +71,28 @@ const TabButton = ({
 }) => (
   <Button
     onClick={() => onClick(id)}
-    className={`flex items-center h-12 gap-2 px-4 py-3 text-sm font-medium rounded-full
-                cursor-pointer transition-colors duration-300 ease-in-out will-change-auto
+    className={`flex items-center h-10 sm:h-12 gap-1 sm:gap-2 px-2 sm:px-4 py-2 sm:py-3 
+                text-xs sm:text-sm font-medium rounded-full cursor-pointer 
+                transition-colors duration-300 ease-in-out will-change-auto min-w-0
                ${
                  isActive
                    ? "bg-white/80 text-gray-800 hover:bg-white dark:bg-white/10 dark:text-white/90 dark:hover:bg-white/20"
                    : "text-gray-500 dark:text-gray-400 bg-transparent hover:bg-neutral-200/60 dark:hover:bg-white/5 hover:text-gray-800 dark:hover:text-white/80"
-               }
-
-            `}
+               }`}
     aria-selected={isActive}
     role="tab"
     type="button"
   >
     <Image
       src={`/assets/images/tabs/${config.icon}`}
-      width={34}
-      height={34}
+      width={24}
+      height={24}
+      className="w-6 h-6 sm:w-8 sm:h-8 flex-shrink-0"
       alt={`${config.label} Icon`}
       loading="lazy"
     />
-    {config.label}
+    <span className="hidden sm:inline whitespace-nowrap">{config.label}</span>
+    <span className="sm:hidden text-xs whitespace-nowrap truncate">{config.label}</span>
   </Button>
 );
 
@@ -162,8 +163,9 @@ const TabNavigation = ({
 }) => (
   <AnimatedGroup preset="scale" viewportBehavior="once">
     <nav
-      className="flex flex-wrap sm:justify-center mx-auto gap-2 p-1 w-full mb-8
-                 dark:bg-white/[0.05] bg-gray-100 rounded-2xl lg:rounded-full max-w-fit"
+      className="flex flex-wrap justify-center mx-auto gap-1 sm:gap-2 p-1 w-full mb-6 sm:mb-8
+                 dark:bg-white/[0.05] bg-gray-100 rounded-xl sm:rounded-2xl lg:rounded-full 
+                 max-w-full sm:max-w-fit overflow-x-auto"
       role="tablist"
       aria-label="AI Tools Navigation"
     >
@@ -188,7 +190,7 @@ const TabContentSection = ({ activeTab }: { activeTab: TabId }) => {
   return (
     <AnimatedGroup
       preset="blur-slide"
-      className="text-center mb-8"
+      className="text-center mb-6 sm:mb-8 px-4"
       viewportBehavior="immediate"
       key={`content-${activeTab}`} // Force re-mount and re-animate on tab change
     >
@@ -196,7 +198,7 @@ const TabContentSection = ({ activeTab }: { activeTab: TabId }) => {
         preset="fade-in-blur"
         per="word"
         as="h3"
-        className="text-xl font-bold text-gray-800 dark:text-white/90"
+        className="text-lg sm:text-xl font-bold text-gray-800 dark:text-white/90"
         viewportBehavior="immediate"
       >
         {activeConfig.title}
@@ -206,7 +208,7 @@ const TabContentSection = ({ activeTab }: { activeTab: TabId }) => {
         per="line"
         delay={0.2}
         as="p"
-        className="mt-2 text-sm text-gray-500 dark:text-gray-400 max-w-2xl mx-auto"
+        className="mt-2 text-xs sm:text-sm text-gray-500 dark:text-gray-400 max-w-2xl mx-auto"
         viewportBehavior="immediate"
       >
         {activeConfig.description}
@@ -214,7 +216,7 @@ const TabContentSection = ({ activeTab }: { activeTab: TabId }) => {
 
       <AnimatedGroup
         preset="scale"
-        className="mt-6"
+        className="mt-4 sm:mt-6"
         viewportBehavior="immediate"
         key={`image-${activeTab}`} // Force re-animate on tab change
       >
@@ -273,8 +275,8 @@ const TabView: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabId>("text");
 
   return (
-    <section className="py-14 md:py-20 dark:bg-dark-primary" role="tabpanel">
-      <div className="wrapper">
+    <section className="py-12 sm:py-14 md:py-20 dark:bg-dark-primary" role="tabpanel">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <TabHeader />
 
         <div className="max-w-[1008px] mx-auto">

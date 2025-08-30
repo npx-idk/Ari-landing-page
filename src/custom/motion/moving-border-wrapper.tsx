@@ -99,10 +99,10 @@ const VARIANT_CONFIG = {
 } as const;
 
 const SIZE_CONFIG = {
-  sm: { height: "h-12", width: "w-16", borderWidth: "1px" },
-  md: { height: "h-16", width: "w-20", borderWidth: "1.5px" },
-  lg: { height: "h-20", width: "w-24", borderWidth: "2px" },
-  xl: { height: "h-24", width: "w-28", borderWidth: "2.5px" },
+  sm: { height: "h-1", width: "w-8", borderWidth: "1px" },
+  md: { height: "h-1", width: "w-12", borderWidth: "1.5px" },
+  lg: { height: "h-1.5", width: "w-16", borderWidth: "2px" },
+  xl: { height: "h-2", width: "w-20", borderWidth: "2.5px" },
 } as const;
 
 const SPEED_CONFIG = {
@@ -213,6 +213,7 @@ const BorderElement = memo<{
           ? "grayscale(1) opacity(0.3)"
           : variantConfig.filter || undefined,
         opacity: disabled ? 0.3 : variantConfig.borderOpacity,
+        borderRadius: '999px',
       }}
     />
   );
@@ -264,11 +265,13 @@ const MovingBorder = memo<MovingBorderProps>(
         >
           <rect
             fill="none"
-            width="90%"
-            height="100%"
+            width="96%"
+            height="96%"
             rx={rx}
             ry={ry}
             ref={pathRef}
+            x="2%"
+            y="2%"
           />
         </svg>
         <motion.div

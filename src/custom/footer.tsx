@@ -123,35 +123,35 @@ const LANGUAGE_OPTIONS: readonly LanguageOption[] = [
 
 // Consolidated styles
 const STYLES = {
-  footer: "bg-[#F8FAFC] h-full py-12 dark:bg-[#111A24]",
-  topSection: "mb-8 border-b md:mb-12",
+  footer: "bg-[#F8FAFC] py-8 sm:py-12 dark:bg-[#111A24]",
+  topSection: "mb-6 sm:mb-8 md:mb-12 border-b",
   topContent:
-    "mx-auto flex max-w-5xl flex-wrap items-end justify-between gap-6 px-6 pb-6",
+    "mx-auto flex max-w-5xl flex-col sm:flex-row items-center sm:items-end justify-between gap-4 sm:gap-6 px-4 sm:px-6 pb-6",
   logoLink: "block size-fit",
-  socialContainer: "flex flex-wrap justify-center gap-6 text-sm",
+  socialContainer: "flex flex-wrap justify-center gap-4 sm:gap-6 text-sm",
   socialLink:
     "text-muted-foreground dark:hover:text-primary hover:text-[#008A5B] block transition-colors duration-150",
-  socialIcon: "size-6",
-  mainContent: "mx-auto max-w-5xl px-6",
-  contentGrid: "grid gap-12 md:grid-cols-5 md:gap-0 lg:grid-cols-4",
+  socialIcon: "size-5 sm:size-6",
+  mainContent: "mx-auto max-w-5xl px-4 sm:px-6",
+  contentGrid: "grid gap-8 sm:gap-12 md:grid-cols-5 md:gap-0 lg:grid-cols-4",
   linksGrid:
-    "grid grid-cols-2 gap-6 sm:grid-cols-4 md:col-span-5 md:row-start-1 lg:col-span-3",
-  linkGroup: "space-y-4 text-sm",
-  groupTitle: "block font-medium",
+    "grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-4 md:col-span-5 md:row-start-1 lg:col-span-3",
+  linkGroup: "space-y-3 sm:space-y-4 text-sm",
+  groupTitle: "block font-medium text-sm sm:text-base",
   linkItem:
-    "text-muted-foreground dark:hover:text-primary hover:text-[#008A5B] block duration-150 transition-colors",
+    "text-muted-foreground dark:hover:text-primary hover:text-[#008A5B] block duration-150 transition-colors text-sm",
   newsletterForm:
-    "row-start-1 border-b pb-8 text-sm md:col-span-2 md:border-none lg:col-span-1",
-  newsletterContent: "space-y-4",
+    "row-start-1 border-b pb-6 sm:pb-8 text-sm md:col-span-2 md:border-none lg:col-span-1",
+  newsletterContent: "space-y-3 sm:space-y-4",
   newsletterLabel: "block font-medium",
   newsletterInputGroup: "flex gap-2",
   newsletterInput:
-    "h-8 text-sm bg-white hover:bg-gray-50 dark:bg-gray-800/70 dark:hover:bg-gray-800/80 transition-colors duration-150",
-  newsletterDescription: "text-muted-foreground block text-sm",
+    "h-8 sm:h-9 text-sm bg-white hover:bg-gray-50 dark:bg-gray-800/70 dark:hover:bg-gray-800/80 transition-colors duration-150",
+  newsletterDescription: "text-muted-foreground block text-xs sm:text-sm",
   bottomSection:
-    "mt-12 flex flex-wrap items-end justify-between gap-6 border-t py-6",
+    "mt-8 sm:mt-12 flex flex-col sm:flex-row items-center sm:items-end justify-between gap-4 sm:gap-6 border-t py-6",
   copyright:
-    "text-muted-foreground order-last block text-center text-sm md:order-first",
+    "text-muted-foreground order-last sm:order-first block text-center sm:text-left text-xs sm:text-sm",
   languageSelector: "relative",
   languageSelectorIcon:
     "pointer-events-none absolute inset-y-0 right-2 my-auto opacity-75",

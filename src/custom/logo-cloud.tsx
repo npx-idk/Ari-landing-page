@@ -99,17 +99,17 @@ const DEFAULT_COMPANIES: readonly Company[] = [
 
 // Styles
 const styles = {
-  section: "bg-[#F8FAFC] h-full py-16 dark:bg-[#111A24]",
-  container: "mx-auto max-w-6xl px-6",
-  header: "mx-auto mb-12 max-w-2xl text-center md:mb-16",
-  title: "text-4xl font-semibold text-balance tracking-tight",
-  subtitle: "mt-4 text-lg text-muted-foreground leading-relaxed",
-  grid: "grid grid-cols-5 gap-8 items-center justify-items-center",
+  section: "bg-[#F8FAFC] py-12 sm:py-16 dark:bg-[#111A24]",
+  container: "mx-auto max-w-6xl px-4 sm:px-6",
+  header: "mx-auto mb-8 sm:mb-12 md:mb-16 max-w-2xl text-center",
+  title: "text-3xl sm:text-4xl font-semibold text-balance tracking-tight",
+  subtitle: "mt-4 text-sm sm:text-base lg:text-lg text-muted-foreground leading-relaxed",
+  grid: "grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6 lg:gap-8 items-center justify-items-center",
   logoContainer:
-    "group relative h-16 w-16 overflow-hidden rounded-xl shadow-sm hover:shadow-md transition-all duration-300",
+    "group relative h-12 w-12 sm:h-14 sm:w-14 lg:h-16 lg:w-16 overflow-hidden rounded-lg sm:rounded-xl shadow-sm hover:shadow-md transition-all duration-300",
   logoImage: "object-contain transition-all duration-300 invert dark:invert-0",
   errorFallback:
-    "h-full w-full bg-muted rounded-xl flex items-center justify-center text-muted-foreground text-xs font-semibold",
+    "h-full w-full bg-muted rounded-lg sm:rounded-xl flex items-center justify-center text-muted-foreground text-xs font-semibold",
 } as const;
 
 // Logo image component
@@ -149,7 +149,7 @@ const LogoImage = memo<{
         onError={handleError}
         onLoad={handleLoad}
         priority={priority}
-        sizes="64px"
+        sizes="(max-width: 640px) 48px, (max-width: 1024px) 56px, 64px"
         quality={90}
       />
     </div>

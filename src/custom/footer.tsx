@@ -138,7 +138,8 @@ const Footer = () => {
               <Logo />
             </Link>
             <p className={STYLES.brandText}>
-              Tailark is a platform for building AI-powered applications.
+              Your intelligent AI shopping assistant. Transforming e-commerce
+              with personalized customer experiences and 24/7 support.
             </p>
           </AnimatedGroup>
 
@@ -159,7 +160,7 @@ const Footer = () => {
             viewportBehavior="once"
             className={STYLES.group}
           >
-            <span className={STYLES.groupTitle}>Community</span>
+            <span className={STYLES.groupTitle}>Socials</span>
             <div className={STYLES.socialRow}>
               {SOCIAL_LINKS.map((link, index) => (
                 <SocialIcon key={index} link={link} />
@@ -180,7 +181,7 @@ const Footer = () => {
               preset="fade"
               viewportBehavior="once"
             >
-              © 2025 Tailark, All rights reserved
+              {`© ${new Date().getFullYear()} Ari AI, All rights reserved.`}
             </TextEffect>
           </AnimatedGroup>
 

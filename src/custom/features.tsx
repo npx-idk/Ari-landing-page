@@ -4,7 +4,10 @@ import {
   MonitorSmartphone,
   Settings2,
   Sparkles,
-  Zap,
+  Paintbrush,
+  Earth,
+  Languages,
+  ImagePlay,
 } from "lucide-react";
 import { ReactNode } from "react";
 import { AnimatedGroup } from "./motion/animated-group";
@@ -32,45 +35,47 @@ const ICON_VARIANTS = {
 const FEATURES = [
   {
     id: "customizable",
-    icon: Zap,
+    icon: Paintbrush,
     title: "Customizable",
     description:
-      "Extensive customization options, allowing you to tailor every aspect to meet your specific needs.",
-  },
-  {
-    id: "control",
-    icon: Settings2,
-    title: "You have full control",
-    description:
-      "From design elements to functionality, you have complete control to create a unique and personalized experience.",
+      "Extensive customization options, allowing you to tailor every aspect of bot to meet your specific needs",
   },
   {
     id: "ai-powered",
     icon: Sparkles,
-    title: "Powered By AI",
+    title: "Powerful AI underneath",
     description:
-      "Advanced AI capabilities that adapt to your workflow and enhance productivity across all features.",
+      "Our AI is trained to understand your products and customers, and it's always getting smarter",
   },
+  {
+    id: "multi-lingual",
+    icon: Languages,
+    title: "Multi-lingual",
+    description:
+      "Ari can understand and respond in any languages over text and voice",
+  },
+  {
+    id: "multi-media",
+    icon: ImagePlay,
+    title: "Multi-media",
+    description:
+      "Designed to understand images, docs and beyond whatever you throw at it",
+  },
+
   {
     id: "responsive",
     icon: MonitorSmartphone,
     title: "Fully Responsive",
     description:
-      "Optimized for all devices, ensuring seamless experiences across desktops, tablets, and mobile screens.",
+      "Optimized for all devices, ensuring seamless experiences across desktops, tablets, and mobile screens",
   },
-  {
-    id: "performance",
-    icon: GaugeCircle,
-    title: "Optimized Performance",
-    description:
-      "Lightweight and fast by design, ensuring quick load times and smooth user interactions without compromise.",
-  },
+
   {
     id: "developer-friendly",
     icon: Code2,
     title: "Developer Friendly",
     description:
-      "Built with clean, modular code and modern standards to accelerate development and scale effortlessly.",
+      "One-click installation, no coding required. Its very easy to get started with AI",
   },
 ] as const;
 
@@ -158,7 +163,10 @@ const FeaturesHeader = () => (
       className="mt-4 text-gray-500 dark:text-gray-400 max-w-2xl mx-auto"
       viewportBehavior="once"
     >
-     Meet your AI sales assistant. It helps shoppers find the right products, follows up on abandoned carts, and answers support questions, so more people check out, even when you're off. Learn from customer behavior and gently lift order values.
+      Meet your AI sales assistant. It helps shoppers find the right products,
+      follows up on abandoned carts, and answers support questions, so more
+      people check out, even when you're off. Learn from customer behavior and
+      gently lift order values.
     </TextEffect>
   </AnimatedGroup>
 );
@@ -185,7 +193,10 @@ const FeaturesGrid = () => (
 // ===== MAIN COMPONENT =====
 export default function Features() {
   return (
-    <section className="bg-[#F8FAFC] py-12 sm:py-16 md:py-20 dark:bg-[#111A24]">
+    <section
+      id="features"
+      className="bg-[#F8FAFC] py-12 sm:py-16 md:py-20 dark:bg-[#111A24]"
+    >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <FeaturesHeader />
         <FeaturesGrid />

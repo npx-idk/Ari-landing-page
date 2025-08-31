@@ -92,7 +92,9 @@ const TabButton = ({
       loading="lazy"
     />
     <span className="hidden sm:inline whitespace-nowrap">{config.label}</span>
-    <span className="sm:hidden text-xs whitespace-nowrap truncate">{config.label}</span>
+    <span className="sm:hidden text-xs whitespace-nowrap truncate">
+      {config.label}
+    </span>
   </Button>
 );
 
@@ -101,16 +103,16 @@ const TabContent = ({ activeTab }: { activeTab: TabId }) => {
   const config = TAB_CONFIG[activeTab];
 
   return (
-    <div className="overflow-hidden tab-img-bg rounded-4xl">
-      <div className="p-6">
+    <div className="overflow-hidden tab-img-bg rounded-4xl bg-gradient-to-b from-primary to-background dark:from-dark-primary to-dark-secondary">
+      <div className="p-0.5">
         <div className="p-3 tab-img-overlay">
           <picture>
             <source
               media="(prefers-color-scheme: dark)"
-              srcSet={`assets/images/tab-image/tab-image-${imageIndex}-dark.jpg`}
+              srcSet={`assets/images/tab-image/tab-image-${imageIndex}-dark.png`}
             />
             <img
-              src={`assets/images/tab-image/tab-image-${imageIndex}.jpg`}
+              src={`assets/images/tab-image/tab-image-${imageIndex}.png`}
               alt={`${config.title} interface preview`}
               className="w-full rounded-2xl"
               loading="lazy"
@@ -215,7 +217,7 @@ const TabContentSection = ({ activeTab }: { activeTab: TabId }) => {
       </TextEffect>
 
       <AnimatedGroup
-        preset="scale"
+        preset="blur-slide-in-out"
         className="mt-4 sm:mt-6"
         viewportBehavior="immediate"
         key={`image-${activeTab}`} // Force re-animate on tab change
@@ -239,7 +241,7 @@ const TabFooter = () => (
       className="mb-2 text-xl font-bold text-gray-800 dark:text-white/90"
       viewportBehavior="once"
     >
-      Ready to transform your workflow with AI?
+      Ready to transform your store with AI?
     </TextEffect>
 
     <TextEffect
@@ -250,8 +252,8 @@ const TabFooter = () => (
       className="max-w-xl mx-auto mb-6 text-sm text-gray-500 dark:text-gray-400"
       viewportBehavior="once"
     >
-      Start exploring powerful AI tools for content, visuals, code, and more —
-      all in one seamless platform. No setup, no hassle.
+      Start exploring powerful AI tools for ai chatbot, ai voice call, analytics
+      dashboard, and more — all in one seamless platform. No setup, no hassle.
     </TextEffect>
 
     <MovingBorderWrapper
@@ -275,7 +277,10 @@ const TabView: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabId>("text");
 
   return (
-    <section className="py-12 sm:py-14 md:py-20 dark:bg-dark-primary" role="tabpanel">
+    <section
+      className="py-12 sm:py-14 md:py-20 dark:bg-dark-primary"
+      role="tabpanel"
+    >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <TabHeader />
 

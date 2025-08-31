@@ -14,7 +14,7 @@ export default function PostCard({ post }: Props) {
     : undefined;
 
   return (
-    <article className="group overflow-hidden rounded-2xl bg-white shadow-card ring-1 ring-black/5 transition hover:-translate-y-1">
+    <article className="group overflow-hidden rounded-2xl bg-white dark:bg-gray-900 shadow-card dark:shadow-gray-900/20 ring-1 ring-black/5 dark:ring-gray-700/30 transition hover:-translate-y-1">
       {imageUrl && (
         <Link href={`/blog/${post.slug}`} className="block overflow-hidden">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -27,22 +27,31 @@ export default function PostCard({ post }: Props) {
         </Link>
       )}
       <div className="p-6">
-        <div className="mb-2 flex items-center gap-3 text-xs font-semibold uppercase tracking-wide text-neutral-500">
-          <span className="inline-flex items-center rounded-full bg-neutral-100 px-2.5 py-0.5 text-neutral-700">Article</span>
-          {post.publishedDate ? format(new Date(post.publishedDate), "PPP") : null}
+        <div className="mb-2 flex items-center gap-3 text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
+          <span className="inline-flex items-center rounded-full bg-neutral-100 dark:bg-neutral-800 px-2.5 py-0.5 text-neutral-700 dark:text-neutral-300">
+            Article
+          </span>
+          {post.publishedDate
+            ? format(new Date(post.publishedDate), "PPP")
+            : null}
         </div>
-        <h3 className="text-xl font-semibold tracking-tight">
-          <Link href={`/blog/${post.slug}`} className="hover:text-brand-600">
+        <h3 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
+          <Link
+            href={`/blog/${post.slug}`}
+            className="hover:text-primary dark:hover:text-primary"
+          >
             {post.title}
           </Link>
         </h3>
         {post.shortDescription && (
-          <p className="mt-2 line-clamp-3 text-neutral-600">{post.shortDescription}</p>
+          <p className="mt-2 line-clamp-3 text-neutral-600 dark:text-neutral-400">
+            {post.shortDescription}
+          </p>
         )}
         <div className="mt-4">
           <Link
             href={`/blog/${post.slug}`}
-            className="inline-flex items-center gap-2 rounded-full bg-brand-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-brand-700"
+            className="inline-flex items-center gap-2 rounded-full bg-primary hover:bg-primary/90 dark:bg-primary dark:hover:bg-primary/80 px-4 py-2 text-sm font-medium text-white shadow transition-colors"
           >
             Read more
             <span aria-hidden>→</span>
@@ -52,5 +61,3 @@ export default function PostCard({ post }: Props) {
     </article>
   );
 }
-
-

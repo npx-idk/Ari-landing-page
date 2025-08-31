@@ -13,11 +13,10 @@ import { Button } from "./ui/button";
 // Constants moved outside component to prevent recreation
 const MENU_ITEMS = [
   { name: "Features", href: "#features" },
-  { name: "Solution", href: "#solution" },
   { name: "Pricing", href: "#pricing" },
-  { name: "About", href: "#about" },
+  { name: "About", href: "/about" },
+  { name: "Blog", href: "/blog" },
 ] as const;
-
 const SCROLL_THRESHOLD = 50;
 
 // Memoized navigation items component
@@ -92,13 +91,27 @@ const MobileThemeSwitcher = memo(() => (
   </div>
 ));
 
-// Memoized desktop action buttons component  
+// Memoized desktop action buttons component
 const DesktopActionButtons = memo(() => (
   <div className="hidden lg:flex lg:gap-3">
     <ThemeSwitcher />
     <Button asChild size="sm">
       <Link href="#get-started">
         <TextEffect preset="fade">Get Started</TextEffect>
+      </Link>
+    </Button>
+    <Button
+      asChild
+      size="sm"
+      variant="outline"
+      className="bg-transparent hover:bg-transparent dark:bg-transparent dark:hover:bg-transparent hover:text-current border-primary hover:border-primary focus-visible:border-primary dark:border-primary dark:hover:border-primary dark:focus-visible:border-primary"
+    >
+      <Link
+        href="https://cal.com/ariai"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <TextEffect preset="fade">Book demo</TextEffect>
       </Link>
     </Button>
   </div>
@@ -198,11 +211,25 @@ export const Header = memo(() => {
               >
                 <Logo />
               </Link>
-              
+
               <div className="flex items-center gap-3 lg:hidden">
                 <Button asChild size="sm">
                   <Link href="#get-started">
                     <TextEffect preset="fade">Get Started</TextEffect>
+                  </Link>
+                </Button>
+                <Button
+                  asChild
+                  size="sm"
+                  variant="outline"
+                  className="bg-transparent hover:bg-transparent dark:bg-transparent dark:hover:bg-transparent hover:text-current border-primary hover:border-primary focus-visible:border-primary dark:border-primary dark:hover:border-primary dark:focus-visible:border-primary"
+                >
+                  <Link
+                    href="https://cal.com/ariai"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <TextEffect preset="fade">Book demo</TextEffect>
                   </Link>
                 </Button>
                 <MenuToggle isOpen={isMenuOpen} onToggle={toggleMenu} />

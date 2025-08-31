@@ -25,37 +25,39 @@ const FAQ_ITEMS: readonly FAQItem[] = [
   {
     id: "item-1",
     icon: "clock",
-    question: "What are your business hours?",
+    question:
+      "How quickly can I set up the Ari AI shopkeeper on my Shopify store?",
     answer:
-      "Our customer service team is available Monday through Friday from 9:00 AM to 8:00 PM EST, and weekends from 10:00 AM to 6:00 PM EST. During holidays, hours may vary and will be posted on our website.",
+      "Setup takes just 5 minutes! Simply install our app from the Shopify App Store, connect your store data, and your AI assistant will be live and ready to help customers immediately.",
   },
   {
     id: "item-2",
-    icon: "credit-card",
-    question: "How do subscription payments work?",
+    icon: "languages",
+    question: "Does the AI shopkeeper work in languages other than English?",
     answer:
-      "Subscription payments are automatically charged to your default payment method on the same day each month or year, depending on your billing cycle. You can update your payment information and view billing history in your account dashboard.",
+      "Yes, Ari can work in any language you want. It automatically adapts according to your customers' language.",
   },
   {
     id: "item-3",
-    icon: "truck",
-    question: "Can I expedite my shipping?",
+    icon: "store",
+    question:
+      "Will the AI shopkeeper understand my specific products and store policies?",
     answer:
-      "Yes, we offer several expedited shipping options at checkout. Next-day and 2-day shipping are available for most U.S. addresses if orders are placed before 2:00 PM EST. International expedited shipping options vary by destination.",
+      "Absolutely! Ari learns about your entire product catalog, store policies, shipping information, and brand voice. It provides accurate recommendations and answers based on your specific inventory and business rules.",
   },
   {
     id: "item-4",
-    icon: "globe",
-    question: "Do you offer localized support?",
+    icon: "bot-message-square",
+    question: "What happens if the AI can't answer a customer's question?",
     answer:
-      "We offer multilingual support in English, Spanish, French, German, and Japanese. Our support team can assist customers in these languages via email, chat, and phone during standard business hours for each respective region.",
+      "When the AI encounters complex issues beyond its scope, it seamlessly transfers the conversation to your team with full context. You can also set custom escalation rules and the AI will notify you of urgent matters in real-time.",
   },
   {
     id: "item-5",
-    icon: "package",
-    question: "How do I track my order?",
+    icon: "headset",
+    question: "Is customer support available if I need help?",
     answer:
-      "Once your order ships, you'll receive a confirmation email with a tracking number. You can use this number on our website or the carrier's website to track your package. You can also view order status and tracking information in your account dashboard under \"Order History\".",
+      "Yes! Our customer support team is available 24/7 to assist you with setup, customization, or any questions. We're here to ensure your AI shopkeeper works perfectly for your business.",
   },
 ] as const;
 
@@ -164,7 +166,7 @@ FAQContent.displayName = "FAQContent";
 // Main component
 const OptimizedFAQs = () => {
   return (
-    <section className={STYLES.section}>
+    <section id="about" className={STYLES.section}>
       <div className={STYLES.container}>
         <div className={STYLES.layout}>
           <FAQSidebar />

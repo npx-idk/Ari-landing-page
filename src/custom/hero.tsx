@@ -97,10 +97,10 @@ const HeroContent = () => (
       as="h1"
       className="text-gray-700 mx-auto font-bold mb-4 text-3xl sm:text-4xl lg:text-[50px]
                  dark:text-white/90 leading-tight sm:leading-[48px] lg:leading-[64px] 
-                 max-w-[700px] mt-6 sm:mt-8 lg:mt-10 px-4"
+                 max-w-[700px] mt-6 sm:mt-8 lg:mt-20 px-4"
       viewportBehavior="once"
     >
-     Transform Your E-commerce with the Power of AI
+      Transform Your E-commerce with the Power of AI
     </TextEffect>
 
     <TextEffect
@@ -112,7 +112,9 @@ const HeroContent = () => (
                  text-gray-500 text-sm sm:text-base mt-6 sm:mt-8 px-4"
       viewportBehavior="once"
     >
-      Deploy an intelligent AI shopkeeper that answers queries in texts, photos and voice calls in any language 24/7. Your AI assistant grows your business by turning visitors into customers around the clock.
+      Deploy an intelligent AI shopkeeper that answers queries in texts, photos
+      and voice calls in any language 24/7. Your AI assistant grows your
+      business by turning visitors into customers around the clock.
     </TextEffect>
   </AnimatedGroup>
 );
@@ -137,7 +139,7 @@ const ControlSection = ({
       className="mt-8 sm:mt-12 flex flex-col items-center justify-center gap-4 px-4"
       viewportBehavior="once"
     >
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-6 w-full max-w-2xl">
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-6 w-full max-w-2xl mt-5 lg:mt-20">
         {/* Placement Control */}
         <div className="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
           <span className="text-sm sm:text-md text-gray-600 dark:text-gray-400 whitespace-nowrap">
@@ -212,7 +214,7 @@ const FloatingIcons = () => {
       ),
       text: "Product Suggestion",
       pointerPosition: "bottom-right" as const,
-      className: "absolute left-20 animate-[float_4s_ease-in-out_infinite]",
+      className: "absolute left-0 animate-[float_4s_ease-in-out_infinite]",
     },
     {
       icon: (
@@ -224,7 +226,7 @@ const FloatingIcons = () => {
       text: "Image Search",
       pointerPosition: "bottom-left" as const,
       className:
-        "absolute right-1/12 animate-[float-diagonal_4s_linear_infinite]",
+        "absolute right-15 animate-[float-diagonal_4s_linear_infinite]",
     },
     {
       icon: (
@@ -236,7 +238,7 @@ const FloatingIcons = () => {
       text: "Voice Call",
       pointerPosition: "top-right" as const,
       className:
-        "absolute top-60 left-1/6 animate-[float-horizontal_4s_linear_infinite]",
+        "absolute top-60 left-10 animate-[float-horizontal_4s_linear_infinite]",
     },
     {
       icon: (
@@ -248,7 +250,7 @@ const FloatingIcons = () => {
       text: "Track Order",
       pointerPosition: "top-left" as const,
       className:
-        "absolute top-68 right-1/6 animate-[float-fast_4s_linear_infinite]",
+        "absolute top-78 right-10 animate-[float-fast_4s_linear_infinite]",
     },
   ];
   return (
@@ -298,6 +300,7 @@ export default function HeroSection() {
             <FloatingIcons />
             <BackgroundAura />
             <HeroContent />
+
             <ControlSection
               placement={placement}
               theme={theme}

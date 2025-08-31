@@ -43,99 +43,99 @@ interface WallOfLoveSectionProps {
 const DEFAULT_TESTIMONIALS: Testimonial[] = [
   {
     id: "1",
-    name: "Jonathan Yombo",
-    role: "Software Engineer",
+    name: "Marcus Chen",
+    role: "Fashion Store Owner",
     image: "/assets/images/users/user-1.png",
     quote:
-      "Tailus is really extraordinary and very practical, no need to break your head. A real gold mine.",
+      "Our AI shopkeeper transformed my boutique completely 🚀 Sales increased 40% in the first month - customers love getting instant product recommendations! 💰",
   },
   {
     id: "2",
-    name: "Yves Kalume",
-    role: "GDE - Android",
+    name: "Sarah Williams",
+    role: "Dropshipping Entrepreneur",
     image: "/assets/images/users/user-2.png",
     quote:
-      "With no experience in webdesign I just redesigned my entire website in a few minutes with tailwindcss thanks to Tailus.",
+      "With zero tech experience, I deployed my AI assistant in minutes ⚡ It handles customer queries 24/7 and my conversion rate doubled compared to before! 📈",
   },
   {
     id: "3",
-    name: "Yucel Faruksahan",
-    role: "Tailkits Creator",
+    name: "David Rodriguez",
+    role: "Shopify Plus Developer",
     image: "/assets/images/users/user-3.png",
     quote:
-      "Great work on tailfolio template. This is one of the best personal website that I have seen so far :)",
+      "Outstanding AI shopkeeper 👏 It's easily the most intelligent customer service solution I've implemented for clients 🎯",
   },
   {
     id: "4",
-    name: "Anonymous author",
-    role: "Doing something",
+    name: "Jennifer Park",
+    role: "Home Decor Store Owner",
     image: "/assets/images/users/user-4.png",
     quote:
-      "I am really new to Tailwind and I want to give a go to make some page on my own. I searched a lot of hero pages and blocks online. However, most of them are not giving me a clear view or needed some HTML/CSS coding background to make some changes from the original or too expensive to have.",
+      "I'm fairly new to Shopify and wanted something to help customers find products ✨ This AI assistant is perfect - it answers questions, suggests items, and customers love the voice chat feature! 🛒❤️",
   },
   {
     id: "5",
-    name: "Shekinah Tshiokufila",
-    role: "Senior Software Engineer",
+    name: "Ahmed Hassan",
+    role: "Electronics Store Manager",
     image: "/assets/images/users/user-5.png",
     quote:
-      "Tailus is redefining the standard of web design, with these blocks it provides an easy and efficient way for those who love beauty but may lack the time to implement it.",
+      "This AI shopkeeper is redefining customer service. Our mobile conversions doubled, and customers constantly praise how quickly they get help finding products.",
   },
   {
     id: "6",
-    name: "Oketa Fred",
-    role: "Fullstack Developer",
+    name: "Lisa Thompson",
+    role: "Jewelry Store Owner",
     image: "/assets/images/users/user-6.png",
     quote:
-      "I absolutely love Tailus! The component blocks are beautifully designed and easy to use, which makes creating a great-looking website a breeze.",
+      "I absolutely love this AI assistant! It recommends jewelry perfectly based on photos customers share, and abandoned carts dropped 30% with its follow-up messages.",
   },
   {
     id: "7",
-    name: "Zeki",
-    role: "Founder of ChatExtend",
+    name: "Roberto Silva",
+    role: "Fitness Brand Founder",
     image: "/assets/images/users/user-1.png",
     quote:
-      "Using TailsUI has been like unlocking a secret design superpower. It's the perfect fusion of simplicity and versatility.",
+      "Using this AI shopkeeper was like discovering a secret weapon for e-commerce. Perfect blend of smart recommendations and 24/7 support - our AOV increased significantly.",
   },
   {
     id: "8",
-    name: "Joseph Kitheka",
-    role: "Fullstack Developer",
+    name: "Emma Johnson",
+    role: "Beauty Store Developer",
     image: "/assets/images/users/user-2.png",
     quote:
-      "Tailus has transformed the way I develop web applications. Their extensive collection of UI components has significantly accelerated my workflow.",
+      "This AI has revolutionized how I build customer experiences for clients. The multilingual voice support and product matching features save customers time and boost sales.",
   },
   {
     id: "9",
-    name: "Khatab Wedaa",
-    role: "MerakiUI Creator",
+    name: "Omar Al-Rashid",
+    role: "Multi-Store Owner",
     image: "/assets/images/users/user-3.png",
     quote:
-      "Tailus is an elegant, clean, and responsive tailwind css components it's very helpful to start fast with your project.",
+      "Intelligent, responsive, and works 24/7 - exactly what modern Shopify stores need. I've deployed it across 5 different stores with amazing results.",
   },
   {
     id: "10",
-    name: "Rodrigo Aguilar",
-    role: "TailwindAwesome Creator",
+    name: "Maria Gonzalez",
+    role: "Handmade Crafts Store Owner",
     image: "/assets/images/users/user-4.png",
     quote:
-      "I love Tailus ❤️. The component blocks are well-structured, simple to use, and beautifully designed.",
+      "I love this AI shopkeeper ❤️. It perfectly explains my handmade products to customers and helps them find exactly what they're looking for through voice and photo search.",
   },
   {
     id: "11",
-    name: "Eric Ampire",
-    role: "Mobile Engineer • Google Dev Expert",
+    name: "Kevin Mitchell",
+    role: "Shopify Expert • Partner",
     image: "/assets/images/users/user-5.png",
     quote:
-      "Tailus templates are the perfect solution for anyone who wants to create a beautiful and functional website without any web design experience.",
+      "This AI shopkeeper is the perfect solution for store owners who want professional customer service without hiring staff. I recommend it to all my clients.",
   },
   {
     id: "12",
-    name: "Roland Tubonge",
-    role: "Software Engineer",
+    name: "Priya Patel",
+    role: "Sustainable Fashion Store Owner",
     image: "/assets/images/users/user-6.png",
     quote:
-      "Tailus is so well designed that even with a very poor knowledge of web design you can do miracles. Let yourself be seduced!",
+      "The AI is so well-designed that even with minimal tech knowledge, I have a smart assistant that reflects my brand values and helps customers perfectly. Simply amazing!",
   },
 ];
 
@@ -182,22 +182,24 @@ const generateInitials = (name: string): string => {
 
 // Custom hook for responsive behavior
 const useResponsive = () => {
-  const [screenSize, setScreenSize] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
+  const [screenSize, setScreenSize] = useState<"mobile" | "tablet" | "desktop">(
+    "desktop"
+  );
 
   useEffect(() => {
     const checkScreenSize = () => {
       if (window.innerWidth < 768) {
-        setScreenSize('mobile');
+        setScreenSize("mobile");
       } else if (window.innerWidth < 1024) {
-        setScreenSize('tablet');
+        setScreenSize("tablet");
       } else {
-        setScreenSize('desktop');
+        setScreenSize("desktop");
       }
     };
 
     checkScreenSize();
-    window.addEventListener('resize', checkScreenSize);
-    return () => window.removeEventListener('resize', checkScreenSize);
+    window.addEventListener("resize", checkScreenSize);
+    return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
   return screenSize;
@@ -381,8 +383,8 @@ StatusIndicator.displayName = "StatusIndicator";
 // Main component
 export const WallOfLoveSection = memo<WallOfLoveSectionProps>(
   ({
-    title = "Loved by the Community",
-    subtitle = "Unlock the Potential of Innovation. Discover the Advanced AI Tools Transforming Your Ideas into Reality with Unmatched Precision and Intelligence.",
+    title = "Loved by Shopify Store Owners Worldwide",
+    subtitle = "See how ARI AI is transforming businesses and boosting sales. Real stories from real store owners who chose to grow with intelligent automation.",
     testimonials = DEFAULT_TESTIMONIALS,
     columns = 3,
     className,
@@ -390,23 +392,25 @@ export const WallOfLoveSection = memo<WallOfLoveSectionProps>(
   }) => {
     // Responsive column distribution based on screen size
     const screenSize = useResponsive();
-    
+
     // Determine number of columns based on screen size
     const getColumnCount = () => {
       switch (screenSize) {
-        case 'mobile':
+        case "mobile":
           return 1;
-        case 'tablet':
+        case "tablet":
           return 2;
-        case 'desktop':
+        case "desktop":
           return columns;
         default:
           return columns;
       }
     };
-    
+
     const currentColumns = getColumnCount();
-    const testimonialsPerColumn = Math.ceil(testimonials.length / currentColumns);
+    const testimonialsPerColumn = Math.ceil(
+      testimonials.length / currentColumns
+    );
     const testimonialChunks = chunkArray(testimonials, testimonialsPerColumn);
 
     // Grid classes based on responsive column count
@@ -454,7 +458,10 @@ export const WallOfLoveSection = memo<WallOfLoveSectionProps>(
           {/* Testimonials grid */}
           <AnimatedGroup
             preset="scale"
-            className={cn("grid gap-3 sm:gap-4 md:gap-6 lg:gap-8", getGridClasses())}
+            className={cn(
+              "grid gap-3 sm:gap-4 md:gap-6 lg:gap-8",
+              getGridClasses()
+            )}
             viewportBehavior="once"
           >
             {testimonialChunks.map((chunk, index) => (
@@ -469,7 +476,7 @@ export const WallOfLoveSection = memo<WallOfLoveSectionProps>(
             ))}
           </AnimatedGroup>
 
-          {/* Status indicator */}
+          {/* Status indicator
           {showHoverHint && (
             <AnimatedGroup
               preset="fade"
@@ -478,7 +485,7 @@ export const WallOfLoveSection = memo<WallOfLoveSectionProps>(
             >
               <StatusIndicator />
             </AnimatedGroup>
-          )}
+          )} */}
         </div>
       </section>
     );

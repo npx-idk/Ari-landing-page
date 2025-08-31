@@ -123,7 +123,7 @@ const FeatureCard = ({
   title: string;
   description: string;
 }) => (
-  <MagicCard className="shadow-zinc-950/5 rounded-lg border transition-all duration-300 hover:shadow-lg min-h-[300px] sm:min-h-[320px] lg:min-h-[280px] flex flex-col justify-center p-4 sm:p-6">
+  <MagicCard className="shadow-zinc-950/5 rounded-lg border transition-all duration-300 hover:shadow-lg min-h-[300px] sm:min-h-[320px] lg:min-h-[280px] flex flex-col justify-center p-4 sm:p-6 h-88">
     <CardHeader className="pb-3 text-center px-0">
       <IconDecorator size="md" variant="elevated">
         <Icon className="size-5 sm:size-6" aria-hidden="true" />
@@ -176,7 +176,7 @@ const FeaturesGrid = () => (
     preset="scale"
     className="mx-auto mt-8 md:mt-16 grid gap-4 sm:gap-6 
                grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 
-               max-w-sm sm:max-w-2xl lg:max-w-6xl"
+               max-w-2xs sm:max-w-xl lg:max-w-4xl"
     viewportBehavior="once"
   >
     {FEATURES.map((feature) => (

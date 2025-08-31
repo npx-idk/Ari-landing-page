@@ -16,6 +16,13 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "./ui/carousel";
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 
 // Types
@@ -84,6 +91,9 @@ const STYLES = {
   subtitle:
     "mt-4 text-sm sm:text-base text-gray-500 dark:text-white/70 max-w-2xl mx-auto",
   grid: "mt-6 sm:mt-8 grid w-full gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4",
+  carousel: "mt-6 sm:mt-8 w-full max-w-6xl mx-auto lg:hidden relative",
+  carouselContent: "gap-4 sm:gap-6",
+  carouselItem: "pl-0 sm:pl-0 basis-full sm:basis-1/3 py-4",
   card: {
     base: "relative w-full h-full text-left bg-white border border-gray-200/60 shadow-lg shadow-gray-100/50 dark:bg-[#1A2E25] dark:shadow-2xl dark:shadow-primary/10 dark:bg-gradient-to-br dark:from-card dark:via-card dark:to-primary/5 dark:border-gray-700/50",
     popular:
@@ -272,14 +282,36 @@ const OptimizedPricing = () => {
           onFrequencyChange={handleFrequencyChange}
         />
 
+        {/* Desktop Grid Layout - Hidden on screens smaller than lg */}
         <AnimatedGroup
           preset="scale"
           as="div"
-          className={STYLES.grid}
+          className={cn(STYLES.grid, "hidden lg:grid")}
           viewportBehavior="once"
         >
           {planCards}
         </AnimatedGroup>
+
+        {/* Mobile/Tablet Carousel Layout - Hidden on lg and larger screens */}
+        <div className={STYLES.carousel}>
+          <Carousel
+            opts={{
+              align: "start",
+              slidesToScroll: 1,
+            }}
+            className="w-full"
+          >
+            <CarouselContent className={STYLES.carouselContent}>
+              {PLANS.map((plan) => (
+                <CarouselItem key={plan.id} className={STYLES.carouselItem}>
+                  <PlanCard plan={plan} frequency={frequency} />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="left-4 top-1/2 -translate-y-1/2" />
+            <CarouselNext className="right-4 top-1/2 -translate-y-1/2" />
+          </Carousel>
+        </div>
       </AnimatedGroup>
     </section>
   );

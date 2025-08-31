@@ -101,8 +101,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  blog,
 }: Readonly<{
   children: React.ReactNode;
+  blog: React.ReactNode;
 }>) {
   return (
     <html

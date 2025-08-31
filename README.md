@@ -36,7 +36,7 @@ A modern, responsive landing page template built with Next.js 15, TypeScript, an
 ## 🛠️ Getting Started
 
 ### Prerequisites
-- Node.js 18+ 
+- Node.js 18+
 - pnpm (package manager)
 
 ### Installation
@@ -91,7 +91,7 @@ The project uses Tailwind CSS with custom gradients and animations. Key design e
 
 The template is built mobile-first with breakpoints:
 - `sm`: 640px and up
-- `md`: 768px and up  
+- `md`: 768px and up
 - `lg`: 1024px and up
 - `xl`: 1280px and up
 
@@ -141,4 +141,4 @@ For questions or support, please reach out to the development team or create an 
 
 ---
 
-Built with ❤️ by the Shopkeeper team
+Built with ❤️ by the Shopkeeper team.

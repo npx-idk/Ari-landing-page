@@ -2,8 +2,8 @@
 
 import { cn } from "@/lib/utils";
 import NumberFlow from "@number-flow/react";
-import { ArrowRight, BadgeCheck } from "lucide-react";
-import { memo, useCallback, useMemo, useState } from "react";
+import { ArrowLeft, ArrowRight, BadgeCheck } from "lucide-react";
+import React, { memo, useCallback, useMemo, useState } from "react";
 import { AnimatedGroup } from "./motion/animated-group";
 import { TextEffect } from "./motion/text-effect";
 import { Badge } from "./ui/badge";
@@ -16,13 +16,7 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "./ui/carousel";
+
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 
 // Types
@@ -84,18 +78,15 @@ const PLANS: readonly Plan[] = [
 // Consolidated styles with CSS custom properties for better performance
 const STYLES = {
   section:
-    "not-prose flex flex-col gap-12 sm:gap-16 px-4 sm:px-6 lg:px-8 text-center bg-[#F8FAFC] py-12 sm:py-16 md:py-20 dark:bg-[#111A24]",
+    "not-prose flex flex-col gap-12 sm:gap-16 px-4 sm:px-6 lg:px-8 text-center bg-[#F8FAFC] py-12 sm:py-16 md:py-20 dark:bg-[#111A24] overflow-hidden",
   header: "flex flex-col items-center justify-center gap-6 sm:gap-8",
   title:
     "text-balance text-3xl sm:text-4xl lg:text-5xl font-semibold text-gray-700 dark:text-white/90",
   subtitle:
     "mt-4 text-sm sm:text-base text-gray-500 dark:text-white/70 max-w-2xl mx-auto",
   grid: "mt-6 sm:mt-8 grid w-full gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4",
-  carousel: "mt-6 sm:mt-8 w-full max-w-6xl mx-auto lg:hidden relative",
-  carouselContent: "gap-4 sm:gap-6",
-  carouselItem: "pl-0 sm:pl-0 basis-full sm:basis-1/3 py-4",
   card: {
-    base: "relative w-full h-full text-left bg-white border border-gray-200/60 shadow-lg shadow-gray-100/50 dark:bg-[#1A2E25] dark:shadow-2xl dark:shadow-primary/10 dark:bg-gradient-to-br dark:from-card dark:via-card dark:to-primary/5 dark:border-gray-700/50",
+    base: "relative w-full max-w-full h-full text-left bg-white border border-gray-200/60 shadow-lg shadow-gray-100/50 dark:bg-[#1A2E25] dark:shadow-2xl dark:shadow-primary/10 dark:bg-gradient-to-br dark:from-card dark:via-card dark:to-primary/5 dark:border-gray-700/50",
     popular:
       "ring-2 ring-primary/30 border-primary/30 dark:ring-primary/30 dark:border-primary/30",
   },
@@ -174,7 +165,9 @@ FeatureList.displayName = "FeatureList";
 const PlanCard = memo<{ plan: Plan; frequency: BillingFrequency }>(
   ({ plan, frequency }) => (
     <Card className={cn(STYLES.card.base, plan.popular && STYLES.card.popular)}>
-      {plan.popular && <Badge className={STYLES.badge.popular}>Popular</Badge>}
+      {plan.popular && (
+        <Badge className={cn(STYLES.badge.popular, "z-10")}>Popular</Badge>
+      )}
 
       <CardHeader className="pb-2">
         <CardTitle className="font-semibold text-xl text-card-foreground">
@@ -229,6 +222,168 @@ const PricingTabs = memo<{
   </Tabs>
 ));
 PricingTabs.displayName = "PricingTabs";
+
+// Simple Carousel Component
+const SimpleCarousel = memo<{
+  plans: readonly Plan[];
+  frequency: BillingFrequency;
+}>(({ plans, frequency }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [slidesPerView, setSlidesPerView] = useState(1);
+
+  React.useEffect(() => {
+    const updateSlidesPerView = () => {
+      const width = window.innerWidth;
+      setSlidesPerView(width >= 800 && width <= 1000 ? 2 : 1);
+    };
+    updateSlidesPerView();
+    window.addEventListener("resize", updateSlidesPerView);
+    return () => window.removeEventListener("resize", updateSlidesPerView);
+  }, []);
+
+  const totalPages = Math.ceil(plans.length / slidesPerView);
+
+  React.useEffect(() => {
+    const lastPage = Math.max(0, totalPages - 1);
+    if (currentIndex > lastPage) setCurrentIndex(lastPage);
+  }, [totalPages]);
+
+  const goToPrevious = useCallback(() => {
+    setCurrentIndex((prev) => {
+      const lastPage = Math.max(0, totalPages - 1);
+      return prev === 0 ? lastPage : prev - 1;
+    });
+  }, [totalPages]);
+
+  const goToNext = useCallback(() => {
+    setCurrentIndex((prev) => {
+      const lastPage = Math.max(0, totalPages - 1);
+      return prev === lastPage ? 0 : prev + 1;
+    });
+  }, [totalPages]);
+
+  // Auto-scroll functionality
+  React.useEffect(() => {
+    if (!isAutoPlaying) return;
+
+    const interval = setInterval(() => {
+      goToNext();
+    }, 4000); // Change slide every 4 seconds
+
+    return () => clearInterval(interval);
+  }, [goToNext, isAutoPlaying]);
+
+  // Touch handlers for swipe functionality
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+    setIsAutoPlaying(false); // Pause auto-play on touch
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+
+    const distance = touchStart - touchEnd;
+    const minSwipeDistance = 50;
+
+    if (distance > minSwipeDistance) {
+      goToNext();
+    } else if (distance < -minSwipeDistance) {
+      goToPrevious();
+    }
+
+    // Resume auto-play after 3 seconds of inactivity
+    setTimeout(() => setIsAutoPlaying(true), 3000);
+  };
+
+  const handleMouseEnter = () => setIsAutoPlaying(false);
+  const handleMouseLeave = () => setIsAutoPlaying(true);
+
+  return (
+    <div className="relative w-[90vw] mx-auto">
+      {/* Card Container with extra top padding for popular badge */}
+      <div
+        className="overflow-hidden pt-6 pb-4 px-1"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        <div
+          className="flex transition-transform duration-300 ease-in-out"
+          style={{
+            transform: `translateX(-${currentIndex * (100 / slidesPerView)}%)`,
+          }}
+        >
+          {plans.map((plan) => (
+            <div
+              key={plan.id}
+              className="flex-shrink-0 px-3"
+              style={{ width: `${100 / slidesPerView}%` }}
+            >
+              <PlanCard plan={plan} frequency={frequency} />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Navigation Buttons */}
+      <button
+        onClick={() => {
+          goToPrevious();
+          setIsAutoPlaying(false);
+          setTimeout(() => setIsAutoPlaying(true), 3000);
+        }}
+        className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 bg-white dark:bg-gray-800 rounded-full p-2 shadow-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors z-10"
+        aria-label="Previous plan"
+      >
+        <ArrowLeft className="h-4 w-4 text-gray-600 dark:text-gray-300" />
+      </button>
+
+      <button
+        onClick={() => {
+          goToNext();
+          setIsAutoPlaying(false);
+          setTimeout(() => setIsAutoPlaying(true), 3000);
+        }}
+        className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 bg-white dark:bg-gray-800 rounded-full p-2 shadow-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors z-10"
+        aria-label="Next plan"
+      >
+        <ArrowRight className="h-4 w-4 text-gray-600 dark:text-gray-300" />
+      </button>
+
+      {/* Dots Indicator */}
+      <div className="flex justify-center space-x-2 mt-4">
+        {Array.from({ length: totalPages }).map((_, index) => (
+          <button
+            key={index}
+            onClick={() => {
+              setCurrentIndex(index);
+              setIsAutoPlaying(false);
+              setTimeout(() => setIsAutoPlaying(true), 3000);
+            }}
+            className={cn(
+              "w-2 h-2 rounded-full transition-colors",
+              index === currentIndex
+                ? "bg-primary"
+                : "bg-gray-300 dark:bg-gray-600"
+            )}
+            aria-label={`Go to page ${index + 1}`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+});
+SimpleCarousel.displayName = "SimpleCarousel";
 
 // Main component
 const OptimizedPricing = () => {
@@ -293,24 +448,8 @@ const OptimizedPricing = () => {
         </AnimatedGroup>
 
         {/* Mobile/Tablet Carousel Layout - Hidden on lg and larger screens */}
-        <div className={STYLES.carousel}>
-          <Carousel
-            opts={{
-              align: "start",
-              slidesToScroll: 1,
-            }}
-            className="w-full"
-          >
-            <CarouselContent className={STYLES.carouselContent}>
-              {PLANS.map((plan) => (
-                <CarouselItem key={plan.id} className={STYLES.carouselItem}>
-                  <PlanCard plan={plan} frequency={frequency} />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious className="left-4 top-1/2 -translate-y-1/2" />
-            <CarouselNext className="right-4 top-1/2 -translate-y-1/2" />
-          </Carousel>
+        <div className="lg:hidden w-full px-4 sm:px-6">
+          <SimpleCarousel plans={PLANS} frequency={frequency} />
         </div>
       </AnimatedGroup>
     </section>

@@ -8,12 +8,15 @@ import {
   Earth,
   Languages,
   ImagePlay,
+  ArrowLeft,
+  ArrowRight,
 } from "lucide-react";
-import { ReactNode } from "react";
+import React, { ReactNode, memo, useCallback, useState } from "react";
 import { AnimatedGroup } from "./motion/animated-group";
 import { MagicCard } from "./motion/magic-card";
 import { TextEffect } from "./motion/text-effect";
 import { CardContent, CardHeader } from "./ui/card";
+import { cn } from "@/lib/utils";
 
 // ===== CONSTANTS =====
 const ICON_CONFIG = {
@@ -171,6 +174,171 @@ const FeaturesHeader = () => (
   </AnimatedGroup>
 );
 
+// Simple Carousel Component for mobile/tablet
+const SimpleCarousel = memo<{
+  features: typeof FEATURES;
+}>(({ features }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [slidesPerView, setSlidesPerView] = useState(1);
+
+  React.useEffect(() => {
+    const updateSlidesPerView = () => {
+      const width = window.innerWidth;
+      setSlidesPerView(width >= 640 && width <= 1024 ? 2 : 1);
+    };
+    updateSlidesPerView();
+    window.addEventListener("resize", updateSlidesPerView);
+    return () => window.removeEventListener("resize", updateSlidesPerView);
+  }, []);
+
+  const totalPages = Math.ceil(features.length / slidesPerView);
+
+  React.useEffect(() => {
+    const lastPage = Math.max(0, totalPages - 1);
+    if (currentIndex > lastPage) setCurrentIndex(lastPage);
+  }, [totalPages]);
+
+  const goToPrevious = useCallback(() => {
+    setCurrentIndex((prev) => {
+      const lastPage = Math.max(0, totalPages - 1);
+      return prev === 0 ? lastPage : prev - 1;
+    });
+  }, [totalPages]);
+
+  const goToNext = useCallback(() => {
+    setCurrentIndex((prev) => {
+      const lastPage = Math.max(0, totalPages - 1);
+      return prev === lastPage ? 0 : prev + 1;
+    });
+  }, [totalPages]);
+
+  // Auto-scroll functionality
+  React.useEffect(() => {
+    if (!isAutoPlaying) return;
+
+    const interval = setInterval(() => {
+      goToNext();
+    }, 4000); // Change slide every 4 seconds
+
+    return () => clearInterval(interval);
+  }, [goToNext, isAutoPlaying]);
+
+  // Touch handlers for swipe functionality
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+    setIsAutoPlaying(false); // Pause auto-play on touch
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+
+    const distance = touchStart - touchEnd;
+    const minSwipeDistance = 50;
+
+    if (distance > minSwipeDistance) {
+      goToNext();
+    } else if (distance < -minSwipeDistance) {
+      goToPrevious();
+    }
+
+    // Resume auto-play after 3 seconds of inactivity
+    setTimeout(() => setIsAutoPlaying(true), 3000);
+  };
+
+  const handleMouseEnter = () => setIsAutoPlaying(false);
+  const handleMouseLeave = () => setIsAutoPlaying(true);
+
+  return (
+    <div className="relative w-[90vw] mx-auto">
+      {/* Card Container */}
+      <div
+        className="overflow-hidden pt-2 pb-4 px-1"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        <div
+          className="flex transition-transform duration-300 ease-in-out"
+          style={{
+            transform: `translateX(-${currentIndex * (100 / slidesPerView)}%)`,
+          }}
+        >
+          {features.map((feature) => (
+            <div
+              key={feature.id}
+              className="flex-shrink-0 px-3"
+              style={{ width: `${100 / slidesPerView}%` }}
+            >
+              <FeatureCard
+                icon={feature.icon}
+                title={feature.title}
+                description={feature.description}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Navigation Buttons */}
+      <button
+        onClick={() => {
+          goToPrevious();
+          setIsAutoPlaying(false);
+          setTimeout(() => setIsAutoPlaying(true), 3000);
+        }}
+        className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 bg-white dark:bg-gray-800 rounded-full p-2 shadow-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors z-10"
+        aria-label="Previous feature"
+      >
+        <ArrowLeft className="h-4 w-4 text-gray-600 dark:text-gray-300" />
+      </button>
+
+      <button
+        onClick={() => {
+          goToNext();
+          setIsAutoPlaying(false);
+          setTimeout(() => setIsAutoPlaying(true), 3000);
+        }}
+        className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 bg-white dark:bg-gray-800 rounded-full p-2 shadow-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors z-10"
+        aria-label="Next feature"
+      >
+        <ArrowRight className="h-4 w-4 text-gray-600 dark:text-gray-300" />
+      </button>
+
+      {/* Dots Indicator */}
+      <div className="flex justify-center space-x-2 mt-4">
+        {Array.from({ length: totalPages }).map((_, index) => (
+          <button
+            key={index}
+            onClick={() => {
+              setCurrentIndex(index);
+              setIsAutoPlaying(false);
+              setTimeout(() => setIsAutoPlaying(true), 3000);
+            }}
+            className={cn(
+              "w-2 h-2 rounded-full transition-colors",
+              index === currentIndex
+                ? "bg-primary"
+                : "bg-gray-300 dark:bg-gray-600"
+            )}
+            aria-label={`Go to page ${index + 1}`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+});
+SimpleCarousel.displayName = "SimpleCarousel";
+
 const FeaturesGrid = () => (
   <AnimatedGroup
     preset="scale"
@@ -199,7 +367,16 @@ export default function Features() {
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <FeaturesHeader />
-        <FeaturesGrid />
+
+        {/* Desktop Grid Layout - Hidden on screens smaller than lg */}
+        <div className="hidden lg:block">
+          <FeaturesGrid />
+        </div>
+
+        {/* Mobile/Tablet Carousel Layout - Hidden on lg and larger screens */}
+        <div className="lg:hidden w-full px-4 sm:px-6 mt-8 md:mt-16">
+          <SimpleCarousel features={FEATURES} />
+        </div>
       </div>
     </section>
   );

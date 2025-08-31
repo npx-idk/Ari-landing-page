@@ -1,4 +1,3 @@
-import Image from "next/image";
 import React, { useState } from "react";
 import { AnimatedGroup } from "./motion/animated-group";
 import {
@@ -7,45 +6,58 @@ import {
 } from "./motion/moving-border-wrapper";
 import { TextEffect } from "./motion/text-effect";
 import { Button } from "./ui/button";
+import {
+  ChartArea,
+  Code,
+  Computer,
+  FileText,
+  Image as ImageIcon,
+  Mail,
+  MessageCircleMore,
+  PhoneCall,
+  SprayCan,
+  Video,
+  type LucideIcon,
+} from "lucide-react";
 
 // ===== CONSTANTS =====
 type TabId = "text" | "image" | "code" | "video" | "email";
 
 const TAB_CONFIG = {
   text: {
-    title: "Easiest way to generate text",
+    title: "Track Your AI Shopkeeper's Performance in Real-Time",
     description:
-      "Unlock the Potential of Innovation. Discover the Advanced AI Tools Transforming Your Ideas into Reality with Unmatched Precision and Intelligence.",
+      "Monitor conversations, analyze sales impact, and optimize your AI assistant's performance with detailed analytics. See exactly how your AI shopkeeper is boosting conversions and growing your revenue",
     icon: "text-generator.svg",
-    label: "Text Generator",
+    label: "Analytics Dashboard",
   },
   image: {
-    title: "Instantly generate stunning visuals",
+    title: "Monitor Live Conversations and Customer Interests",
     description:
-      "Bring your creative concepts to life. Our AI can generate high-quality images from simple text descriptions in seconds.",
+      "See what customers are asking about, track product interests, and discover trending queries in real-time. Gain valuable insights into customer behavior and optimize your inventory based on actual demand.",
     icon: "image-generator.svg",
-    label: "Image Generator",
+    label: "Conversation Monitoring",
   },
   code: {
-    title: "Accelerate your development workflow",
+    title: "Customize Every Detail with Our Visual Canvas Editor",
     description:
-      "Generate clean, efficient code in any language. Let our AI handle the boilerplate so you can focus on solving complex problems.",
+      "Design your AI shopkeeper's appearance, behavior, and responses with complete creative control. From colors and fonts to conversation flows - make it perfectly match your brand identity.",
     icon: "code-generator.svg",
-    label: "Code Generator",
+    label: "Customizable Canvas",
   },
   video: {
-    title: "Create engaging videos effortlessly",
+    title: "Replace Expensive Support with Multilingual AI Voice Calls",
     description:
-      "Produce professional-quality videos from text scripts or existing content. Perfect for marketing, tutorials, and social media.",
+      "Handle customer inquiries in any language through natural voice conversations that feel completely human. Cut support costs while providing instant, 24/7 assistance that never puts customers on hold.",
     icon: "video-generator.svg",
-    label: "Video Generator",
+    label: "AI voice call",
   },
   email: {
-    title: "Craft perfect emails in moments",
+    title: "Test and Integrate Your AI Chatbot APIs Anywhere",
     description:
-      "Generate compelling email copy for marketing campaigns, newsletters, and professional correspondence that gets results.",
+      "Experiment with chatbot responses in our interactive API playground before going live. Seamlessly integrate your AI assistant into any platform, website, or app with our flexible APIs.",
     icon: "email-generator.svg",
-    label: "Email Generator",
+    label: "API Playground",
   },
 } as const;
 
@@ -55,6 +67,14 @@ const IMAGE_MAP: Record<TabId, number> = {
   code: 3,
   video: 4,
   email: 5,
+};
+
+const ICON_MAP: Record<TabId, LucideIcon> = {
+  text: ChartArea,
+  image: MessageCircleMore,
+  code: SprayCan,
+  video: PhoneCall,
+  email: Computer,
 };
 
 // ===== COMPONENTS =====
@@ -83,14 +103,16 @@ const TabButton = ({
     role="tab"
     type="button"
   >
-    <Image
-      src={`/assets/images/tabs/${config.icon}`}
-      width={24}
-      height={24}
-      className="w-6 h-6 sm:w-8 sm:h-8 flex-shrink-0"
-      alt={`${config.label} Icon`}
-      loading="lazy"
-    />
+    {(() => {
+      const Icon = ICON_MAP[id];
+      return (
+        <Icon
+          className={`w-6 h-6 sm:w-8 sm:h-8 flex-shrink-0 text-primary`}
+          strokeWidth={isActive ? 3 : 2}
+          aria-hidden="true"
+        />
+      );
+    })()}
     <span className="hidden sm:inline whitespace-nowrap">{config.label}</span>
     <span className="sm:hidden text-xs whitespace-nowrap truncate">
       {config.label}
@@ -141,7 +163,7 @@ const TabHeader = () => (
     >
       AI power at your fingertips
     </TextEffect>
-    <TextEffect
+    {/* <TextEffect
       preset="slide"
       per="line"
       delay={0.3}
@@ -149,10 +171,11 @@ const TabHeader = () => (
       className="mt-4 text-gray-500 dark:text-gray-400 max-w-2xl mx-auto"
       viewportBehavior="once"
     >
-      Unlock the Potential of Innovation. Discover the Advanced AI Tools
-      Transforming Your Ideas into Reality with Unmatched Precision and
-      Intelligence.
-    </TextEffect>
+      Packed with advanced analytics, conversation monitoring, customizable
+      canvas, and automation tools for complete control over customer
+      interactions. Transform your store into a data-driven sales machine with
+      insights and AI power all in one dashboard.
+    </TextEffect> */}
   </AnimatedGroup>
 );
 

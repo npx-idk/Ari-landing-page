@@ -141,4 +141,4 @@ For questions or support, please reach out to the development team or create an 
 
 ---
 
-Built with ❤️ by the Shopkeeper team.
+Built with ❤️ by the Shopkeeper team

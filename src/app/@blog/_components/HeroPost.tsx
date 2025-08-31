@@ -15,7 +15,13 @@ export default function HeroPost({ post, label }: Props) {
     : undefined;
 
   return (
-    <section className="relative mb-10 overflow-hidden rounded-3xl">
+    <section
+      className={`relative mb-10 overflow-hidden rounded-3xl ${
+        !imageUrl
+          ? "bg-gradient-to-br from-primary to-primary/80 dark:from-primary/90 dark:to-primary/70 min-h-[420px]"
+          : ""
+      }`}
+    >
       {imageUrl && (
         // eslint-disable-next-line @next/next/no-img-element
         <img
@@ -28,17 +34,21 @@ export default function HeroPost({ post, label }: Props) {
       <div className="absolute inset-0">
         <div className="mx-auto flex h-full max-w-6xl items-end px-6 pb-10 lg:px-8">
           <div className="max-w-3xl text-white">
-            <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-brand-600/90 px-3 py-1 text-xs font-semibold uppercase tracking-wide">
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-primary/90 dark:bg-primary/80 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white">
               <span>{label}</span>
             </div>
             <h2 className="text-3xl font-extrabold tracking-tight sm:text-5xl">
               <Link href={`/blog/${post.slug}`}>{post.title}</Link>
             </h2>
             {post.shortDescription && (
-              <p className="mt-3 line-clamp-3 text-white/90">{post.shortDescription}</p>
+              <p className="mt-3 line-clamp-3 text-white/90">
+                {post.shortDescription}
+              </p>
             )}
             <div className="mt-4 text-sm text-white/80">
-              {post.publishedDate ? format(new Date(post.publishedDate), "PPP") : null}
+              {post.publishedDate
+                ? format(new Date(post.publishedDate), "PPP")
+                : null}
             </div>
             <div className="mt-6">
               <Link
@@ -54,5 +64,3 @@ export default function HeroPost({ post, label }: Props) {
     </section>
   );
 }
-
-

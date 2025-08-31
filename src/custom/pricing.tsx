@@ -239,7 +239,7 @@ const OptimizedPricing = () => {
   );
 
   return (
-    <section className={STYLES.section}>
+    <section id="pricing" className={STYLES.section}>
       <AnimatedGroup
         preset="blur-slide"
         className={STYLES.header}

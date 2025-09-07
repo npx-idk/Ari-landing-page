@@ -116,7 +116,7 @@ export default function RootLayout({
         <link rel="canonical" href="https://ari-ai.com" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#10B981" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/logo-dark.png" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <meta name="msapplication-TileColor" content="#10B981" />
       </head>

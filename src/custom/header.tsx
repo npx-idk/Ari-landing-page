@@ -6,9 +6,13 @@ import Link from "next/link";
 import { memo, useCallback, useEffect, useState } from "react";
 import { AnimatedGroup } from "../custom/motion/animated-group";
 import { TextEffect } from "../custom/motion/text-effect";
-import Logo from "./logo";
+import LogoLight from "../assets/logo/logo-light.png";
+import LogoDark from "../assets/logo/logo-dark.png";
+import LogoTextLight from "../assets/logo/logo-text-light.png";
+import LogoTextDark from "../assets/logo/logo-text-dark.png";
 import { ThemeSwitcher } from "./theme/theme-switcher";
 import { Button } from "./ui/button";
+import Image from "next/image";
 
 // Constants moved outside component to prevent recreation
 const MENU_ITEMS = [
@@ -147,10 +151,29 @@ const useScrolled = (threshold: number = SCROLL_THRESHOLD) => {
   return isScrolled;
 };
 
+// Detect dark mode by observing the root `dark` class
+const useIsDarkMode = () => {
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    const update = () => setIsDark(root.classList.contains("dark"));
+    update();
+
+    const observer = new MutationObserver(update);
+    observer.observe(root, { attributes: true, attributeFilter: ["class"] });
+
+    return () => observer.disconnect();
+  }, []);
+
+  return isDark;
+};
+
 // Main component
 export const Header = memo(() => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isScrolled = useScrolled();
+  const isDarkMode = useIsDarkMode();
 
   const toggleMenu = useCallback(() => {
     setIsMenuOpen((prev) => !prev);
@@ -209,7 +232,20 @@ export const Header = memo(() => {
                 aria-label="Go to homepage"
                 className="flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-primary rounded-lg p-1"
               >
-                <Logo />
+                <Image
+                  src={isDarkMode ? LogoLight : LogoDark}
+                  alt="Logo"
+                  width={100}
+                  height={100}
+                  className="block lg:hidden h-10 w-10 object-contain"
+                />
+                <Image
+                  src={isDarkMode ? LogoTextLight : LogoTextDark}
+                  alt="Logo Text"
+                  width={100}
+                  height={100}
+                  className="hidden lg:block"
+                />
               </Link>
 
               <div className="flex items-center gap-3 lg:hidden">

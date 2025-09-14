@@ -21,9 +21,9 @@ export default function OrganizationStructuredData() {
         availableLanguage: ["English", "Spanish", "French", "German"],
       },
       sameAs: [
-        "https://twitter.com/ari_ai",
-        "https://linkedin.com/company/ari-ai",
-        "https://github.com/ari-ai",
+        "https://www.instagram.com/hi_ariai/",
+        "https://x.com/hi_ariai",
+        "https://www.linkedin.com/company/hi-ari/",
       ],
       address: {
         "@type": "PostalAddress",

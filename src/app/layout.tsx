@@ -69,7 +69,7 @@ export const metadata: Metadata = {
       "AI Chatbot for E-commerce | 24/7 Customer Support & Sales Assistant",
     description:
       "Deploy intelligent AI chatbots for your e-commerce store. Automate customer support, boost sales with voice calls, image search, and multilingual chat.",
-    creator: "@ari_ai",
+    creator: "@hi_ariai",
     images: ["/twitter-image.jpg"],
   },
   robots: {

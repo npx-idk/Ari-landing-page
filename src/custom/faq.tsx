@@ -63,7 +63,7 @@ const FAQ_ITEMS: readonly FAQItem[] = [
 
 // Consolidated styles
 const STYLES = {
-  section: "py-12 sm:py-16 md:py-20",
+  section: "py-12 sm:py-16 md:py-20 bg-[#F8FAFC] dark:bg-[#111A24]",
   container: "mx-auto max-w-7xl px-4 sm:px-6",
   layout: "flex flex-col gap-8 sm:gap-10 md:flex-row md:gap-16",
   sidebar: "md:w-1/3",
@@ -131,7 +131,7 @@ const FAQSidebar = memo(() => (
           >
             Can't find what you're looking for? Contact our
           </TextEffect>{" "}
-          <Link href="#" className={STYLES.link}>
+          <Link href="mailTo:support@getari.co" className={STYLES.link}>
             <TextEffect
               per="line"
               as="span"

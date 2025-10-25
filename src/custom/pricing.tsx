@@ -51,7 +51,7 @@ const PLANS: readonly Plan[] = [
 	{
 		id: "starter",
 		name: "Starter",
-		price: { monthly: 12, yearly: 216 },
+		price: { monthly: 12, yearly: 115.2 },
 		description: "Everything you need to build and scale your small business.",
 		features: ["300 Messages", "5 AI Audio Call", "No Try-on","Standard Support"],
 		cta: "Subscribe to Starter",
@@ -60,7 +60,7 @@ const PLANS: readonly Plan[] = [
 	{
 		id: "plus",
 		name: "Plus",
-		price: { monthly: 70, yearly: 216 },
+		price: { monthly: 70, yearly: 672 },
 		description: "Everything you need to build and scale your business.",
 		features: ["1200 Messages", "100 AI Audio Call", "300 Try-on", "Standard Support"],
 		cta: "Subscribe to Plus",
@@ -69,7 +69,7 @@ const PLANS: readonly Plan[] = [
 	{
 		id: "pro",
 		name: "Pro",
-		price: { monthly: 120, yearly: 480 },
+		price: { monthly: 120, yearly: 1152 },
 		description: "Everything you need to build and scale your business.",
 		features: ["1800 Messages", "150 AI Audio Call", "350 Try-on", "Priority 24/7 Support"],
 		cta: "Subscribe to Pro",
@@ -77,7 +77,7 @@ const PLANS: readonly Plan[] = [
 	{
 		id: "business",
 		name: "Business",
-		price: { monthly: 200, yearly: 2000 },
+		price: { monthly: 200, yearly: 1920 },
 		description: "Critical security, performance, observability and support.",
 		features: ["3000 Messages", "300 AI Audio Call", "500 Try-on", "Priority 24/7 Support"],
 		cta: "Subscribe to Business",

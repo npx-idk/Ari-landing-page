@@ -180,7 +180,7 @@ const ControlSection = ({
                        dark:hover:bg-accent-foreground/5 w-full sm:w-36 transition-colors cursor-pointer text-sm"
             aria-label={`Start demo`}
           >
-            <Play className="w-4 h-4 flex-shrink-0" />
+            <Play className="w-4 h-4 flex-shrink-0 text-red-500" />
             <span className="truncate">Watch Demo</span>
           </Button>
         </div>

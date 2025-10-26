@@ -166,7 +166,7 @@ FAQContent.displayName = "FAQContent";
 // Main component
 const OptimizedFAQs = () => {
   return (
-    <section id="about" className={STYLES.section}>
+    <section id="faq" className={STYLES.section}>
       <div className={STYLES.container}>
         <div className={STYLES.layout}>
           <FAQSidebar />

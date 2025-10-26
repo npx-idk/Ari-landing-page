@@ -1,64 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Button } from "@ari/ui/components/button";
 import { Icons } from "@ari/ui/components/icons";
-import {
-  Brain,
-  Heart,
-  Zap,
-  Users,
-  Target,
-  Lightbulb,
-  Rocket,
-  Star,
-  ShoppingCart,
-  MessageSquare,
-  TrendingUp,
-  Globe,
-  ArrowLeft,
-} from "lucide-react";
-import { cn } from "@ari/ui/lib/utils";
 import Link from "next/link";
-import { TweetCard } from "@ari/ui/components/tweet-card";
 import { BottomCTA } from "@/components/bottom-cta";
-
-const stats = [
-  { label: "Stores Powered", value: "10K+", icon: ShoppingCart },
-  { label: "Conversations", value: "2M+", icon: MessageSquare },
-  { label: "Sales Increased", value: "300%", icon: TrendingUp },
-  { label: "Countries", value: "50+", icon: Globe },
-];
-
-const values = [
-  {
-    icon: Heart,
-    title: "Customer-Centric",
-    description:
-      "Every feature we build starts with asking: 'How does this help the customer?'",
-  },
-  {
-    icon: Zap,
-    title: "Innovation",
-    description:
-      "We push the boundaries of AI to create experiences that feel magical yet practical.",
-  },
-  {
-    icon: Users,
-    title: "Partnership",
-    description:
-      "We see ourselves as partners in your success, not just another tool.",
-  },
-  {
-    icon: Target,
-    title: "Results-Driven",
-    description:
-      "Beautiful AI means nothing without measurable business impact.",
-  },
-];
+import { Header } from "@/custom/header";
+import Footer from "@/custom/footer";
 
 export default function AboutPage() {
-  const [hoveredStat, setHoveredStat] = useState<number | null>(null);
   const [daysSinceStart, setDaysSinceStart] = useState(0);
 
   useEffect(() => {
@@ -72,33 +21,12 @@ export default function AboutPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-950">
-      {/* Header */}
-      <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            {/* <Link
-              href="/"
-              className="flex items-center space-x-2 justify-center"
-            >
-              <Icons.logo className="w-8 h-8 text-current" />
-            </Link> */}
-            <Link href="/">
-              <Button variant="default" cta size={"sm"}>
-                <ArrowLeft className="w-4 h-4" />
-                <Icons.logo className="w-4 h-4" />
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      <div className="container mx-auto px-4 py-16">
+    <div className="min-h-screen">
+      <Header />
+      <main>
+        <div className="container mx-auto px-4 py-32">
         {/* Hero Section */}
         <div className="text-center mb-20">
-          <div className="inline-flex items-center justify-center w-24 h-24 bg-primary border border-gray-200 dark:border-gray-700 rounded-2xl mb-8 mx-auto border-primary-foreground p-6">
-            <Icons.logo className="w-12 h-12 text-primary-foreground" />
-          </div>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading text-gray-900 dark:text-white mb-6">
             Meet Ari
           </h1>
@@ -309,32 +237,9 @@ export default function AboutPage() {
           </div>
         </div> */}
 
-        {/* CTA Section */}
-        {/* <div>
-          <div className="bg-white dark:bg-gray-800 rounded-3xl p-8 md:p-16 shadow-lg">
-            <h2 className="text-3xl md:text-4xl font-heading  text-gray-900 dark:text-white mb-6">
-              Ready to Transform Your Store?
-            </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-400 mb-8 max-w-2xl">
-              Join thousands of merchants who are already seeing incredible
-              results with Ari.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Link href="/#demo">
-                <Button size="lg" className="text-lg">
-                  Try Ari Now
-                </Button>
-              </Link>
-              <Link href="/contact">
-                <Button size="lg" variant="outline" className="text-lg">
-                  Get in Touch
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div> */}
-        <BottomCTA />
-      </div>
+        </div>
+      </main>
+      <Footer />
     </div>
   );
 }

@@ -11,6 +11,8 @@ import {
   PanelRight,
   PhoneCall,
   ShoppingCart,
+  X,
+  Play,
 } from "lucide-react";
 import Image from "next/image";
 import { useCallback, useState } from "react";
@@ -124,11 +126,13 @@ const ControlSection = ({
   theme,
   onPlacementChange,
   onThemeChange,
+  startDemo,
 }: {
   placement: PlacementType;
   theme: ThemeType;
   onPlacementChange: () => void;
   onThemeChange: (theme: ThemeType) => void;
+  startDemo: () => void;
 }) => {
   const currentOption = PLACEMENT_OPTIONS.find((p) => p.type === placement)!;
   const CurrentIcon = currentOption.icon;
@@ -165,6 +169,21 @@ const ControlSection = ({
           </span>
           <ThemeDropdown currentTheme={theme} onThemeChange={onThemeChange} />
         </div>
+        <div className="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
+          <span className="text-sm sm:text-md text-gray-600 dark:text-gray-400 whitespace-nowrap">
+          </span>
+          <Button
+            onClick={startDemo}
+            variant="outline"
+            className="justify-center gap-2 sm:gap-3 border-gray-400 dark:border-gray-500
+                       rounded-full py-3 sm:py-5 px-4 border-2 hover:bg-primary-foreground/5
+                       dark:hover:bg-accent-foreground/5 w-full sm:w-36 transition-colors cursor-pointer text-sm"
+            aria-label={`Start demo`}
+          >
+            <Play className="w-4 h-4 flex-shrink-0 text-red-500" />
+            <span className="truncate">Watch Demo</span>
+          </Button>
+        </div>
       </div>
     </AnimatedGroup>
   );
@@ -175,11 +194,13 @@ const DemoSection = ({
   theme,
   onPlacementChange,
   onThemeChange,
+  startDemo,
 }: {
   placement: PlacementType;
   theme: ThemeType;
   onPlacementChange: (placement: PlacementType) => void;
   onThemeChange: (theme: ThemeType) => void;
+  startDemo: () => void;
 }) => (
   <AnimatedGroup
     preset="blur-slide"
@@ -272,10 +293,39 @@ const FloatingIcons = () => {
   );
 };
 
+const VideoModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
+      <div className="relative w-full max-w-4xl mx-4">
+        <button
+          onClick={onClose}
+          className="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors z-10"
+          aria-label="Close video"
+        >
+          <X size={32} />
+        </button>
+        <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden">
+          <iframe
+            src="https://drive.google.com/file/d/1Hsbty6FxqkP5qAHyGaoRFxemPxHi-xVf/preview"
+            title="Video player"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+            className="w-full h-full"
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // ===== MAIN COMPONENT =====
 export default function HeroSection() {
   const [placement, setPlacement] = useState<PlacementType>("center");
   const [theme, setTheme] = useState<ThemeType>("default");
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
 
   const cyclePlacement = useCallback(() => {
     setPlacement((current) => {
@@ -289,6 +339,14 @@ export default function HeroSection() {
 
   const handleThemeChange = useCallback((newTheme: ThemeType) => {
     setTheme(newTheme);
+  }, []);
+
+  const startDemo = useCallback(() => {
+    setIsVideoModalOpen(true);
+  }, []);
+
+  const closeVideoModal = useCallback(() => {
+    setIsVideoModalOpen(false);
   }, []);
 
   return (
@@ -306,6 +364,7 @@ export default function HeroSection() {
               theme={theme}
               onPlacementChange={cyclePlacement}
               onThemeChange={handleThemeChange}
+              startDemo={startDemo}
             />
           </div>
         </div>
@@ -315,8 +374,11 @@ export default function HeroSection() {
           theme={theme}
           onPlacementChange={setPlacement}
           onThemeChange={setTheme}
+          startDemo={startDemo}
         />
       </div>
+      
+      <VideoModal isOpen={isVideoModalOpen} onClose={closeVideoModal} />
     </section>
   );
 }

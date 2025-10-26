@@ -15,8 +15,8 @@ import { Button } from "./ui/button";
 
 // Constants moved outside component to prevent recreation
 const MENU_ITEMS = [
-	{ name: "Features", href: "#features" },
-	{ name: "Pricing", href: "#pricing" },
+	{ name: "Features", href: "/#features" },
+	{ name: "Pricing", href: "/#pricing" },
 	{ name: "About", href: "/about" },
 	{ name: "Blog", href: "/blog" },
 ] as const;

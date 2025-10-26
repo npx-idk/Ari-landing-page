@@ -45,33 +45,42 @@ const PLANS: readonly Plan[] = [
 		price: { monthly: 0, yearly: 0 },
 		description:
 			"The perfect starting place for your web app or personal project.",
-		features: ["300 Messages", "No AI Audio Call", "No Support Available"],
+		features: ["175 Messages", "No AI Audio Call", "No Try-on", "No Support Available"],
 		cta: "Get started for free",
+	},
+	{
+		id: "starter",
+		name: "Starter",
+		price: { monthly: 12, yearly: 115.2 },
+		description: "Everything you need to build and scale your small business.",
+		features: ["300 Messages", "5 AI Audio Call", "No Try-on","Standard Support"],
+		cta: "Subscribe to Starter",
+		popular: true,
 	},
 	{
 		id: "plus",
 		name: "Plus",
-		price: { monthly: 20, yearly: 216 },
+		price: { monthly: 70, yearly: 672 },
 		description: "Everything you need to build and scale your business.",
-		features: ["1200 Messages", "No AI Audio Call", "Standard Support"],
+		features: ["1200 Messages", "100 AI Audio Call", "300 Try-on", "Standard Support"],
 		cta: "Subscribe to Plus",
 		popular: true,
 	},
 	{
 		id: "pro",
 		name: "Pro",
-		price: { monthly: 50, yearly: 480 },
+		price: { monthly: 120, yearly: 1152 },
 		description: "Everything you need to build and scale your business.",
-		features: ["2000 Messages", "AI Audio Call", "Priority 24/7 Support"],
+		features: ["1800 Messages", "150 AI Audio Call", "350 Try-on", "Priority 24/7 Support"],
 		cta: "Subscribe to Pro",
 	},
 	{
-		id: "enterprise",
-		name: "Enterprise",
-		price: { monthly: "Let's talk", yearly: "Let's talk" },
+		id: "business",
+		name: "Business",
+		price: { monthly: 200, yearly: 1920 },
 		description: "Critical security, performance, observability and support.",
-		features: ["2000 Messages", "AI Audio Call", "Priority 24/7 Support"],
-		cta: "Contact us",
+		features: ["3000 Messages", "300 AI Audio Call", "500 Try-on", "Priority 24/7 Support"],
+		cta: "Subscribe to Business",
 	},
 ] as const;
 
@@ -84,7 +93,7 @@ const STYLES = {
 		"text-balance text-3xl sm:text-4xl lg:text-5xl font-semibold text-gray-700 dark:text-white/90",
 	subtitle:
 		"mt-4 text-sm sm:text-base text-gray-500 dark:text-white/70 max-w-2xl mx-auto",
-	grid: "mt-6 sm:mt-8 grid w-full gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4",
+	grid: "mt-6 sm:mt-8 grid w-full gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5",
 	card: {
 		base: "relative w-full max-w-full h-full text-left bg-white border border-gray-200/60 shadow-lg shadow-gray-100/50 dark:bg-[#1A2E25] dark:shadow-2xl dark:shadow-primary/10 dark:bg-gradient-to-br dark:from-card dark:via-card dark:to-primary/5 dark:border-gray-700/50",
 		popular:

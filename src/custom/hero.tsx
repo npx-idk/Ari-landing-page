@@ -308,7 +308,7 @@ const VideoModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
         </button>
         <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden">
           <iframe
-            src="https://drive.google.com/file/d/1Hsbty6FxqkP5qAHyGaoRFxemPxHi-xVf/preview"
+            src="https://drive.google.com/file/d/1ZYL3u308OI49FJwIWK4ZyHbRq_yZkDi2/preview"
             title="Video player"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

@@ -122,7 +122,7 @@ const STYLES = {
 		icon: "h-4 w-4 flex-shrink-0 text-green-600 dark:text-primary/50",
 	},
 	button: {
-		base: "w-full font-semibold h-10 text-sm uppercase tracking-wider backdrop-blur-md border bg-green-600 hover:bg-green-700 text-white border-green-600 hover:border-green-700 shadow-md hover:shadow-lg hover:shadow-green-600/25 dark:bg-green-600/20 dark:hover:bg-green-600/30 dark:text-white dark:border-green-500/30 dark:hover:shadow-xl dark:hover:shadow-green-500/25 cursor-pointer rounded-full",
+		base: "w-full font-semibold min-h-10 py-2 px-4 text-xs sm:text-sm uppercase tracking-normal sm:tracking-wide backdrop-blur-md border bg-green-600 hover:bg-green-700 text-white border-green-600 hover:border-green-700 shadow-md hover:shadow-lg hover:shadow-green-600/25 dark:bg-green-600/20 dark:hover:bg-green-600/30 dark:text-white dark:border-green-500/30 dark:hover:shadow-xl dark:hover:shadow-green-500/25 cursor-pointer rounded-full whitespace-normal leading-tight",
 		popular: "shadow-lg hover:shadow-xl",
 	},
 } as const;

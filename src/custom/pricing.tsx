@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import NumberFlow from "@number-flow/react";
 import { ArrowLeft, ArrowRight, BadgeCheck } from "lucide-react";
 import Link from "next/link";
-import React, { memo, useCallback, useMemo, useState } from "react";
+import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { AnimatedGroup } from "./motion/animated-group";
 import { TextEffect } from "./motion/text-effect";
 import { Badge } from "./ui/badge";
@@ -19,7 +19,61 @@ import {
 } from "./ui/card";
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 
-// Types
+// API Response Types
+interface ApiOffering {
+	id: string;
+	planId: string;
+	category: string;
+	name: string;
+	description: string;
+	offeringType: string;
+	enabled: boolean;
+	displayOrder: number;
+	valueConfig: {
+		limit?: number;
+		level?: string;
+	};
+	createdAt: string;
+	updatedAt: string;
+}
+
+interface ApiPlan {
+	id: string;
+	name: string;
+	displayName: string;
+	description: string;
+	amount: number;
+	currencyCode: string;
+	setupFee: number | null;
+	discountedPrice: number | null;
+	discountValidUntil: string | null;
+	billingCycle: string;
+	trialDays: number;
+	status: string;
+	isPopular: boolean;
+	recommendedFor: string[];
+	comparisonHighlights: string[];
+	tags: string[];
+	customFields: any;
+	createdAt: string;
+	updatedAt: string;
+	offerings: ApiOffering[];
+	_count: {
+		subscriptions: number;
+	};
+}
+
+interface ApiResponse {
+	data: ApiPlan[];
+	meta: {
+		total: number;
+		page: number;
+		limit: number;
+		totalPages: number;
+	};
+}
+
+// UI Types
 interface PlanPrice {
 	readonly monthly: number | string;
 	readonly yearly: number | string;
@@ -37,41 +91,107 @@ interface Plan {
 
 type BillingFrequency = "monthly" | "yearly";
 
-// Constants - moved to top level for better tree-shaking
-const PLANS: readonly Plan[] = [
+// Utility Functions
+const formatOfferingName = (name: string): string => {
+	const nameMap: Record<string, string> = {
+		CHAT: "Messages",
+		TRY_ON: "Try Ons",
+		CALL: "Voice Calls",
+		SUPPORT: "Support",
+	};
+	return nameMap[name] || name;
+};
+
+const formatOfferingValue = (offering: ApiOffering): string => {
+	const formattedName = formatOfferingName(offering.name);
+	
+	if (offering.name === "SUPPORT") {
+		const level = offering.valueConfig.level || "basic";
+		const supportLevel = level.charAt(0).toUpperCase() + level.slice(1);
+		return `${supportLevel} Support`;
+	}
+	
+	if (offering.valueConfig.limit) {
+		return `${offering.valueConfig.limit} ${formattedName}`;
+	}
+	
+	return formattedName;
+};
+
+const transformApiPlanToUIPlan = (apiPlan: ApiPlan): Plan => {
+	// Calculate yearly price with 20% discount
+	const monthlyPrice = apiPlan.amount;
+	const yearlyPrice = Math.round(monthlyPrice * 12 * 0.8);
+	
+	// Transform offerings into features array
+	const features = apiPlan.offerings
+		.sort((a, b) => a.displayOrder - b.displayOrder)
+		.map(formatOfferingValue);
+	
+	// Generate CTA text
+	const cta = apiPlan.name === "free" 
+		? "Get started for free"
+		: `Subscribe to ${apiPlan.displayName}`;
+	
+	return {
+		id: apiPlan.name,
+		name: apiPlan.displayName,
+		price: {
+			monthly: monthlyPrice,
+			yearly: yearlyPrice,
+		},
+		description: apiPlan.description,
+		features,
+		cta,
+		popular: apiPlan.isPopular,
+	};
+};
+
+const fetchPlans = async (): Promise<Plan[]> => {
+	try {
+		const response = await fetch("https://api.getari.co/plans", {
+			next: { revalidate: 3600 }, // Cache for 1 hour
+		});
+		
+		if (!response.ok) {
+			throw new Error(`Failed to fetch plans: ${response.statusText}`);
+		}
+		
+		const data: ApiResponse = await response.json();
+		
+		// Transform API plans to UI plans and sort by price
+		return data.data
+			.filter(plan => plan.status === "ACTIVE")
+			.map(transformApiPlanToUIPlan)
+			.sort((a, b) => {
+				const priceA = typeof a.price.monthly === "number" ? a.price.monthly : 0;
+				const priceB = typeof b.price.monthly === "number" ? b.price.monthly : 0;
+				return priceA - priceB;
+			});
+	} catch (error) {
+		console.error("Error fetching plans:", error);
+		throw error;
+	}
+};
+
+// Fallback plans in case API fails
+const FALLBACK_PLANS: readonly Plan[] = [
 	{
 		id: "free",
 		name: "Free",
 		price: { monthly: 0, yearly: 0 },
 		description:
 			"The perfect starting place for your web app or personal project.",
-		features: ["300 Messages", "No AI Audio Call", "No Support Available"],
+		features: ["300 Messages", "15 Try Ons", "15 Voice Calls"],
 		cta: "Get started for free",
 	},
 	{
-		id: "plus",
-		name: "Plus",
-		price: { monthly: 20, yearly: 216 },
-		description: "Everything you need to build and scale your business.",
-		features: ["1200 Messages", "No AI Audio Call", "Standard Support"],
-		cta: "Subscribe to Plus",
-		popular: true,
-	},
-	{
-		id: "pro",
-		name: "Pro",
-		price: { monthly: 50, yearly: 480 },
-		description: "Everything you need to build and scale your business.",
-		features: ["2000 Messages", "AI Audio Call", "Priority 24/7 Support"],
-		cta: "Subscribe to Pro",
-	},
-	{
-		id: "enterprise",
-		name: "Enterprise",
-		price: { monthly: "Let's talk", yearly: "Let's talk" },
-		description: "Critical security, performance, observability and support.",
-		features: ["2000 Messages", "AI Audio Call", "Priority 24/7 Support"],
-		cta: "Contact us",
+		id: "go",
+		name: "Go",
+		price: { monthly: 29, yearly: 278 },
+		description: "Everything you need to build and scale your small business.",
+		features: ["2000 Messages", "200 Try Ons", "100 Voice Calls", "Basic Support"],
+		cta: "Subscribe to Go",
 	},
 ] as const;
 
@@ -84,7 +204,7 @@ const STYLES = {
 		"text-balance text-3xl sm:text-4xl lg:text-5xl font-semibold text-gray-700 dark:text-white/90",
 	subtitle:
 		"mt-4 text-sm sm:text-base text-gray-500 dark:text-white/70 max-w-2xl mx-auto",
-	grid: "mt-6 sm:mt-8 grid w-full gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4",
+	grid: "mt-6 sm:mt-8 grid w-full gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4",
 	card: {
 		base: "relative w-full max-w-full h-full text-left bg-white border border-gray-200/60 shadow-lg shadow-gray-100/50 dark:bg-[#1A2E25] dark:shadow-2xl dark:shadow-primary/10 dark:bg-gradient-to-br dark:from-card dark:via-card dark:to-primary/5 dark:border-gray-700/50",
 		popular:
@@ -390,19 +510,42 @@ SimpleCarousel.displayName = "SimpleCarousel";
 // Main component
 const OptimizedPricing = () => {
 	const [frequency, setFrequency] = useState<BillingFrequency>("monthly");
+	const [plans, setPlans] = useState<Plan[]>([]);
+	const [isLoading, setIsLoading] = useState(true);
+	const [error, setError] = useState<string | null>(null);
+
+	// Fetch plans on component mount
+	useEffect(() => {
+		const loadPlans = async () => {
+			try {
+				setIsLoading(true);
+				setError(null);
+				const fetchedPlans = await fetchPlans();
+				setPlans(fetchedPlans);
+			} catch (err) {
+				console.error("Failed to load plans, using fallback:", err);
+				setError("Failed to load plans. Showing default options.");
+				setPlans([...FALLBACK_PLANS]);
+			} finally {
+				setIsLoading(false);
+			}
+		};
+
+		loadPlans();
+	}, []);
 
 	// Use useCallback to prevent unnecessary re-renders of child components
 	const handleFrequencyChange = useCallback((value: string) => {
 		setFrequency(value as BillingFrequency);
 	}, []);
 
-	// Memoize plan cards - only re-render when frequency changes
+	// Memoize plan cards - only re-render when plans or frequency changes
 	const planCards = useMemo(
 		() =>
-			PLANS.map((plan) => (
+			plans.map((plan) => (
 				<PlanCard key={plan.id} plan={plan} frequency={frequency} />
 			)),
-		[frequency],
+		[plans, frequency],
 	);
 
 	return (
@@ -434,25 +577,39 @@ const OptimizedPricing = () => {
 					contracts, cancel anytime.
 				</TextEffect>
 
+				{error && (
+					<div className="text-sm text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 px-4 py-2 rounded-lg border border-amber-200 dark:border-amber-800">
+						{error}
+					</div>
+				)}
+
 				<PricingTabs
 					frequency={frequency}
 					onFrequencyChange={handleFrequencyChange}
 				/>
 
-				{/* Desktop Grid Layout - Hidden on screens smaller than lg */}
-				<AnimatedGroup
-					preset="scale"
-					as="div"
-					className={cn(STYLES.grid, "hidden lg:grid")}
-					viewportBehavior="once"
-				>
-					{planCards}
-				</AnimatedGroup>
+				{isLoading ? (
+					<div className="flex items-center justify-center py-12">
+						<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+					</div>
+				) : (
+					<>
+						{/* Desktop Grid Layout - Hidden on screens smaller than lg */}
+						<AnimatedGroup
+							preset="scale"
+							as="div"
+							className={cn(STYLES.grid, "hidden lg:grid")}
+							viewportBehavior="once"
+						>
+							{planCards}
+						</AnimatedGroup>
 
-				{/* Mobile/Tablet Carousel Layout - Hidden on lg and larger screens */}
-				<div className="lg:hidden w-full px-4 sm:px-6">
-					<SimpleCarousel plans={PLANS} frequency={frequency} />
-				</div>
+						{/* Mobile/Tablet Carousel Layout - Hidden on lg and larger screens */}
+						<div className="lg:hidden w-full px-4 sm:px-6">
+							<SimpleCarousel plans={plans} frequency={frequency} />
+						</div>
+					</>
+				)}
 			</AnimatedGroup>
 		</section>
 	);

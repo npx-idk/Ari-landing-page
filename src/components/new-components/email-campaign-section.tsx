@@ -14,7 +14,7 @@ import {
 
 export function EmailCampaignSection() {
     return (
-        <section className="py-24 bg-white dark:bg-gray-900 overflow-hidden">
+        <section className="py-24 bg-gray-50 dark:bg-gray-900/50 overflow-hidden">
             <div className="container mx-auto px-4">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                     {/* Content Side */}

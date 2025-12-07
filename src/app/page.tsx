@@ -242,6 +242,9 @@ const SEOContent = () => (
 	</div>
 );
 
+import { EmailCampaignSection } from "@/components/new-components/email-campaign-section";
+import { OmniChannelSection } from "@/components/new-components/omni-channel-section";
+
 export default function Home() {
 	return (
 		<div className="min-h-screen">
@@ -252,6 +255,8 @@ export default function Home() {
 				<HeroSection />
 				<Features />
 				<TabView />
+				<EmailCampaignSection />
+				<OmniChannelSection />
 				<Testimonials />
 				<Pricing />
 				<Faq />
